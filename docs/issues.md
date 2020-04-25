@@ -39,6 +39,8 @@ jobs.reduce((accu, curr) => {
 
 - index signature 관련 문제, 자주 쓰이는건데 인식으로 못하고 있어서 이제까지 왜 이런 문제를 못만났는지 이해가 안됨
 
+- https://basarat.gitbook.io/typescript/type-system/index-signatures
+
 ### enum as interface key
 
 To define an interface, the member names must be supplied not computed.
@@ -67,3 +69,8 @@ example[colorsEnum.green] = true;
 TypeScript is perfectly happy for you to pass the enum as the index and a rename-refactor would then keep everything together if you decided to rename red, for example.
 
 - https://stackoverflow.com/questions/39701524/using-enum-as-interface-key-in-typescript
+
+### duplicate identifier 에러
+
+- skipLibCheck : true로 해줌
+- https://stackoverflow.com/questions/50609517/error-ts2300-duplicate-identifier-requestinfo

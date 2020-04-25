@@ -23,13 +23,6 @@ export interface Stats {
   VIT: number;
 }
 
-// export type PerJobChange = {
-//   STR?: [number, number];
-//   AGI?: [number, number];
-//   INT?: [number, number];
-//   VIT?: [number, number];
-// };
-
 const jobPointMap: any = {};
 jobPointMap["무도가"] = {
   "3": {

@@ -1,8 +1,11 @@
 import React, { useState, ChangeEvent } from "react";
 import styled from "styled-components";
 import jobList from "./database/job";
-import jobLogic from "./lib/jobLogic";
+import { Jobs } from "./database/job";
+import jobLogic, { CurrentJobPoints } from "./lib/jobLogic";
 import { Stats } from "./database/jobPointMap";
+
+type buttonState = 1 | -1;
 
 const CalculatorWrapper = styled.div`
   border: 1px solid black;
@@ -13,6 +16,8 @@ const CalculatorWrapper = styled.div`
   margin-left: 25%;
 `;
 
+const isValidJob = (selectedValue: string): boolean => selectedValue in Jobs;
+
 export default function App() {
   const [accuStats, setAccuStats] = useState<Stats>({
     STR: 5,
@@ -20,10 +25,28 @@ export default function App() {
     INT: 5,
     VIT: 5,
   });
-  const [selectedJob, setSelectedJob] = useState("무직");
+  const [currentJobPos, setCurrentJobPos] = useState<CurrentJobPoints>({
+    무직: 0,
+  });
+  const [selectedJob, setSelectedJob] = useState(Jobs.무직);
+  const [currentJobPo, setCurrentJobPo] = useState(0);
+  const newToThisJob = (job: Jobs): boolean => !(job in currentJobPos);
+  const assignToCurrentJobPos = (job: Jobs): void => {
+    currentJobPos[job] = 0;
+    setCurrentJobPos(currentJobPos);
+  };
   const changeSelectedJob = (evt: ChangeEvent) => {
     const selectedValue = (evt.target as HTMLSelectElement).value;
-    setSelectedJob(selectedValue);
+    if (!isValidJob(selectedValue)) return;
+    setSelectedJob(selectedValue as Jobs);
+    newToThisJob(selectedValue as Jobs) &&
+      assignToCurrentJobPos(selectedValue as Jobs);
+  };
+
+  const changeJobPoint = (state: buttonState) => {
+    newToThisJob(selectedJob) && assignToCurrentJobPos(selectedJob);
+    (currentJobPos[selectedJob] as number) += state;
+    setCurrentJobPos({ ...currentJobPos });
   };
 
   return (
@@ -39,7 +62,11 @@ export default function App() {
           []
         )}
       </select>
+      <button onClick={() => changeJobPoint(1)}>+</button>
+      <button onClick={() => changeJobPoint(-1)}>-</button>
       <span>{selectedJob}</span>
+      <div>{JSON.stringify(currentJobPos)}</div>
+      <div>{JSON.stringify(accuStats)}</div>
     </CalculatorWrapper>
   );
 }
