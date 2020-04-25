@@ -2,16 +2,18 @@ import React, { useState, ChangeEvent } from "react";
 import styled from "styled-components";
 import jobList from "./database/job";
 import { Jobs } from "./database/job";
-import jobLogic, { CurrentJobPoints } from "./lib/jobLogic";
 import jobPointMap, {
   Stats,
   Intervals,
   Stat,
-  JobPointMap,
   EachJobPointMap,
   DeltaInfo,
   StatMap,
 } from "./database/jobPointMap";
+
+type CurrentJobPoints = {
+  [job in Jobs]?: number;
+};
 
 type buttonState = 1 | -1;
 
@@ -25,6 +27,8 @@ const CalculatorWrapper = styled.div`
 `;
 
 const isValidJob = (selectedValue: string): boolean => selectedValue in Jobs;
+const isValidJobPo = (nextJobPo: number): boolean =>
+  nextJobPo >= 0 && nextJobPo <= 100;
 
 export default function App() {
   const [accuStats, setAccuStats] = useState<Stats>({
@@ -55,13 +59,14 @@ export default function App() {
 
   const changeJobPoint = (state: buttonState) => {
     newToThisJob(selectedJob) && assignFirstTimeToCurrentJobPos(selectedJob);
-    setCurrentJobPo(currentJobPo + state);
-    currentJobPos[selectedJob] = currentJobPo + state;
+    const nextJobPo = currentJobPo + state;
+    if (!isValidJobPo(nextJobPo)) return;
+    setCurrentJobPo(nextJobPo);
+    currentJobPos[selectedJob] = nextJobPo;
     setCurrentJobPos({ ...currentJobPos });
     if (shouldChangeStat(state)) applyStatsChange(state);
   };
 
-  // 무도가, 투사만 있음
   const shouldChangeStat = (state: buttonState): boolean => {
     const nextJobPo = currentJobPo + state;
     return Object.keys(jobPointMap[selectedJob] || {}).some((interval) => {
