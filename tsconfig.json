@@ -7,8 +7,9 @@
     },
     "typeRoots": ["node_modules/@types"],
     "noImplicitAny": true,
+    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "lib": ["es6", "dom"],
+    "lib": ["es2015", "dom"],
     "strict": true
   },
   "include": ["src/**/*"]
