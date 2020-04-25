@@ -40,6 +40,7 @@ jobs.reduce((accu, curr) => {
 - index signature 관련 문제, 자주 쓰이는건데 인식으로 못하고 있어서 이제까지 왜 이런 문제를 못만났는지 이해가 안됨
 
 - https://basarat.gitbook.io/typescript/type-system/index-signatures
+- https://itmining.tistory.com/87
 
 ### enum as interface key
 
@@ -74,3 +75,18 @@ TypeScript is perfectly happy for you to pass the enum as the index and a rename
 
 - skipLibCheck : true로 해줌
 - https://stackoverflow.com/questions/50609517/error-ts2300-duplicate-identifier-requestinfo
+
+### Object.entries가 없다.
+
+- lib 를 es2017로 해야했음
+- https://stackoverflow.com/questions/45422573/property-entries-does-not-exist-on-type-objectconstructor
+
+### tsx type assertion
+
+- <>을 쓸 수 없으므로 as 로 type assertion을 해야했음
+
+```ts
+Object.keys(jobPointMap[selectedJob] as EachJobPointMap).forEach((interval) => {
+  if (nextJobPo % +interval === 0) intervals.push(interval as Intervals);
+});
+```

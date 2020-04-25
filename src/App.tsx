@@ -3,7 +3,15 @@ import styled from "styled-components";
 import jobList from "./database/job";
 import { Jobs } from "./database/job";
 import jobLogic, { CurrentJobPoints } from "./lib/jobLogic";
-import { Stats } from "./database/jobPointMap";
+import jobPointMap, {
+  Stats,
+  Intervals,
+  Stat,
+  JobPointMap,
+  EachJobPointMap,
+  DeltaInfo,
+  StatMap,
+} from "./database/jobPointMap";
 
 type buttonState = 1 | -1;
 
@@ -31,22 +39,72 @@ export default function App() {
   const [selectedJob, setSelectedJob] = useState(Jobs.무직);
   const [currentJobPo, setCurrentJobPo] = useState(0);
   const newToThisJob = (job: Jobs): boolean => !(job in currentJobPos);
-  const assignToCurrentJobPos = (job: Jobs): void => {
+  const assignFirstTimeToCurrentJobPos = (job: Jobs): void => {
+    setCurrentJobPo(0);
     currentJobPos[job] = 0;
-    setCurrentJobPos(currentJobPos);
+    setCurrentJobPos({ ...currentJobPos });
   };
   const changeSelectedJob = (evt: ChangeEvent) => {
     const selectedValue = (evt.target as HTMLSelectElement).value;
     if (!isValidJob(selectedValue)) return;
     setSelectedJob(selectedValue as Jobs);
     newToThisJob(selectedValue as Jobs) &&
-      assignToCurrentJobPos(selectedValue as Jobs);
+      assignFirstTimeToCurrentJobPos(selectedValue as Jobs);
+    setCurrentJobPo(currentJobPos[selectedValue as Jobs] as number);
   };
 
   const changeJobPoint = (state: buttonState) => {
-    newToThisJob(selectedJob) && assignToCurrentJobPos(selectedJob);
-    (currentJobPos[selectedJob] as number) += state;
+    newToThisJob(selectedJob) && assignFirstTimeToCurrentJobPos(selectedJob);
+    setCurrentJobPo(currentJobPo + state);
+    currentJobPos[selectedJob] = currentJobPo + state;
     setCurrentJobPos({ ...currentJobPos });
+    if (shouldChangeStat(state)) applyStatsChange(state);
+  };
+
+  // 무도가, 투사만 있음
+  const shouldChangeStat = (state: buttonState): boolean => {
+    const nextJobPo = currentJobPo + state;
+    return Object.keys(jobPointMap[selectedJob] || {}).some((interval) => {
+      return nextJobPo % +interval === 0;
+    });
+  };
+
+  const applyStatsChange = (state: buttonState): void => {
+    const nextJobPo = currentJobPo + state;
+    const currentAccuStats = JSON.parse(JSON.stringify(accuStats));
+    const intervals: Intervals[] = [];
+    Object.keys(jobPointMap[selectedJob] as EachJobPointMap).forEach(
+      (interval) => {
+        if (nextJobPo % +interval === 0) intervals.push(interval as Intervals);
+      }
+    );
+
+    intervals.forEach((interval) => {
+      Object.entries(
+        (jobPointMap[selectedJob] as EachJobPointMap)[interval] as StatMap
+      ).forEach(([stat, deltaInfo]) => {
+        const [delta, limit] = deltaInfo as DeltaInfo;
+        if (state > 0) {
+          if (
+            (delta < 0 && accuStats[stat as Stat] > limit) ||
+            (delta > 0 && accuStats[stat as Stat] < limit)
+          )
+            accuStats[stat as Stat] += delta;
+        } else {
+          if (
+            (delta < 0 && accuStats[stat as Stat] > limit) ||
+            (delta > 0 && accuStats[stat as Stat] < limit)
+          )
+            if (
+              currentAccuStats[stat as Stat] !==
+                accuStats[stat as Stat] - delta ||
+              accuStats[stat as Stat] - delta === 5
+            )
+              accuStats[stat as Stat] -= delta;
+        }
+      });
+      setAccuStats({ ...accuStats });
+    });
   };
 
   return (
@@ -65,6 +123,7 @@ export default function App() {
       <button onClick={() => changeJobPoint(1)}>+</button>
       <button onClick={() => changeJobPoint(-1)}>-</button>
       <span>{selectedJob}</span>
+      <span>{` 잡포인트는 : ${currentJobPo}`}</span>
       <div>{JSON.stringify(currentJobPos)}</div>
       <div>{JSON.stringify(accuStats)}</div>
     </CalculatorWrapper>
