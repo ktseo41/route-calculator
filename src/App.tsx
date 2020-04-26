@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, useEffect, ChangeEvent, MouseEvent } from "react";
 import styled from "styled-components";
 import jobList from "./database/job";
 import { Jobs } from "./database/job";
@@ -15,7 +15,28 @@ type CurrentJobPoints = {
   [job in Jobs]?: number;
 };
 
-type buttonState = 1 | -1;
+type ButtonState =
+  | "1"
+  | "-1"
+  | "5"
+  | "-5"
+  | "10"
+  | "-10"
+  | "100"
+  | "-100"
+  | "reset";
+
+const buttonStates: ButtonState[] = [
+  "1",
+  "-1",
+  "5",
+  "-5",
+  "10",
+  "-10",
+  "100",
+  "-100",
+  "reset",
+];
 
 const CalculatorWrapper = styled.div`
   border: 1px solid black;
@@ -48,6 +69,7 @@ export default function App() {
     currentJobPos[job] = 0;
     setCurrentJobPos({ ...currentJobPos });
   };
+
   const changeSelectedJob = (evt: ChangeEvent) => {
     const selectedValue = (evt.target as HTMLSelectElement).value;
     if (!isValidJob(selectedValue)) return;
@@ -57,58 +79,99 @@ export default function App() {
     setCurrentJobPo(currentJobPos[selectedValue as Jobs] as number);
   };
 
-  const changeJobPoint = (state: buttonState) => {
-    newToThisJob(selectedJob) && assignFirstTimeToCurrentJobPos(selectedJob);
-    const nextJobPo = currentJobPo + state;
-    if (!isValidJobPo(nextJobPo)) return;
-    setCurrentJobPo(nextJobPo);
-    currentJobPos[selectedJob] = nextJobPo;
-    setCurrentJobPos({ ...currentJobPos });
-    if (shouldChangeStat(state)) applyStatsChange(state);
+  const changeJobPointByOne = (delta: number) => {
+    console.log("change Job Po By One", delta);
+    // const delta = numberedState > 0 ? 1 : -1;
+    // const nextJobPo = currentJobPo + ();
+    setCurrentJobPo((_currentJobPo) => {
+      const nextJobPo = _currentJobPo + delta;
+      if (!isValidJobPo(nextJobPo)) return _currentJobPo;
+      setCurrentJobPos((_currentJobPos) => {
+        _currentJobPos[selectedJob] = nextJobPo;
+        if (shouldChangeStat(_currentJobPo, delta))
+          applyStatsChange(_currentJobPo, delta);
+        return { ..._currentJobPos };
+      });
+      return nextJobPo;
+    });
+    // currentJobPos[selectedJob] = nextJobPo;
+    // setCurrentJobPos({ ...currentJobPos });
   };
 
-  const shouldChangeStat = (state: buttonState): boolean => {
-    const nextJobPo = currentJobPo + state;
+  const changeJobPoint = (event: MouseEvent) => {
+    const changeState = (event.target as HTMLButtonElement)
+      .textContent as ButtonState;
+    const numberedState = changeState === "reset" ? 4040 : +changeState;
+    // 증가할 때
+    /*
+    1. 잡포인트는 100까지만
+    2. 실질변화량이 
+    interval을 지날때마다 해당 스탯이 변경된다.
+    3. 스탯마다 리미트까지는 증가 혹 감소하지 않는다.
+    4. 리미트이하일때도 감소하지 않는다.
+    */
+
+    // 감소할 때
+    // 캐시를 쓰자, 증가할때 기록
+
+    // for (let i = 0; i < Math.abs(numberedState); i++) {
+    //   const delta = numberedState > 0 ? 1 : -1;
+    //   changeJobPointByOne(delta);
+    // }
+  };
+
+  const shouldChangeStat = (currentJobPo: number, delta: number): boolean => {
+    const nextJobPo = currentJobPo + delta;
+    // const nextJobPo = currentJobPo + numberedState;
     return Object.keys(jobPointMap[selectedJob] || {}).some((interval) => {
+      if (delta < 0 && currentJobPo % +interval === 0) return true;
+      console.log("shouldCHangeStat", nextJobPo % +interval);
       return nextJobPo % +interval === 0;
     });
   };
 
-  const applyStatsChange = (state: buttonState): void => {
-    const nextJobPo = currentJobPo + state;
-    const currentAccuStats = JSON.parse(JSON.stringify(accuStats));
-    const intervals: Intervals[] = [];
-    Object.keys(jobPointMap[selectedJob] as EachJobPointMap).forEach(
-      (interval) => {
-        if (nextJobPo % +interval === 0) intervals.push(interval as Intervals);
-      }
-    );
-
-    intervals.forEach((interval) => {
-      Object.entries(
-        (jobPointMap[selectedJob] as EachJobPointMap)[interval] as StatMap
-      ).forEach(([stat, deltaInfo]) => {
-        const [delta, limit] = deltaInfo as DeltaInfo;
-        if (state > 0) {
-          if (
-            (delta < 0 && accuStats[stat as Stat] > limit) ||
-            (delta > 0 && accuStats[stat as Stat] < limit)
-          )
-            accuStats[stat as Stat] += delta;
-        } else {
-          if (
-            (delta < 0 && accuStats[stat as Stat] > limit) ||
-            (delta > 0 && accuStats[stat as Stat] < limit)
-          )
-            if (
-              currentAccuStats[stat as Stat] !==
-                accuStats[stat as Stat] - delta ||
-              accuStats[stat as Stat] - delta === 5
-            )
-              accuStats[stat as Stat] -= delta;
+  const applyStatsChange = (
+    nextJobPo: number,
+    deltaDirection: number
+  ): void => {
+    // const nextJobPo = currentJobPo + numberedState;
+    setAccuStats((_accuStats) => {
+      const currentAccuStats = JSON.parse(JSON.stringify(_accuStats));
+      const intervals: Intervals[] = [];
+      Object.keys(jobPointMap[selectedJob] as EachJobPointMap).forEach(
+        (interval) => {
+          if (nextJobPo % +interval === 0)
+            intervals.push(interval as Intervals);
         }
+      );
+
+      intervals.forEach((interval) => {
+        Object.entries(
+          (jobPointMap[selectedJob] as EachJobPointMap)[interval] as StatMap
+        ).forEach(([stat, deltaInfo]) => {
+          const [delta, limit] = deltaInfo as DeltaInfo;
+          if (deltaDirection > 0) {
+            if (
+              (delta < 0 && _accuStats[stat as Stat] > limit) ||
+              (delta > 0 && _accuStats[stat as Stat] < limit)
+            )
+              _accuStats[stat as Stat] += delta;
+          } else {
+            if (
+              (delta < 0 && _accuStats[stat as Stat] > limit) ||
+              (delta > 0 && _accuStats[stat as Stat] < limit)
+            )
+              if (
+                currentAccuStats[stat as Stat] !==
+                  _accuStats[stat as Stat] - delta ||
+                _accuStats[stat as Stat] - delta === 5
+              )
+                _accuStats[stat as Stat] -= delta;
+          }
+        });
       });
-      setAccuStats({ ...accuStats });
+      return { ..._accuStats };
+      // setAccuStats({ ...accuStats });
     });
   };
 
@@ -125,12 +188,19 @@ export default function App() {
           []
         )}
       </select>
-      <button onClick={() => changeJobPoint(1)}>+</button>
-      <button onClick={() => changeJobPoint(-1)}>-</button>
-      <span>{selectedJob}</span>
-      <span>{` 잡포인트는 : ${currentJobPo}`}</span>
-      <div>{JSON.stringify(currentJobPos)}</div>
-      <div>{JSON.stringify(accuStats)}</div>
+      {buttonStates.map((buttonState, idx) => {
+        return (
+          <button onClick={changeJobPoint} key={idx}>
+            {buttonState}
+          </button>
+        );
+      })}
+      <div>
+        <span>{`${selectedJob} | `}</span>
+        <span>{` 잡포인트 : ${currentJobPo}`}</span>
+      </div>
+      <div>{JSON.stringify(currentJobPos, null, 2)}</div>
+      <div>{JSON.stringify(accuStats, null, 2)}</div>
     </CalculatorWrapper>
   );
 }
