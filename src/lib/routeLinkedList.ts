@@ -26,77 +26,101 @@ export default class RouteLinkedList {
     if (!this.tail) {
       this.head = routeNode;
       this.tail = routeNode;
-      this.length += 1;
     } else {
-      routeNode.prevStats = { ...this.tail.Stats };
       this.tail.next = routeNode;
+      routeNode.prev = this.tail;
       this.tail = routeNode;
-      this.tail.next = null;
-      this.length += 1;
     }
+    this.length += 1;
     return routeNode;
   }
 
   insertAt(routeNode: RouteNode, position: number) {}
 
-  shift() {
-    if (!this.head) return -1;
+  shift(): RouteNode | null {
+    if (!this.length) return null;
 
-    let current = this.head;
-    if (current.next) {
-      this.head = current.next;
-    } else {
+    const nodeToRemove = this.head as RouteNode;
+
+    if (this.length === 1) {
       this.head = null;
+      this.tail = null;
+    } else {
+      this.head = nodeToRemove.next as RouteNode;
+
+      this.head.prev = null;
+      nodeToRemove.next = null;
     }
+
     this.length -= 1;
-    return current;
+
+    return nodeToRemove;
   }
 
-  pop() {
-    if (!this.tail) {
-      return -1;
+  pop(): RouteNode | null {
+    if (!this.length) {
+      return null;
     } else {
-      let current = this.head;
-      let preTail = this.head;
-      while (current?.next) {
-        preTail = current;
-        current = current.next;
-      }
+      const nodeToRemove = this.tail;
 
-      this.tail = preTail;
-      (this.tail as RouteNode).next = null;
-      this.length -= 1;
-      if (!this.length) {
+      if (this.length === 1) {
         this.head = null;
         this.tail = null;
+      } else {
+        this.tail = (this.tail as RouteNode).prev as RouteNode;
+        this.tail.next = null;
+        (nodeToRemove as RouteNode).prev = null;
       }
-      return current;
+
+      this.length -= 1;
+
+      return nodeToRemove;
     }
   }
 
-  get(index: number): RouteNode {
-    if (index < 0 || index >= this.length)
-      throw new Error("해당 노드가 없습니다");
+  get(index: number): RouteNode | null {
+    if (!this.length || index < 0 || index >= this.length) return null;
 
-    let current = this.head;
-    let count = 0;
-    while (count < index) {
-      current = (current as RouteNode).next; // this.length를 통해서 routenode가 존재함을 알기 때문에 가능
-      count += 1;
+    let current: RouteNode;
+
+    if (index < this.length / 2) {
+      let counter = 0;
+
+      current = this.head as RouteNode;
+
+      while (counter < index) {
+        current = current.next as RouteNode;
+        counter += 1;
+      }
+    } else {
+      let counter = this.length - 1;
+
+      current = this.tail as RouteNode;
+
+      while (counter > index) {
+        current = current.prev as RouteNode;
+        counter -= 1;
+      }
     }
-    return current as RouteNode;
+    return current;
   }
 
   // index가 tail일때
   removeAt(index: number) {
-    if (index < 0 && index >= this.length) return -1;
+    if (index < 0 && index >= this.length) return null;
     if (index === 0) return this.shift();
     if (index === this.length - 1) return this.pop();
 
-    const preNodeToRemove = this.get(index - 1);
-    const nodeToRemove = this.get(index);
+    const nodeToRemove = this.get(index) as RouteNode;
+    const prevNodeToRemove = nodeToRemove.prev as RouteNode;
+    const nextNodeToRemove = nodeToRemove.next as RouteNode;
 
-    (preNodeToRemove as RouteNode).next = (nodeToRemove as RouteNode).next;
+    nodeToRemove.next = null;
+    nodeToRemove.prev = null;
+
+    prevNodeToRemove.next = nextNodeToRemove;
+    nextNodeToRemove.prev = prevNodeToRemove;
+
     this.length -= 1;
     return nodeToRemove;
   }
@@ -141,6 +165,7 @@ class RouteNode {
   Stats: Stats;
   currentJobPos: CurrentJobPoints;
   jobPointMap: EachJobPointMap;
+  prev: this | null = null;
   next: this | null = null;
 
   adjustJobPoint(jobPoDelta: number) {
@@ -198,6 +223,6 @@ class RouteNode {
     ) {
       this.Stats[stat] = expectStat < limit ? limit : expectStat;
     }
-    console.log(`stat changed!`, this.Stats);
+    console.log(`stat changed!`, JSON.stringify(this.Stats));
   }
 }
