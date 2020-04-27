@@ -53,6 +53,9 @@ export type JobPointMap = {
 };
 
 const jobPointMap: JobPointMap = {};
+
+jobPointMap[Jobs.무직] = {};
+
 jobPointMap[Jobs.무도가] = {
   "3": {
     INT: [-1, 10],
