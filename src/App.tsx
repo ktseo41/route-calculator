@@ -63,10 +63,13 @@ export default function App() {
   });
   const [selectedJob, setSelectedJob] = useState(Jobs.무직);
   const [currentJobPo, setCurrentJobPo] = useState(0);
+  const statsCache: Stats[] = [];
+
   const newToThisJob = (job: Jobs): boolean => !(job in currentJobPos);
   const assignFirstTimeToCurrentJobPos = (job: Jobs): void => {
     setCurrentJobPo(0);
     currentJobPos[job] = 0;
+    statsCache[0] = { ...accuStats };
     setCurrentJobPos({ ...currentJobPos });
   };
 
@@ -98,21 +101,31 @@ export default function App() {
     // setCurrentJobPos({ ...currentJobPos });
   };
 
-  const changeJobPoint = (event: MouseEvent) => {
-    const changeState = (event.target as HTMLButtonElement)
-      .textContent as ButtonState;
-    const numberedState = changeState === "reset" ? 4040 : +changeState;
+  const addJobPoint = (numberedChangeState: number) => {
+    const actualChange =
+      currentJobPo + numberedChangeState > 100
+        ? 100 - currentJobPo
+        : numberedChangeState;
+    // 증가할 때
+    /*
+    1. 실질변화량을 구한다.
+    2. 실질변화량때까지 1씩 증가하면서 스탯의 캐시를 남긴다.
+    */
     // 증가할 때
     /*
     1. 잡포인트는 100까지만
-    2. 실질변화량이 
-    interval을 지날때마다 해당 스탯이 변경된다.
+    2. 실질변화량이 interval을 지날때마다 해당 스탯이 변경된다.
     3. 스탯마다 리미트까지는 증가 혹 감소하지 않는다.
     4. 리미트이하일때도 감소하지 않는다.
     */
-
     // 감소할 때
     // 캐시를 쓰자, 증가할때 기록
+  };
+
+  const changeJobPoint = (event: MouseEvent) => {
+    const changeState = (event.target as HTMLButtonElement)
+      .textContent as ButtonState;
+    const numberedChangeState = changeState === "reset" ? 4040 : +changeState;
 
     // for (let i = 0; i < Math.abs(numberedState); i++) {
     //   const delta = numberedState > 0 ? 1 : -1;
