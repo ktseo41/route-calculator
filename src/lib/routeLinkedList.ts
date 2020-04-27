@@ -35,7 +35,43 @@ export default class RouteLinkedList {
     return routeNode;
   }
 
-  insertAt(routeNode: RouteNode, position: number) {}
+  insertAt(job: Jobs, index: number): RouteNode | null {
+    if (index < 0 || index > this.length) return null;
+    if (index === 0) return this.unshift(job);
+    if (index === this.length) return this.add(job);
+
+    const routeNode = new RouteNode(job);
+
+    const prevRouteNode = this.get(index - 1) as RouteNode;
+    const nextRouteNode = prevRouteNode.next as RouteNode;
+
+    routeNode.prev = prevRouteNode;
+    prevRouteNode.next = routeNode;
+
+    routeNode.next = nextRouteNode;
+    nextRouteNode.prev = routeNode;
+
+    this.length -= 1;
+
+    return routeNode;
+  }
+
+  unshift(job: Jobs) {
+    const routeNode = new RouteNode(job);
+
+    if (!this.length) {
+      this.head = routeNode;
+      this.tail = routeNode;
+    } else {
+      routeNode.next = this.head as RouteNode;
+      (this.head as RouteNode).prev = routeNode;
+      this.head = routeNode;
+    }
+
+    this.length += 1;
+
+    return routeNode;
+  }
 
   shift(): RouteNode | null {
     if (!this.length) return null;
