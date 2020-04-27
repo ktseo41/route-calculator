@@ -63,13 +63,13 @@ export default function App() {
   });
   const [selectedJob, setSelectedJob] = useState(Jobs.무직);
   const [currentJobPo, setCurrentJobPo] = useState(0);
-  const statsCache: Stats[] = [];
+  // const statsCache: Stats[] = [];
 
   const newToThisJob = (job: Jobs): boolean => !(job in currentJobPos);
   const assignFirstTimeToCurrentJobPos = (job: Jobs): void => {
     setCurrentJobPo(0);
     currentJobPos[job] = 0;
-    statsCache[0] = { ...accuStats };
+    // statsCache[0] = { ...accuStats };
     setCurrentJobPos({ ...currentJobPos });
   };
 

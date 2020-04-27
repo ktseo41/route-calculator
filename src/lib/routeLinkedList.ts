@@ -37,33 +37,50 @@ export default class RouteLinkedList {
   }
 
   pop() {
-    if (!this.tail) return -1;
+    if (!this.tail) {
+      return -1;
+    } else {
+      let current = this.head;
+      let preTail = this.head;
+      while (current?.next) {
+        preTail = current;
+        current = current.next;
+      }
+      this.tail = preTail;
+      (this.tail as RouteNode).next = null;
+      this.length -= 1;
+      if (!this.length) {
+        this.head = null;
+        this.tail = null;
+      }
+      return current;
+    }
   }
 
-  search(position: number) {
-    if (position < 0 || position >= this.length) return -1;
+  get(index: number) {
+    if (index < 0 || index >= this.length) return -1;
 
     let current = this.head;
-    let count: number = 0;
-    while (count < position && current) {
-      current = current.next;
+    let count = 0;
+    while (count < index) {
+      current = (current as RouteNode).next; // this.length를 통해서 routenode가 존재함을 알기 때문에 가능
       count += 1;
     }
     return current;
   }
 
-  removeAt(position: number) {
-    if (position < 0 && position >= this.length) return -1;
+  // index가 tail일때
+  removeAt(index: number) {
+    if (index < 0 && index >= this.length) return -1;
+    if (index === 0) return this.shift();
+    if (index === this.length - 1) return this.pop();
 
-    let current = this.head;
-    let before;
-    let remove: RouteNode | null;
-    let count = 0;
-    if (position === 0) {
-      remove = this.head;
-      this.head = this.head?.next;
-      this.length -= 1;
-    }
+    const preNodeToRemove = this.get(index - 1);
+    const nodeToRemove = this.get(index);
+
+    (preNodeToRemove as RouteNode).next = (nodeToRemove as RouteNode).next;
+    this.length -= 1;
+    return nodeToRemove;
   }
 }
 
