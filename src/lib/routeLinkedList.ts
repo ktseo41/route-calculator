@@ -28,6 +28,7 @@ export default class RouteLinkedList {
       this.tail = routeNode;
       this.length += 1;
     } else {
+      routeNode.prevStats = { ...this.tail.Stats };
       this.tail.next = routeNode;
       this.tail = routeNode;
       this.tail.next = null;
@@ -61,6 +62,7 @@ export default class RouteLinkedList {
         preTail = current;
         current = current.next;
       }
+
       this.tail = preTail;
       (this.tail as RouteNode).next = null;
       this.length -= 1;
@@ -106,7 +108,7 @@ export default class RouteLinkedList {
  *member
  * job
  * jobPo
- * accuStats
+ * prevStats
  * currentJobPos
  * intervals를 추가했다. 자주 사용하길래
  * adjustJobPos()
@@ -118,23 +120,25 @@ class RouteNode {
    *    초기화는 RouteLinkedList에서 할 것이므로
    *    RouteNode가 job이나 이전스탯을 안받는 상황은 생각하지 않는다.
    * @param job
-   * @param accuStats
+   * @param prevStats
    */
   constructor(
     job: Jobs,
     jobPo?: number,
-    accuStats?: Stats,
+    prevStats?: Stats,
     currentJobPos?: CurrentJobPoints
   ) {
     this.job = job;
     this.jobPo = jobPo || 0;
-    this.accuStats = accuStats || { STR: 5, AGI: 5, INT: 5, VIT: 5 };
+    this.prevStats = prevStats || { STR: 5, AGI: 5, INT: 5, VIT: 5 };
     this.currentJobPos = currentJobPos || { [this.job]: 0 };
     this.jobPointMap = { ...jobPointMap[this.job] };
+    this.Stats = { ...this.prevStats };
   }
   job: Jobs;
   jobPo: number;
-  accuStats: Stats;
+  prevStats: Stats;
+  Stats: Stats;
   currentJobPos: CurrentJobPoints;
   jobPointMap: EachJobPointMap;
   next: this | null = null;
@@ -182,18 +186,18 @@ class RouteNode {
   }
 
   applyStatDelta(quotient: number, stat: Stat, delta: number, limit: number) {
-    const expectStat = this.accuStats[stat] + delta * quotient;
+    const expectStat = this.prevStats[stat] + delta * quotient;
 
     if ((quotient > 0 && delta > 0) || (quotient < 0 && delta < 0)) {
-      this.accuStats[stat] = expectStat > limit ? limit : expectStat;
+      this.Stats[stat] = expectStat > limit ? limit : expectStat;
     }
 
     if (
       ((quotient > 0 && delta < 0) || (quotient < 0 && delta > 0)) &&
-      this.accuStats[stat] > 10
+      this.prevStats[stat] > 10
     ) {
-      this.accuStats[stat] = expectStat < limit ? limit : expectStat;
+      this.Stats[stat] = expectStat < limit ? limit : expectStat;
     }
-    console.log(`stat changed!`, this.accuStats);
+    console.log(`stat changed!`, this.Stats);
   }
 }
