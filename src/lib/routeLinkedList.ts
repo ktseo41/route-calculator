@@ -21,8 +21,11 @@ export default class RouteLinkedList {
   tail: RouteNode | null = null;
 
   // = push
-  add(job: Jobs) {
+  // 추가조건 1. 이전 jobPo가 100이면 추가할 수 없게 한다.
+  add(job: Jobs): RouteNode | null {
+    if (this.tail && this.tail.currentJobPos[job] === 100) return null;
     const routeNode = new RouteNode(job);
+
     if (!this.tail) {
       this.head = routeNode;
       this.tail = routeNode;
@@ -30,11 +33,14 @@ export default class RouteLinkedList {
       this.tail.next = routeNode;
       routeNode.prev = this.tail;
       this.tail = routeNode;
+      routeNode.getPrevs();
     }
+
     this.length += 1;
     return routeNode;
   }
 
+  // 추가 조건 1. currentJobPo에서 현재 jobPo가 100이면 추가 못함
   insertAt(job: Jobs, index: number): RouteNode | null {
     if (index < 0 || index > this.length) return null;
     if (index === 0) return this.unshift(job);
@@ -43,6 +49,9 @@ export default class RouteLinkedList {
     const routeNode = new RouteNode(job);
 
     const prevRouteNode = this.get(index - 1) as RouteNode;
+
+    if (prevRouteNode.currentJobPos[job] === 100) return null;
+
     const nextRouteNode = prevRouteNode.next as RouteNode;
 
     routeNode.prev = prevRouteNode;
@@ -56,7 +65,9 @@ export default class RouteLinkedList {
     return routeNode;
   }
 
-  unshift(job: Jobs) {
+  // 추가 조건 마지막 노드의 jobpo가 100이면 추가 못하게
+  unshift(job: Jobs): RouteNode | null {
+    if (this.tail && this.tail.currentJobPos[job] === 100) return null;
     const routeNode = new RouteNode(job);
 
     if (!this.length) {
@@ -158,6 +169,9 @@ export default class RouteLinkedList {
     nextNodeToRemove.prev = prevNodeToRemove;
 
     this.length -= 1;
+
+    nextNodeToRemove.getPrevs();
+
     return nodeToRemove;
   }
 }
@@ -180,41 +194,33 @@ class RouteNode {
    *    초기화는 RouteLinkedList에서 할 것이므로
    *    RouteNode가 job이나 이전스탯을 안받는 상황은 생각하지 않는다.
    * @param job
-   * @param prevStats
    */
-  constructor(
-    job: Jobs,
-    jobPo?: number,
-    prevStats?: Stats,
-    currentJobPos?: CurrentJobPoints
-  ) {
+  constructor(job: Jobs) {
     this.job = job;
-    this.jobPo = jobPo || 0;
-    this.prevStats = prevStats || { STR: 5, AGI: 5, INT: 5, VIT: 5 };
-    this.currentJobPos = currentJobPos || { [this.job]: 0 };
-    this.jobPointMap = { ...jobPointMap[this.job] };
-    this.Stats = { ...this.prevStats };
+    this.jobPointMap = jobPointMap[this.job] as EachJobPointMap;
   }
   job: Jobs;
-  jobPo: number;
-  prevStats: Stats;
-  Stats: Stats;
-  currentJobPos: CurrentJobPoints;
+  jobPo: number = 0;
+  Stats: Stats = { STR: 5, AGI: 5, INT: 5, VIT: 5 };
+  currentJobPos: CurrentJobPoints = { [Jobs.무직]: 0 };
   jobPointMap: EachJobPointMap;
   prev: this | null = null;
   next: this | null = null;
 
-  adjustJobPoint(jobPoDelta: number) {
-    let actualChange: number;
+  getActualChange(jobPoDelta: number): number {
     if (jobPoDelta > 0) {
-      actualChange =
-        this.jobPo + jobPoDelta > 100 ? 100 - this.jobPo : jobPoDelta;
+      return this.jobPo + jobPoDelta > 100 ? 100 - this.jobPo : jobPoDelta;
     } else {
-      actualChange = this.jobPo + jobPoDelta < 0 ? this.jobPo - 0 : jobPoDelta;
+      return this.jobPo + jobPoDelta < 0 ? this.jobPo - 0 : jobPoDelta;
     }
+  }
+
+  adjustJobPoint(jobPoDelta: number) {
+    const actualChange = this.getActualChange(jobPoDelta);
     console.log(`jobPoDelta : ${jobPoDelta}`, `actualChange: ${actualChange}`);
     this.shouldChangeStats(actualChange) && this.changeStats(actualChange);
     this.jobPo += actualChange;
+    this.currentJobPos[this.job] = this.jobPo;
   }
 
   shouldChangeStats(actualChange: number) {
@@ -247,7 +253,7 @@ class RouteNode {
   }
 
   applyStatDelta(quotient: number, stat: Stat, delta: number, limit: number) {
-    const expectStat = this.prevStats[stat] + delta * quotient;
+    const expectStat = this.Stats[stat] + delta * quotient;
 
     if ((quotient > 0 && delta > 0) || (quotient < 0 && delta < 0)) {
       this.Stats[stat] = expectStat > limit ? limit : expectStat;
@@ -255,10 +261,40 @@ class RouteNode {
 
     if (
       ((quotient > 0 && delta < 0) || (quotient < 0 && delta > 0)) &&
-      this.prevStats[stat] > 10
+      this.Stats[stat] > 10
     ) {
       this.Stats[stat] = expectStat < limit ? limit : expectStat;
     }
     console.log(`stat changed!`, JSON.stringify(this.Stats));
+  }
+
+  getPrevs(): void {
+    if (this.prev) {
+      console.log("my job", this.job, "getPrev prev is ", this.prev);
+      this.Stats = { ...this.prev.Stats };
+      this.currentJobPos = { ...this.prev.currentJobPos };
+      if (this.currentJobPos[this.job] === undefined)
+        this.currentJobPos[this.job] = 0;
+      // jobPo는 현재 node의 jobPo 변경양을 뜻하기 때문에
+      // 바로 반영하지 않도록 했다.
+    }
+  }
+
+  recalculateJobPo(): number {
+    return this.currentJobPos[this.job]
+      ? this.jobPo - (this.currentJobPos[this.job] as number)
+      : this.jobPo;
+  }
+
+  recalculate() {
+    // 잡포는 변경이 안됐는데 이전 스탯이 변경될 수도 있는 상황
+    // 그러므로 이전 노드 스탯과 잡포를 바탕으로 현재 잡포와 스탯을 변경해야 한다.
+    // 조건 : this.getPrev()가 실행된 뒤 실행돼야한다.
+
+    // 이전에 직업을 가지지 않았을 수도 있어서
+    const newJobPo = this.recalculateJobPo();
+    this.jobPo = 0; // 초기화한 후
+    this.currentJobPos[this.job] = this.jobPo;
+    this.adjustJobPoint(newJobPo);
   }
 }
