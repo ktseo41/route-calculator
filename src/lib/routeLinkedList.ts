@@ -12,6 +12,7 @@ import jobPointMap, {
 type CurrentJobPoints = {
   [job in Jobs]?: number;
 };
+
 export default class RouteLinkedList {
   constructor() {
     this.add(Jobs.무직);
@@ -185,9 +186,21 @@ export default class RouteLinkedList {
 
     return nodeToRemove;
   }
+
+  public getAllNodes(): (RouteNode | null)[] {
+    const allNodes = [];
+    let count = 0;
+
+    while (count < this.length) {
+      allNodes.push(this.get(count));
+      count += 1;
+    }
+
+    return allNodes;
+  }
 }
 
-class RouteNode {
+export class RouteNode {
   constructor(job: Jobs) {
     this.job = job;
     this.jobPointMap = jobPointMap[this.job] as EachJobPointMap;
@@ -204,7 +217,7 @@ class RouteNode {
     const actualChange = this.getActualChange(jobPoDelta);
     this.shouldChangeStats(actualChange) && this.changeStats(actualChange);
     this.jobPo += actualChange;
-    this.currentJobPos[this.job] = this.jobPo;
+    (this.currentJobPos[this.job] as number) += actualChange;
     if (this.next) {
       this.next.getPrevs();
       this.next.recalculate();
