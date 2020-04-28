@@ -11,15 +11,15 @@ STR변화 = [-1, 20] // 레벨당 1감소, 최대 20까지 감소
 
 export enum Stat {
   STR = "STR",
-  AGI = "AGI",
   INT = "INT",
+  AGI = "AGI",
   VIT = "VIT",
 }
 
 export interface Stats {
   STR: number;
-  AGI: number;
   INT: number;
+  AGI: number;
   VIT: number;
 }
 

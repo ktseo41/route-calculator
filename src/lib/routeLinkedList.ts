@@ -24,6 +24,7 @@ export default class RouteLinkedList {
   // 추가조건 1. 이전 jobPo가 100이면 추가할 수 없게 한다.
   add(job: Jobs): RouteNode | null {
     if (this.tail && this.tail.currentJobPos[job] === 100) return null;
+
     const routeNode = new RouteNode(job);
 
     if (!this.tail) {
@@ -37,6 +38,7 @@ export default class RouteLinkedList {
     }
 
     this.length += 1;
+    console.log("job added!", job, routeNode);
     return routeNode;
   }
 
@@ -62,6 +64,10 @@ export default class RouteLinkedList {
 
     this.length -= 1;
 
+    routeNode.getPrevs();
+    // routeNode.next.recalculate()가 필요 없는 이유는
+    // 추가만한 상황이라서 어떤 변화도 없을 것이기 때문이다.
+
     return routeNode;
   }
 
@@ -77,6 +83,8 @@ export default class RouteLinkedList {
       routeNode.next = this.head as RouteNode;
       (this.head as RouteNode).prev = routeNode;
       this.head = routeNode;
+      routeNode.next.getPrevs();
+      routeNode.next.recalculate();
     }
 
     this.length += 1;
@@ -97,6 +105,9 @@ export default class RouteLinkedList {
 
       this.head.prev = null;
       nodeToRemove.next = null;
+
+      this.head.next?.getPrevs();
+      this.head.next?.recalculate();
     }
 
     this.length -= 1;
@@ -121,6 +132,7 @@ export default class RouteLinkedList {
 
       this.length -= 1;
 
+      console.log("job popped! :", nodeToRemove?.job, nodeToRemove);
       return nodeToRemove;
     }
   }
@@ -171,7 +183,9 @@ export default class RouteLinkedList {
     this.length -= 1;
 
     nextNodeToRemove.getPrevs();
+    nextNodeToRemove.recalculate();
 
+    console.log("job removed ! : ", nodeToRemove);
     return nodeToRemove;
   }
 }
@@ -201,7 +215,7 @@ class RouteNode {
   }
   job: Jobs;
   jobPo: number = 0;
-  Stats: Stats = { STR: 5, AGI: 5, INT: 5, VIT: 5 };
+  Stats: Stats = { STR: 5, INT: 5, AGI: 5, VIT: 5 };
   currentJobPos: CurrentJobPoints = { [Jobs.무직]: 0 };
   jobPointMap: EachJobPointMap;
   prev: this | null = null;
@@ -217,24 +231,27 @@ class RouteNode {
 
   adjustJobPoint(jobPoDelta: number) {
     const actualChange = this.getActualChange(jobPoDelta);
-    console.log(`jobPoDelta : ${jobPoDelta}`, `actualChange: ${actualChange}`);
     this.shouldChangeStats(actualChange) && this.changeStats(actualChange);
     this.jobPo += actualChange;
     this.currentJobPos[this.job] = this.jobPo;
+    if (this.next) {
+      this.next.getPrevs();
+      this.next.recalculate();
+    }
   }
 
   shouldChangeStats(actualChange: number) {
     return Object.keys(this.jobPointMap).some((interval) => {
       return (
-        Math.trunc((this.jobPo + actualChange) / +interval) -
-          Math.trunc(this.jobPo / +interval) >=
-        1
+        Math.abs(
+          Math.trunc((this.jobPo + actualChange) / +interval) -
+            Math.trunc(this.jobPo / +interval)
+        ) >= 1
       );
     });
   }
 
   changeStats(actualChange: number) {
-    console.log("stat should be changed!");
     for (const interval in this.jobPointMap) {
       if (this.jobPointMap.hasOwnProperty(interval)) {
         const quotient =
@@ -245,7 +262,6 @@ class RouteNode {
           this.jobPointMap[interval as Intervals] as StatMap
         ).forEach(([stat, deltaInfo]) => {
           const [delta, limit] = deltaInfo;
-
           this.applyStatDelta(quotient, stat as Stat, delta, limit);
         });
       }
@@ -256,28 +272,44 @@ class RouteNode {
     const expectStat = this.Stats[stat] + delta * quotient;
 
     if ((quotient > 0 && delta > 0) || (quotient < 0 && delta < 0)) {
+      if (this.Stats[stat] > limit) return;
       this.Stats[stat] = expectStat > limit ? limit : expectStat;
+      console.log(`stat changed!`, this.job, stat, JSON.stringify(this.Stats));
     }
 
     if (
       ((quotient > 0 && delta < 0) || (quotient < 0 && delta > 0)) &&
       this.Stats[stat] > 10
     ) {
-      this.Stats[stat] = expectStat < limit ? limit : expectStat;
+      if (delta < 0) {
+        this.Stats[stat] = expectStat < limit ? limit : expectStat;
+      } else {
+        this.Stats[stat] = expectStat < 10 ? 10 : expectStat;
+      }
+      console.log(
+        `stat changed!`,
+        this.job,
+        "몫 :",
+        quotient,
+        stat,
+        JSON.stringify(this.Stats)
+      );
     }
-    console.log(`stat changed!`, JSON.stringify(this.Stats));
   }
 
   getPrevs(): void {
-    if (this.prev) {
-      console.log("my job", this.job, "getPrev prev is ", this.prev);
-      this.Stats = { ...this.prev.Stats };
-      this.currentJobPos = { ...this.prev.currentJobPos };
-      if (this.currentJobPos[this.job] === undefined)
-        this.currentJobPos[this.job] = 0;
-      // jobPo는 현재 node의 jobPo 변경양을 뜻하기 때문에
-      // 바로 반영하지 않도록 했다.
-    }
+    this.Stats = this.prev
+      ? { ...this.prev.Stats }
+      : { STR: 5, INT: 5, AGI: 5, VIT: 5 };
+    this.currentJobPos = this.prev
+      ? {
+          ...this.prev.currentJobPos,
+        }
+      : { [Jobs.무직]: 0 };
+    if (this.currentJobPos[this.job] === undefined)
+      this.currentJobPos[this.job] = 0;
+    // jobPo는 현재 node의 jobPo 변경양을 뜻하기 때문에
+    // 바로 반영하지 않도록 했다.
   }
 
   recalculateJobPo(): number {
@@ -292,9 +324,12 @@ class RouteNode {
     // 조건 : this.getPrev()가 실행된 뒤 실행돼야한다.
 
     // 이전에 직업을 가지지 않았을 수도 있어서
+    console.log("start recalculate!");
     const newJobPo = this.recalculateJobPo();
     this.jobPo = 0; // 초기화한 후
     this.currentJobPos[this.job] = this.jobPo;
+    console.log("newJobPo", newJobPo, this.job, this.Stats, this.currentJobPos);
     this.adjustJobPoint(newJobPo);
+    if (this.next) this.next.recalculate();
   }
 }
