@@ -305,11 +305,9 @@ export class RouteNode {
   }
 
   public recalculate(): void {
-    console.log("start recalculate!");
     const newJobPo = this.recalculateJobPo();
     this.jobPo = 0; // 초기화한 후
     this.currentJobPos[this.job] = this.jobPo;
-    console.log("newJobPo", newJobPo, this.job, this.stats, this.currentJobPos);
     this.adjustJobPoint(newJobPo);
     if (this.next) this.next.recalculate();
   }

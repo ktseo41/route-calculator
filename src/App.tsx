@@ -36,12 +36,30 @@ const CalculatorWrapper = styled.div`
   width: 50%;
   min-width: 300px;
   height: 500px;
-  margin-top: 200px;
-  margin-left: 25%;
 `;
+
+const Timer = () => {
+  const [nowStr, setNowStr] = useState(new Date().toLocaleTimeString());
+
+  useEffect(() => {
+    let count = 0;
+
+    const intervalID = setInterval(() => {
+      if (count >= 680) {
+        clearInterval(intervalID);
+        alert("15분 경과");
+      }
+      setNowStr(new Date().toLocaleTimeString());
+      count += 1;
+    }, 1000);
+  }, []);
+
+  return <span>{nowStr}</span>;
+};
 
 export default function App() {
   const [rLL, setRLL] = useState(new RouteLinkedList());
+  const [selectedNode, setSelectedNode] = useState(rLL.tail);
   const [job, setJob] = useState(rLL.tail?.job);
   const [jobPo, setJobPo] = useState(rLL.tail?.jobPo);
   const [stats, setStats] = useState(rLL.tail?.stats);
@@ -111,22 +129,44 @@ export default function App() {
       </section>
       <section>
         <div>
+          <h5>현재 노드</h5>
           <div>{`직업 : ${job}`}</div>
           <span>{` 잡포인트 : ${jobPo}`}</span>
         </div>
-        <div>{JSON.stringify(currentJobPos, null, 2)}</div>
-        <div>{JSON.stringify(stats, null, 2)}</div>
+        <div>
+          <h5>누적 잡포인트, 스탯</h5>
+          <div>{JSON.stringify(currentJobPos, null, 2)}</div>
+          <div>{JSON.stringify(stats, null, 2)}</div>
+        </div>
       </section>
       <section>
-        {rLL.getAllNodes().map((routeNode, index) => {
-          return (
-            <div key={index}>
-              <span>{routeNode?.job}</span>
-              <span>{routeNode?.jobPo}</span>
-              <span>{JSON.stringify(routeNode?.stats)}</span>
-            </div>
-          );
-        })}
+        <table>
+          <tr>
+            <th>직업</th>
+            <th>STR</th>
+            <th>INT</th>
+            <th>AGI</th>
+            <th>VIT</th>
+            <th>잡포인트</th>
+          </tr>
+          {rLL.getAllNodes().map((routeNode, index) => {
+            return (
+              <tr
+                key={index}
+                onClick={(event: MouseEvent) => {
+                  console.log(event.target);
+                }}
+              >
+                <td>{routeNode?.job}</td>
+                <td>{routeNode?.stats.STR}</td>
+                <td>{routeNode?.stats.INT}</td>
+                <td>{routeNode?.stats.AGI}</td>
+                <td>{routeNode?.stats.VIT}</td>
+                <td>{routeNode?.jobPo}</td>
+              </tr>
+            );
+          })}
+        </table>
       </section>
     </CalculatorWrapper>
   );

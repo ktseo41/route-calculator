@@ -90,3 +90,8 @@ Object.keys(jobPointMap[selectedJob] as EachJobPointMap).forEach((interval) => {
   if (nextJobPo % +interval === 0) intervals.push(interval as Intervals);
 });
 ```
+
+### parcel build 후 경로 에러
+
+- `--public-url ./`를 해줘야 했다.
+- https://github.com/parcel-bundler/parcel/issues/1092
