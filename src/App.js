@@ -46,7 +46,10 @@ var buttonStates = [
     "reset",
 ];
 var CalculatorWrapper = styled_components_1["default"].div(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n  border: 1px solid black;\n  width: 50%;\n  min-width: 300px;\n  /* height: 500px; */\n"], ["\n  border: 1px solid black;\n  width: 50%;\n  min-width: 300px;\n  /* height: 500px; */\n"])));
-var AccusTableTr = styled_components_1["default"].tr(templateObject_2 || (templateObject_2 = __makeTemplateObject(["\n  border: 1px solid black;\n"], ["\n  border: 1px solid black;\n"])));
+var AccusTable = styled_components_1["default"].table(templateObject_2 || (templateObject_2 = __makeTemplateObject(["\n  border-collapse: collapse;\n  text-align: center;\n  width: 100%;\n\n  & tr {\n    padding: 0 5px;\n  }\n\n  & tr.selected {\n    background-color: #ffbb00 !important;\n  }\n\n  & tr:nth-child(even) {\n    background-color: #efefef;\n  }\n"], ["\n  border-collapse: collapse;\n  text-align: center;\n  width: 100%;\n\n  & tr {\n    padding: 0 5px;\n  }\n\n  & tr.selected {\n    background-color: #ffbb00 !important;\n  }\n\n  & tr:nth-child(even) {\n    background-color: #efefef;\n  }\n"])));
+var H5Div = styled_components_1["default"].div(templateObject_3 || (templateObject_3 = __makeTemplateObject(["\n  display: inline;\n  font-weight: bold;\n  margin: 0px 10px;\n"], ["\n  display: inline;\n  font-weight: bold;\n  margin: 0px 10px;\n"])));
+var SelectedNodeDiv = styled_components_1["default"].div(templateObject_4 || (templateObject_4 = __makeTemplateObject(["\n  display: flex;\n  justify-content: flex-start;\n"], ["\n  display: flex;\n  justify-content: flex-start;\n"])));
+var SelectedInsideDiv = styled_components_1["default"].div(templateObject_5 || (templateObject_5 = __makeTemplateObject(["\n  display: flex;\n  justify-content: space-around;\n\n  & span {\n    margin: 0px 10px;\n  }\n"], ["\n  display: flex;\n  justify-content: space-around;\n\n  & span {\n    margin: 0px 10px;\n  }\n"])));
 var Timer = function () {
     var _a = __read(react_1.useState(new Date().toLocaleTimeString()), 2), nowStr = _a[0], setNowStr = _a[1];
     react_1.useEffect(function () {
@@ -74,6 +77,7 @@ function App() {
             .textContent;
         rLL.add(selectedValue);
         setSelectedNode(rLL.tail);
+        setSelectedNodeIdx(rLL.length - 1);
         setJob(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.job);
         setJobPo(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.jobPo);
         setStats(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.stats);
@@ -85,6 +89,7 @@ function App() {
             setRLL(function () {
                 var newRLL = new RouteLinkedList_1["default"]();
                 setSelectedNode(newRLL.tail);
+                setSelectedNodeIdx(0);
                 return newRLL;
             });
             return;
@@ -110,25 +115,13 @@ function App() {
             return (react_1["default"].createElement("button", { onClick: adjustJobPoint, key: idx }, buttonState));
         })),
         react_1["default"].createElement("section", null,
-            react_1["default"].createElement("div", null,
-                react_1["default"].createElement("h5", null, "\uD604\uC7AC \uB178\uB4DC"),
-                react_1["default"].createElement("div", null, "\uC9C1\uC5C5 : " + job),
-                react_1["default"].createElement("span", null, " \uC7A1\uD3EC\uC778\uD2B8 : " + jobPo)),
-            react_1["default"].createElement("div", null,
-                react_1["default"].createElement("h5", null, "\uC120\uD0DD \uB178\uB4DC \uC2A4\uD0EF"),
-                react_1["default"].createElement("table", null,
-                    react_1["default"].createElement("thead", null,
-                        react_1["default"].createElement("tr", null,
-                            react_1["default"].createElement("th", null, "STR"),
-                            react_1["default"].createElement("th", null, "INT"),
-                            react_1["default"].createElement("th", null, "AGI"),
-                            react_1["default"].createElement("th", null, "VIT"))),
-                    react_1["default"].createElement("tbody", null,
-                        react_1["default"].createElement("tr", null, Object.values(stats || {}).map(function (statValue, statIdx) {
-                            return react_1["default"].createElement("td", { key: statIdx }, statValue);
-                        })))))),
+            react_1["default"].createElement(SelectedNodeDiv, null,
+                react_1["default"].createElement(H5Div, null, "\uC120\uD0DD \uB178\uB4DC"),
+                react_1["default"].createElement(SelectedInsideDiv, null,
+                    react_1["default"].createElement("span", null, "\uC9C1\uC5C5 : " + job),
+                    react_1["default"].createElement("span", null, " \uC7A1\uD3EC\uC778\uD2B8 : " + jobPo)))),
         react_1["default"].createElement("section", null,
-            react_1["default"].createElement("table", null,
+            react_1["default"].createElement(AccusTable, null,
                 react_1["default"].createElement("thead", null,
                     react_1["default"].createElement("tr", null,
                         react_1["default"].createElement("th", null, "\uC9C1\uC5C5"),
@@ -138,8 +131,9 @@ function App() {
                         react_1["default"].createElement("th", null, "VIT"),
                         react_1["default"].createElement("th", null, "\uC7A1\uD3EC\uC778\uD2B8"))),
                 react_1["default"].createElement("tbody", null, rLL.getAllNodes().map(function (routeNode, index) {
-                    return (react_1["default"].createElement(AccusTableTr, { id: "" + index, key: index, onClick: function (event) {
+                    return (react_1["default"].createElement("tr", { id: "" + index, key: index, className: index === selectedNodeIdx ? "selected" : "", onClick: function (event) {
                             setSelectedNode(rLL.get(+event.currentTarget.id));
+                            setSelectedNodeIdx(+event.currentTarget.id);
                         } },
                         react_1["default"].createElement("td", null, routeNode === null || routeNode === void 0 ? void 0 : routeNode.job),
                         react_1["default"].createElement("td", null, routeNode === null || routeNode === void 0 ? void 0 : routeNode.stats.STR),
@@ -150,4 +144,4 @@ function App() {
                 }))))));
 }
 exports["default"] = App;
-var templateObject_1, templateObject_2;
+var templateObject_1, templateObject_2, templateObject_3, templateObject_4, templateObject_5;

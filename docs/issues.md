@@ -115,3 +115,14 @@ module.exports = {
   ],
 };
 ```
+
+### powershell 명령어로 gh-pages 배포 자동화
+
+- pipeline이 사용 가능하고
+- pipeline object를 \$\_ 로 받을 수 있다.
+- https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.management/join-path?view=powershell-7
+- https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.management/remove-item?view=powershell-7
+
+#### 참고
+
+- https://sacstory.tistory.com/entry/PowerShell-%EA%B8%B0%EC%B4%88-%EB%AC%B8%EB%B2%95?category=841026

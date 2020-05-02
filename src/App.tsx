@@ -39,8 +39,42 @@ const CalculatorWrapper = styled.div`
   /* height: 500px; */
 `;
 
-const AccusTableTr = styled.tr`
-  border: 1px solid black;
+const AccusTable = styled.table`
+  border-collapse: collapse;
+  text-align: center;
+  width: 100%;
+
+  & tr {
+    padding: 0 5px;
+  }
+
+  & tr.selected {
+    background-color: #ffbb00 !important;
+  }
+
+  & tr:nth-child(even) {
+    background-color: #efefef;
+  }
+`;
+
+const H5Div = styled.div`
+  display: inline;
+  font-weight: bold;
+  margin: 0px 10px;
+`;
+
+const SelectedNodeDiv = styled.div`
+  display: flex;
+  justify-content: flex-start;
+`;
+
+const SelectedInsideDiv = styled.div`
+  display: flex;
+  justify-content: space-around;
+
+  & span {
+    margin: 0px 10px;
+  }
 `;
 
 const Timer = () => {
@@ -76,6 +110,7 @@ export default function App() {
     rLL.add(selectedValue);
 
     setSelectedNode(rLL.tail);
+    setSelectedNodeIdx(rLL.length - 1);
 
     setJob(selectedNode?.job);
     setJobPo(selectedNode?.jobPo);
@@ -89,6 +124,7 @@ export default function App() {
       setRLL(() => {
         const newRLL = new RouteLinkedList();
         setSelectedNode(newRLL.tail);
+        setSelectedNodeIdx(0);
         return newRLL;
       });
       return;
@@ -136,12 +172,14 @@ export default function App() {
         })}
       </section>
       <section>
-        <div>
-          <h5>현재 노드</h5>
-          <div>{`직업 : ${job}`}</div>
-          <span>{` 잡포인트 : ${jobPo}`}</span>
-        </div>
-        <div>
+        <SelectedNodeDiv>
+          <H5Div>선택 노드</H5Div>
+          <SelectedInsideDiv>
+            <span>{`직업 : ${job}`}</span>
+            <span>{` 잡포인트 : ${jobPo}`}</span>
+          </SelectedInsideDiv>
+        </SelectedNodeDiv>
+        {/* <div>
           <h5>선택 노드 스탯</h5>
           <table>
             <thead>
@@ -160,10 +198,10 @@ export default function App() {
               </tr>
             </tbody>
           </table>
-        </div>
+        </div> */}
       </section>
       <section>
-        <table>
+        <AccusTable>
           <thead>
             <tr>
               <th>직업</th>
@@ -177,11 +215,13 @@ export default function App() {
           <tbody>
             {rLL.getAllNodes().map((routeNode, index) => {
               return (
-                <AccusTableTr
+                <tr
                   id={`${index}`}
                   key={index}
+                  className={index === selectedNodeIdx ? "selected" : ""}
                   onClick={(event: MouseEvent) => {
                     setSelectedNode(rLL.get(+event.currentTarget.id));
+                    setSelectedNodeIdx(+event.currentTarget.id);
                   }}
                 >
                   <td>{routeNode?.job}</td>
@@ -190,11 +230,11 @@ export default function App() {
                   <td>{routeNode?.stats.AGI}</td>
                   <td>{routeNode?.stats.VIT}</td>
                   <td>{routeNode?.jobPo}</td>
-                </AccusTableTr>
+                </tr>
               );
             })}
           </tbody>
-        </table>
+        </AccusTable>
       </section>
     </CalculatorWrapper>
   );
