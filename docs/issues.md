@@ -95,3 +95,23 @@ Object.keys(jobPointMap[selectedJob] as EachJobPointMap).forEach((interval) => {
 
 - `--public-url ./`를 해줘야 했다.
 - https://github.com/parcel-bundler/parcel/issues/1092
+
+### jest test import 문제
+
+- bable.config.js에 Introduction의 아래 내용대로 추가했음
+
+```js
+// babel.config.js
+module.exports = {
+  presets: [
+    [
+      "@babel/preset-env",
+      {
+        targets: {
+          node: "current",
+        },
+      },
+    ],
+  ],
+};
+```

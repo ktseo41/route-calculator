@@ -83,7 +83,7 @@ export default class RouteLinkedList {
       routeNode.next = this.head as RouteNode;
       (this.head as RouteNode).prev = routeNode;
       this.head = routeNode;
-      routeNode.next.getPrevs();
+      // routeNode.next.getPrevs();
       routeNode.next.recalculate();
     }
 
@@ -106,7 +106,7 @@ export default class RouteLinkedList {
       this.head.prev = null;
       nodeToRemove.next = null;
 
-      this.head.next?.getPrevs();
+      // this.head.next?.getPrevs();
       this.head.next?.recalculate();
     }
 
@@ -181,7 +181,7 @@ export default class RouteLinkedList {
 
     this.length -= 1;
 
-    nextNodeToRemove.getPrevs();
+    // nextNodeToRemove.getPrevs();
     nextNodeToRemove.recalculate();
 
     return nodeToRemove;
@@ -208,27 +208,38 @@ export class RouteNode {
   job: Jobs;
   jobPo: number = 0;
   stats: Stats = { STR: 5, INT: 5, AGI: 5, VIT: 5 };
+  fisrtStats: Stats | undefined;
   currentJobPos: CurrentJobPoints = { [Jobs.무직]: 0 };
   prev: this | null = null;
   next: this | null = null;
   private jobPointMap: EachJobPointMap;
 
-  public adjustJobPoint(jobPoDelta: number): void {
-    const actualChange = this.getActualChange(jobPoDelta);
+  public adjustJobPoint(jobPoDelta: number, isRecalculating?: boolean): void {
+    let actualChange;
+    if (isRecalculating) {
+      this.jobPo = 0;
+      actualChange = jobPoDelta;
+    } else {
+      actualChange = this.getActualChange(jobPoDelta);
+    }
+
     this.shouldChangeStats(actualChange) && this.changeStats(actualChange);
     this.jobPo += actualChange;
     (this.currentJobPos[this.job] as number) += actualChange;
-    if (this.next) {
-      this.next.getPrevs();
-      this.next.recalculate();
-    }
+
+    if (this.next) this.next.recalculate();
   }
 
   private getActualChange(jobPoDelta: number): number {
     if (jobPoDelta > 0) {
-      return this.jobPo + jobPoDelta > 100 ? 100 - this.jobPo : jobPoDelta;
+      return this.jobPo +
+        jobPoDelta +
+        ((this.prev?.currentJobPos[this.job] as number) || 0) >
+        100
+        ? 100 - this.jobPo
+        : jobPoDelta;
     } else {
-      return this.jobPo + jobPoDelta < 0 ? this.jobPo - 0 : jobPoDelta;
+      return this.jobPo + jobPoDelta < 0 ? -this.jobPo : jobPoDelta;
     }
   }
 
@@ -266,29 +277,53 @@ export class RouteNode {
     delta: number,
     limit: number
   ) {
-    const expectStat = this.stats[stat] + delta * quotient;
-
     if ((quotient > 0 && delta > 0) || (quotient < 0 && delta < 0)) {
-      if (this.stats[stat] > limit) return;
-      this.stats[stat] = expectStat > limit ? limit : expectStat;
+      this.increaseStats(quotient, stat, delta, limit);
     }
 
-    if (
-      ((quotient > 0 && delta < 0) || (quotient < 0 && delta > 0)) &&
-      this.stats[stat] > 10
-    ) {
-      if (delta < 0) {
-        this.stats[stat] = expectStat < limit ? limit : expectStat;
-      } else {
-        this.stats[stat] = expectStat < 10 ? 10 : expectStat;
+    if ((quotient > 0 && delta < 0) || (quotient < 0 && delta > 0)) {
+      this.decreaseStats(quotient, stat, delta, limit);
+    }
+  }
+
+  increaseStats(quotient: number, stat: Stat, delta: number, limit: number) {
+    if (this.stats[stat] > limit) return;
+
+    const prevStats = this.getPrevStats();
+    const expectStat = this.stats[stat] + delta * quotient;
+    if (delta > 0) {
+      this.stats[stat] = expectStat > limit ? limit : expectStat;
+    } else {
+      if (prevStats[stat] > expectStat) {
+        this.stats[stat] = expectStat;
       }
     }
   }
 
-  public getPrevs(): void {
-    this.stats = this.prev
+  decreaseStats(quotient: number, stat: Stat, delta: number, limit: number) {
+    const prevStats = this.getPrevStats();
+    const expectStat = this.stats[stat] + delta * quotient;
+    if (delta > 0) {
+      if (prevStats[stat] < 10) {
+        this.stats[stat] =
+          expectStat < prevStats[stat] ? prevStats[stat] : expectStat;
+      } else {
+        this.stats[stat] = expectStat < 10 ? 10 : expectStat;
+      }
+    } else {
+      if (this.stats[stat] < 10) return;
+      this.stats[stat] = expectStat < limit ? limit : expectStat;
+    }
+  }
+
+  getPrevStats(): Stats {
+    return this.prev
       ? { ...this.prev.stats }
       : { STR: 5, INT: 5, AGI: 5, VIT: 5 };
+  }
+
+  public getPrevs(): void {
+    this.stats = this.getPrevStats();
     this.currentJobPos = this.prev
       ? {
           ...this.prev.currentJobPos,
@@ -299,16 +334,18 @@ export class RouteNode {
   }
 
   recalculateJobPo(): number {
-    return this.currentJobPos[this.job]
-      ? this.jobPo - (this.currentJobPos[this.job] as number)
-      : this.jobPo;
+    if ((this.prev?.currentJobPos[this.job] || 0) + this.jobPo > 100) {
+      return 100 - (this.prev?.currentJobPos[this.job] || 0);
+    }
+
+    return this.jobPo;
   }
 
   public recalculate(): void {
+    const isRecalculating = true;
+    this.getPrevs();
     const newJobPo = this.recalculateJobPo();
-    this.jobPo = 0; // 초기화한 후
-    this.currentJobPos[this.job] = this.jobPo;
-    this.adjustJobPoint(newJobPo);
+    this.adjustJobPoint(newJobPo, isRecalculating);
     if (this.next) this.next.recalculate();
   }
 }

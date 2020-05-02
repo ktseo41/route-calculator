@@ -35,7 +35,7 @@ const CalculatorWrapper = styled.div`
   border: 1px solid black;
   width: 50%;
   min-width: 300px;
-  height: 500px;
+  /* height: 500px; */
 `;
 
 const Timer = () => {
@@ -60,43 +60,52 @@ const Timer = () => {
 export default function App() {
   const [rLL, setRLL] = useState(new RouteLinkedList());
   const [selectedNode, setSelectedNode] = useState(rLL.tail);
-  const [job, setJob] = useState(rLL.tail?.job);
-  const [jobPo, setJobPo] = useState(rLL.tail?.jobPo);
-  const [stats, setStats] = useState(rLL.tail?.stats);
-  const [currentJobPos, setCurrentJobPos] = useState(rLL.tail?.currentJobPos);
+  const [job, setJob] = useState(selectedNode?.job);
+  const [jobPo, setJobPo] = useState(selectedNode?.jobPo);
+  const [stats, setStats] = useState(selectedNode?.stats);
+  const [currentJobPos, setCurrentJobPos] = useState(
+    selectedNode?.currentJobPos
+  );
 
   const addNewJob = (event: MouseEvent) => {
     const selectedValue = (event.target as HTMLButtonElement)
       .textContent as Jobs;
     rLL.add(selectedValue);
 
-    setJob(rLL.tail?.job);
-    setJobPo(rLL.tail?.jobPo);
-    setCurrentJobPos(rLL.tail?.currentJobPos);
-    setStats(rLL.tail?.stats);
+    setSelectedNode(rLL.tail);
+
+    setJob(selectedNode?.job);
+    setJobPo(selectedNode?.jobPo);
+    setCurrentJobPos(selectedNode?.currentJobPos);
+    setStats(selectedNode?.stats);
   };
 
   const adjustJobPoint = (event: MouseEvent) => {
     const changeState = (event.target as HTMLButtonElement)
       .textContent as ButtonState;
     if (changeState === "reset") {
-      setRLL(new RouteLinkedList());
+      setRLL(() => {
+        const newRLL = new RouteLinkedList();
+        setSelectedNode(newRLL.tail);
+        return newRLL;
+      });
       return;
     }
     const numberedChangeState = +changeState;
-    rLL.tail?.adjustJobPoint(numberedChangeState);
+    console.log(`in APP.tsx, adjustJobPoint, changeState ${changeState}`);
+    selectedNode?.adjustJobPoint(numberedChangeState);
 
-    setJobPo(rLL.tail?.jobPo);
-    setCurrentJobPos(rLL.tail?.currentJobPos);
-    setStats(rLL.tail?.stats);
+    setJobPo(selectedNode?.jobPo);
+    setCurrentJobPos(selectedNode?.currentJobPos);
+    setStats(selectedNode?.stats);
   };
 
   useEffect(() => {
-    setJob(rLL.tail?.job);
-    setJobPo(rLL.tail?.jobPo);
-    setCurrentJobPos(rLL.tail?.currentJobPos);
-    setStats(rLL.tail?.stats);
-  }, [rLL]);
+    setJob(selectedNode?.job);
+    setJobPo(selectedNode?.jobPo);
+    setCurrentJobPos(selectedNode?.currentJobPos);
+    setStats(selectedNode?.stats);
+  }, [rLL, selectedNode]);
 
   return (
     <CalculatorWrapper>
@@ -134,9 +143,10 @@ export default function App() {
           <span>{` 잡포인트 : ${jobPo}`}</span>
         </div>
         <div>
-          <h5>누적 잡포인트, 스탯</h5>
-          <div>{JSON.stringify(currentJobPos, null, 2)}</div>
+          <h5>누적 스탯</h5>
           <div>{JSON.stringify(stats, null, 2)}</div>
+          <h5>누적 잡포</h5>
+          <div>{JSON.stringify(currentJobPos, null, 2)}</div>
         </div>
       </section>
       <section>
@@ -152,9 +162,11 @@ export default function App() {
           {rLL.getAllNodes().map((routeNode, index) => {
             return (
               <tr
+                id={`${index}`}
                 key={index}
                 onClick={(event: MouseEvent) => {
-                  console.log(event.target);
+                  setSelectedNode(rLL.get(+event.currentTarget.id));
+                  console.log(event.currentTarget);
                 }}
               >
                 <td>{routeNode?.job}</td>
