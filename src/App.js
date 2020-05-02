@@ -46,6 +46,7 @@ var buttonStates = [
     "reset",
 ];
 var CalculatorWrapper = styled_components_1["default"].div(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n  border: 1px solid black;\n  width: 50%;\n  min-width: 300px;\n  /* height: 500px; */\n"], ["\n  border: 1px solid black;\n  width: 50%;\n  min-width: 300px;\n  /* height: 500px; */\n"])));
+var AccusTableTr = styled_components_1["default"].tr(templateObject_2 || (templateObject_2 = __makeTemplateObject(["\n  border: 1px solid black;\n"], ["\n  border: 1px solid black;\n"])));
 var Timer = function () {
     var _a = __read(react_1.useState(new Date().toLocaleTimeString()), 2), nowStr = _a[0], setNowStr = _a[1];
     react_1.useEffect(function () {
@@ -64,10 +65,10 @@ var Timer = function () {
 function App() {
     var _a = __read(react_1.useState(new RouteLinkedList_1["default"]()), 2), rLL = _a[0], setRLL = _a[1];
     var _b = __read(react_1.useState(rLL.tail), 2), selectedNode = _b[0], setSelectedNode = _b[1];
-    var _c = __read(react_1.useState(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.job), 2), job = _c[0], setJob = _c[1];
-    var _d = __read(react_1.useState(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.jobPo), 2), jobPo = _d[0], setJobPo = _d[1];
-    var _e = __read(react_1.useState(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.stats), 2), stats = _e[0], setStats = _e[1];
-    var _f = __read(react_1.useState(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.currentJobPos), 2), currentJobPos = _f[0], setCurrentJobPos = _f[1];
+    var _c = __read(react_1.useState(0), 2), selectedNodeIdx = _c[0], setSelectedNodeIdx = _c[1];
+    var _d = __read(react_1.useState(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.job), 2), job = _d[0], setJob = _d[1];
+    var _e = __read(react_1.useState(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.jobPo), 2), jobPo = _e[0], setJobPo = _e[1];
+    var _f = __read(react_1.useState(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.stats), 2), stats = _f[0], setStats = _f[1];
     var addNewJob = function (event) {
         var selectedValue = event.target
             .textContent;
@@ -75,7 +76,6 @@ function App() {
         setSelectedNode(rLL.tail);
         setJob(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.job);
         setJobPo(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.jobPo);
-        setCurrentJobPos(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.currentJobPos);
         setStats(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.stats);
     };
     var adjustJobPoint = function (event) {
@@ -90,16 +90,13 @@ function App() {
             return;
         }
         var numberedChangeState = +changeState;
-        console.log("in APP.tsx, adjustJobPoint, changeState " + changeState);
         selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.adjustJobPoint(numberedChangeState);
         setJobPo(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.jobPo);
-        setCurrentJobPos(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.currentJobPos);
         setStats(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.stats);
     };
     react_1.useEffect(function () {
         setJob(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.job);
         setJobPo(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.jobPo);
-        setCurrentJobPos(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.currentJobPos);
         setStats(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.stats);
     }, [rLL, selectedNode]);
     return (react_1["default"].createElement(CalculatorWrapper, null,
@@ -118,23 +115,31 @@ function App() {
                 react_1["default"].createElement("div", null, "\uC9C1\uC5C5 : " + job),
                 react_1["default"].createElement("span", null, " \uC7A1\uD3EC\uC778\uD2B8 : " + jobPo)),
             react_1["default"].createElement("div", null,
-                react_1["default"].createElement("h5", null, "\uB204\uC801 \uC2A4\uD0EF"),
-                react_1["default"].createElement("div", null, JSON.stringify(stats, null, 2)),
-                react_1["default"].createElement("h5", null, "\uB204\uC801 \uC7A1\uD3EC"),
-                react_1["default"].createElement("div", null, JSON.stringify(currentJobPos, null, 2)))),
+                react_1["default"].createElement("h5", null, "\uC120\uD0DD \uB178\uB4DC \uC2A4\uD0EF"),
+                react_1["default"].createElement("table", null,
+                    react_1["default"].createElement("thead", null,
+                        react_1["default"].createElement("tr", null,
+                            react_1["default"].createElement("th", null, "STR"),
+                            react_1["default"].createElement("th", null, "INT"),
+                            react_1["default"].createElement("th", null, "AGI"),
+                            react_1["default"].createElement("th", null, "VIT"))),
+                    react_1["default"].createElement("tbody", null,
+                        react_1["default"].createElement("tr", null, Object.values(stats || {}).map(function (statValue, statIdx) {
+                            return react_1["default"].createElement("td", { key: statIdx }, statValue);
+                        })))))),
         react_1["default"].createElement("section", null,
             react_1["default"].createElement("table", null,
-                react_1["default"].createElement("tr", null,
-                    react_1["default"].createElement("th", null, "\uC9C1\uC5C5"),
-                    react_1["default"].createElement("th", null, "STR"),
-                    react_1["default"].createElement("th", null, "INT"),
-                    react_1["default"].createElement("th", null, "AGI"),
-                    react_1["default"].createElement("th", null, "VIT"),
-                    react_1["default"].createElement("th", null, "\uC7A1\uD3EC\uC778\uD2B8")),
-                rLL.getAllNodes().map(function (routeNode, index) {
-                    return (react_1["default"].createElement("tr", { id: "" + index, key: index, onClick: function (event) {
+                react_1["default"].createElement("thead", null,
+                    react_1["default"].createElement("tr", null,
+                        react_1["default"].createElement("th", null, "\uC9C1\uC5C5"),
+                        react_1["default"].createElement("th", null, "STR"),
+                        react_1["default"].createElement("th", null, "INT"),
+                        react_1["default"].createElement("th", null, "AGI"),
+                        react_1["default"].createElement("th", null, "VIT"),
+                        react_1["default"].createElement("th", null, "\uC7A1\uD3EC\uC778\uD2B8"))),
+                react_1["default"].createElement("tbody", null, rLL.getAllNodes().map(function (routeNode, index) {
+                    return (react_1["default"].createElement(AccusTableTr, { id: "" + index, key: index, onClick: function (event) {
                             setSelectedNode(rLL.get(+event.currentTarget.id));
-                            console.log(event.currentTarget);
                         } },
                         react_1["default"].createElement("td", null, routeNode === null || routeNode === void 0 ? void 0 : routeNode.job),
                         react_1["default"].createElement("td", null, routeNode === null || routeNode === void 0 ? void 0 : routeNode.stats.STR),
@@ -142,7 +147,7 @@ function App() {
                         react_1["default"].createElement("td", null, routeNode === null || routeNode === void 0 ? void 0 : routeNode.stats.AGI),
                         react_1["default"].createElement("td", null, routeNode === null || routeNode === void 0 ? void 0 : routeNode.stats.VIT),
                         react_1["default"].createElement("td", null, routeNode === null || routeNode === void 0 ? void 0 : routeNode.jobPo)));
-                })))));
+                }))))));
 }
 exports["default"] = App;
-var templateObject_1;
+var templateObject_1, templateObject_2;

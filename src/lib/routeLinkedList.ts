@@ -312,7 +312,11 @@ export class RouteNode {
       }
     } else {
       if (this.stats[stat] < 10) return;
-      this.stats[stat] = expectStat < limit ? limit : expectStat;
+      if (prevStats[stat] > limit) {
+        this.stats[stat] = expectStat < limit ? limit : expectStat;
+      } else {
+        this.stats[stat] = expectStat < 10 ? 10 : expectStat;
+      }
     }
   }
 

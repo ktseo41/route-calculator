@@ -3,6 +3,7 @@ import styled from "styled-components";
 import jobList from "./database/job";
 import { Jobs } from "./database/job";
 import RouteLinkedList, { RouteNode } from "./lib/RouteLinkedList";
+import { Stats, Stat } from "./database/jobPointMap";
 
 type CurrentJobPoints = {
   [job in Jobs]?: number;
@@ -38,6 +39,10 @@ const CalculatorWrapper = styled.div`
   /* height: 500px; */
 `;
 
+const AccusTableTr = styled.tr`
+  border: 1px solid black;
+`;
+
 const Timer = () => {
   const [nowStr, setNowStr] = useState(new Date().toLocaleTimeString());
 
@@ -60,12 +65,10 @@ const Timer = () => {
 export default function App() {
   const [rLL, setRLL] = useState(new RouteLinkedList());
   const [selectedNode, setSelectedNode] = useState(rLL.tail);
+  const [selectedNodeIdx, setSelectedNodeIdx] = useState(0);
   const [job, setJob] = useState(selectedNode?.job);
   const [jobPo, setJobPo] = useState(selectedNode?.jobPo);
   const [stats, setStats] = useState(selectedNode?.stats);
-  const [currentJobPos, setCurrentJobPos] = useState(
-    selectedNode?.currentJobPos
-  );
 
   const addNewJob = (event: MouseEvent) => {
     const selectedValue = (event.target as HTMLButtonElement)
@@ -76,7 +79,6 @@ export default function App() {
 
     setJob(selectedNode?.job);
     setJobPo(selectedNode?.jobPo);
-    setCurrentJobPos(selectedNode?.currentJobPos);
     setStats(selectedNode?.stats);
   };
 
@@ -92,18 +94,15 @@ export default function App() {
       return;
     }
     const numberedChangeState = +changeState;
-    console.log(`in APP.tsx, adjustJobPoint, changeState ${changeState}`);
     selectedNode?.adjustJobPoint(numberedChangeState);
 
     setJobPo(selectedNode?.jobPo);
-    setCurrentJobPos(selectedNode?.currentJobPos);
     setStats(selectedNode?.stats);
   };
 
   useEffect(() => {
     setJob(selectedNode?.job);
     setJobPo(selectedNode?.jobPo);
-    setCurrentJobPos(selectedNode?.currentJobPos);
     setStats(selectedNode?.stats);
   }, [rLL, selectedNode]);
 
@@ -143,41 +142,58 @@ export default function App() {
           <span>{` 잡포인트 : ${jobPo}`}</span>
         </div>
         <div>
-          <h5>누적 스탯</h5>
-          <div>{JSON.stringify(stats, null, 2)}</div>
-          <h5>누적 잡포</h5>
-          <div>{JSON.stringify(currentJobPos, null, 2)}</div>
+          <h5>선택 노드 스탯</h5>
+          <table>
+            <thead>
+              <tr>
+                <th>STR</th>
+                <th>INT</th>
+                <th>AGI</th>
+                <th>VIT</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                {Object.values(stats || {}).map((statValue, statIdx) => {
+                  return <td key={statIdx}>{statValue}</td>;
+                })}
+              </tr>
+            </tbody>
+          </table>
         </div>
       </section>
       <section>
         <table>
-          <tr>
-            <th>직업</th>
-            <th>STR</th>
-            <th>INT</th>
-            <th>AGI</th>
-            <th>VIT</th>
-            <th>잡포인트</th>
-          </tr>
-          {rLL.getAllNodes().map((routeNode, index) => {
-            return (
-              <tr
-                id={`${index}`}
-                key={index}
-                onClick={(event: MouseEvent) => {
-                  setSelectedNode(rLL.get(+event.currentTarget.id));
-                  console.log(event.currentTarget);
-                }}
-              >
-                <td>{routeNode?.job}</td>
-                <td>{routeNode?.stats.STR}</td>
-                <td>{routeNode?.stats.INT}</td>
-                <td>{routeNode?.stats.AGI}</td>
-                <td>{routeNode?.stats.VIT}</td>
-                <td>{routeNode?.jobPo}</td>
-              </tr>
-            );
-          })}
+          <thead>
+            <tr>
+              <th>직업</th>
+              <th>STR</th>
+              <th>INT</th>
+              <th>AGI</th>
+              <th>VIT</th>
+              <th>잡포인트</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rLL.getAllNodes().map((routeNode, index) => {
+              return (
+                <AccusTableTr
+                  id={`${index}`}
+                  key={index}
+                  onClick={(event: MouseEvent) => {
+                    setSelectedNode(rLL.get(+event.currentTarget.id));
+                  }}
+                >
+                  <td>{routeNode?.job}</td>
+                  <td>{routeNode?.stats.STR}</td>
+                  <td>{routeNode?.stats.INT}</td>
+                  <td>{routeNode?.stats.AGI}</td>
+                  <td>{routeNode?.stats.VIT}</td>
+                  <td>{routeNode?.jobPo}</td>
+                </AccusTableTr>
+              );
+            })}
+          </tbody>
         </table>
       </section>
     </CalculatorWrapper>
