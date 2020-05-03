@@ -2,17 +2,18 @@
   "name": "route-calculator",
   "homepage": "https://ktseo41.github.io/route-calculator/index.html",
   "version": "0.6.0",
-  "description": "",
+  "description": "일랜시아 웹 루트계산기",
   "main": "index.html",
   "scripts": {
     "start": "parcel index.html",
     "build": "parcel build index.html --public-url ./",
     "test": "jest",
     "gh-pages-win": "pwd | Join-Path -Path { $_.Path } -ChildPath 'gh-pages' | Remove-Item -LiteralPath { $_ } -Recurse; parcel build index.html --public-url ./ --out-dir gh-pages",
-    "predeploy": "parcel build index.html --public-url ./ --out-dir gh-pages",
-    "deploy": "gh-pages -d gh-pages"
+    "predeploy": "parcel build index.html --no-source-maps --public-url ./ --out-dir gh-pages",
+    "deploy": "gh-pages -d gh-pages",
+    "postdeploy": "rimraf gh-pages"
   },
-  "author": "",
+  "author": "ktseo41",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.9.6",
@@ -25,6 +26,7 @@
     "parcel-bundler": "^1.12.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "rimraf": "^3.0.2",
     "styled-components": "^5.1.0",
     "typescript": "^3.8.3"
   },

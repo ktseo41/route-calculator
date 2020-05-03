@@ -126,3 +126,7 @@ module.exports = {
 #### 참고
 
 - https://sacstory.tistory.com/entry/PowerShell-%EA%B8%B0%EC%B4%88-%EB%AC%B8%EB%B2%95?category=841026
+
+### npm-scripts로 폴더 삭제 (windows 10)
+
+- node 모듈인 rimraf 라는 것을 사용하니까 할 수 있었다.

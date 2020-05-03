@@ -18,14 +18,20 @@
 12. [ ] UI 기본 골격
 13. [ ] UI 꾸미기
 
-- [ ] 나눔스퀘어 적용
+    - [x] 나눔스퀘어 적용
+    - [x] 선택 노드 하이라이트 효과
 
-14. [ ] 선택 노드 하이라이트 효과
+      - table collapse, nth-child(even), classList.add(selected), table { width: 100%}, text-align: center
 
-- table collapse, nth-child(even), classList.add(selected), table { width: 100%}, text-align: center
-
-15. [ ] 노드를 삭제할 수 있게 하기
-16. [ ] 노드 순서를 변경할 수 있게 하기
+14. [ ] 노드를 삭제할 수 있게 하기
+15. [ ] 노드 순서를 변경할 수 있게 하기
+16. [ ] 중간에 끼워넣을 수 있게 하기
+17. [ ] 파일 저장
+18. [ ] 모바일 대응
+    - 버튼을 명확히 및 떨어뜨려놓기
+    - 이후 grid (혹은 layout?) 방식으로 대응하도록 변경
+19. [ ] 도메인
+20. [ ] src, node_modules 등 폴더 감추기
 
 ## App.tsx Refactor
 
@@ -48,5 +54,4 @@
 4. [x] 이전 노드를 선택한 후 변경하면 이후 노드들의 잡포인트가 0으로 초기화 됨.
 5. [x] 잡포인트의 합이 100이 넘어도 더 올라간다.
 6. [ ] 직전노드가 같은 직업이어도 추가를 할 수 있다.
-
-7. ![](https://i.imgur.com/ra8yNWj.jpg)
+7. [ ] 이전 노드를 변경했을 때 잡포인트 100을 맞추기위해 이후 노드의 잡포인트가 마이너스가 됐다. ![](https://i.imgur.com/ra8yNWj.jpg)

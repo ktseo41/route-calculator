@@ -107,6 +107,7 @@ export default function App() {
   const addNewJob = (event: MouseEvent) => {
     const selectedValue = (event.target as HTMLButtonElement)
       .textContent as Jobs;
+    if (rLL.tail?.job === selectedValue) return;
     rLL.add(selectedValue);
 
     setSelectedNode(rLL.tail);
