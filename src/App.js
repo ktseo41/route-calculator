@@ -45,33 +45,15 @@ var buttonStates = [
     "-100",
     "reset",
 ];
-var CalculatorWrapper = styled_components_1["default"].div(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n  border: 1px solid black;\n  width: 50%;\n  min-width: 300px;\n  /* height: 500px; */\n"], ["\n  border: 1px solid black;\n  width: 50%;\n  min-width: 300px;\n  /* height: 500px; */\n"])));
+var CalculatorWrapper = styled_components_1["default"].div(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n  border: 1px solid black;\n  width: 50%;\n  min-width: 300px;\n"], ["\n  border: 1px solid black;\n  width: 50%;\n  min-width: 300px;\n"])));
 var AccusTable = styled_components_1["default"].table(templateObject_2 || (templateObject_2 = __makeTemplateObject(["\n  border-collapse: collapse;\n  text-align: center;\n  width: 100%;\n\n  & tr {\n    padding: 0 5px;\n  }\n\n  & tr.selected {\n    background-color: #ffbb00 !important;\n  }\n\n  & tr:nth-child(even) {\n    background-color: #efefef;\n  }\n"], ["\n  border-collapse: collapse;\n  text-align: center;\n  width: 100%;\n\n  & tr {\n    padding: 0 5px;\n  }\n\n  & tr.selected {\n    background-color: #ffbb00 !important;\n  }\n\n  & tr:nth-child(even) {\n    background-color: #efefef;\n  }\n"])));
 var H5Div = styled_components_1["default"].div(templateObject_3 || (templateObject_3 = __makeTemplateObject(["\n  display: inline;\n  font-weight: bold;\n  margin: 0px 10px;\n"], ["\n  display: inline;\n  font-weight: bold;\n  margin: 0px 10px;\n"])));
 var SelectedNodeDiv = styled_components_1["default"].div(templateObject_4 || (templateObject_4 = __makeTemplateObject(["\n  display: flex;\n  justify-content: flex-start;\n"], ["\n  display: flex;\n  justify-content: flex-start;\n"])));
 var SelectedInsideDiv = styled_components_1["default"].div(templateObject_5 || (templateObject_5 = __makeTemplateObject(["\n  display: flex;\n  justify-content: space-around;\n\n  & span {\n    margin: 0px 10px;\n  }\n"], ["\n  display: flex;\n  justify-content: space-around;\n\n  & span {\n    margin: 0px 10px;\n  }\n"])));
-var Timer = function () {
-    var _a = __read(react_1.useState(new Date().toLocaleTimeString()), 2), nowStr = _a[0], setNowStr = _a[1];
-    react_1.useEffect(function () {
-        var count = 0;
-        var intervalID = setInterval(function () {
-            if (count >= 680) {
-                clearInterval(intervalID);
-                alert("15분 경과");
-            }
-            setNowStr(new Date().toLocaleTimeString());
-            count += 1;
-        }, 1000);
-    }, []);
-    return react_1["default"].createElement("span", null, nowStr);
-};
 function App() {
     var _a = __read(react_1.useState(new RouteLinkedList_1["default"]()), 2), rLL = _a[0], setRLL = _a[1];
     var _b = __read(react_1.useState(rLL.tail), 2), selectedNode = _b[0], setSelectedNode = _b[1];
     var _c = __read(react_1.useState(0), 2), selectedNodeIdx = _c[0], setSelectedNodeIdx = _c[1];
-    var _d = __read(react_1.useState(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.job), 2), job = _d[0], setJob = _d[1];
-    var _e = __read(react_1.useState(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.jobPo), 2), jobPo = _e[0], setJobPo = _e[1];
-    var _f = __read(react_1.useState(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.stats), 2), stats = _f[0], setStats = _f[1];
     var addNewJob = function (event) {
         var _a;
         var selectedValue = event.target
@@ -81,9 +63,6 @@ function App() {
         rLL.add(selectedValue);
         setSelectedNode(rLL.tail);
         setSelectedNodeIdx(rLL.length - 1);
-        setJob(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.job);
-        setJobPo(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.jobPo);
-        setStats(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.stats);
     };
     var adjustJobPoint = function (event) {
         var changeState = event.target
@@ -99,14 +78,7 @@ function App() {
         }
         var numberedChangeState = +changeState;
         selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.adjustJobPoint(numberedChangeState);
-        setJobPo(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.jobPo);
-        setStats(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.stats);
     };
-    react_1.useEffect(function () {
-        setJob(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.job);
-        setJobPo(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.jobPo);
-        setStats(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.stats);
-    }, [rLL, selectedNode]);
     return (react_1["default"].createElement(CalculatorWrapper, null,
         react_1["default"].createElement("section", null,
             react_1["default"].createElement("label", { htmlFor: "job-select" }),
@@ -121,8 +93,8 @@ function App() {
             react_1["default"].createElement(SelectedNodeDiv, null,
                 react_1["default"].createElement(H5Div, null, "\uC120\uD0DD \uB178\uB4DC"),
                 react_1["default"].createElement(SelectedInsideDiv, null,
-                    react_1["default"].createElement("span", null, "\uC9C1\uC5C5 : " + job),
-                    react_1["default"].createElement("span", null, " \uC7A1\uD3EC\uC778\uD2B8 : " + jobPo)))),
+                    react_1["default"].createElement("span", null, "\uC9C1\uC5C5 : " + (selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.job)),
+                    react_1["default"].createElement("span", null, " \uC7A1\uD3EC\uC778\uD2B8 : " + (selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.jobPo))))),
         react_1["default"].createElement("section", null,
             react_1["default"].createElement(AccusTable, null,
                 react_1["default"].createElement("thead", null,

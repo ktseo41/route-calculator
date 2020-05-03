@@ -1,13 +1,8 @@
-import React, { useState, useEffect, ChangeEvent, MouseEvent } from "react";
+import React, { useState, useEffect, MouseEvent } from "react";
 import styled from "styled-components";
 import jobList from "./database/job";
 import { Jobs } from "./database/job";
 import RouteLinkedList, { RouteNode } from "./lib/RouteLinkedList";
-import { Stats, Stat } from "./database/jobPointMap";
-
-type CurrentJobPoints = {
-  [job in Jobs]?: number;
-};
 
 type ButtonState =
   | "1"
@@ -36,7 +31,6 @@ const CalculatorWrapper = styled.div`
   border: 1px solid black;
   width: 50%;
   min-width: 300px;
-  /* height: 500px; */
 `;
 
 const AccusTable = styled.table`
@@ -77,32 +71,10 @@ const SelectedInsideDiv = styled.div`
   }
 `;
 
-const Timer = () => {
-  const [nowStr, setNowStr] = useState(new Date().toLocaleTimeString());
-
-  useEffect(() => {
-    let count = 0;
-
-    const intervalID = setInterval(() => {
-      if (count >= 680) {
-        clearInterval(intervalID);
-        alert("15분 경과");
-      }
-      setNowStr(new Date().toLocaleTimeString());
-      count += 1;
-    }, 1000);
-  }, []);
-
-  return <span>{nowStr}</span>;
-};
-
 export default function App() {
   const [rLL, setRLL] = useState(new RouteLinkedList());
   const [selectedNode, setSelectedNode] = useState(rLL.tail);
   const [selectedNodeIdx, setSelectedNodeIdx] = useState(0);
-  const [job, setJob] = useState(selectedNode?.job);
-  const [jobPo, setJobPo] = useState(selectedNode?.jobPo);
-  const [stats, setStats] = useState(selectedNode?.stats);
 
   const addNewJob = (event: MouseEvent) => {
     const selectedValue = (event.target as HTMLButtonElement)
@@ -112,10 +84,6 @@ export default function App() {
 
     setSelectedNode(rLL.tail);
     setSelectedNodeIdx(rLL.length - 1);
-
-    setJob(selectedNode?.job);
-    setJobPo(selectedNode?.jobPo);
-    setStats(selectedNode?.stats);
   };
 
   const adjustJobPoint = (event: MouseEvent) => {
@@ -132,16 +100,7 @@ export default function App() {
     }
     const numberedChangeState = +changeState;
     selectedNode?.adjustJobPoint(numberedChangeState);
-
-    setJobPo(selectedNode?.jobPo);
-    setStats(selectedNode?.stats);
   };
-
-  useEffect(() => {
-    setJob(selectedNode?.job);
-    setJobPo(selectedNode?.jobPo);
-    setStats(selectedNode?.stats);
-  }, [rLL, selectedNode]);
 
   return (
     <CalculatorWrapper>
@@ -176,30 +135,10 @@ export default function App() {
         <SelectedNodeDiv>
           <H5Div>선택 노드</H5Div>
           <SelectedInsideDiv>
-            <span>{`직업 : ${job}`}</span>
-            <span>{` 잡포인트 : ${jobPo}`}</span>
+            <span>{`직업 : ${selectedNode?.job}`}</span>
+            <span>{` 잡포인트 : ${selectedNode?.jobPo}`}</span>
           </SelectedInsideDiv>
         </SelectedNodeDiv>
-        {/* <div>
-          <h5>선택 노드 스탯</h5>
-          <table>
-            <thead>
-              <tr>
-                <th>STR</th>
-                <th>INT</th>
-                <th>AGI</th>
-                <th>VIT</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                {Object.values(stats || {}).map((statValue, statIdx) => {
-                  return <td key={statIdx}>{statValue}</td>;
-                })}
-              </tr>
-            </tbody>
-          </table>
-        </div> */}
       </section>
       <section>
         <AccusTable>

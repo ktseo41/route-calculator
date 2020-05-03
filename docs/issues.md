@@ -130,3 +130,7 @@ module.exports = {
 ### npm-scripts로 폴더 삭제 (windows 10)
 
 - node 모듈인 rimraf 라는 것을 사용하니까 할 수 있었다.
+
+### source tab에서 src , node_modules 폴더가 보였던 것
+
+- 강력 새로고침을 하니까 사라졌다.

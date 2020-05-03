@@ -31,7 +31,7 @@
     - 버튼을 명확히 및 떨어뜨려놓기
     - 이후 grid (혹은 layout?) 방식으로 대응하도록 변경
 19. [ ] 도메인
-20. [ ] src, node_modules 등 폴더 감추기
+20. [x] src, node_modules 등 폴더 감추기
 
 ## App.tsx Refactor
 
