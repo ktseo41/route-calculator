@@ -24,6 +24,9 @@
       - table collapse, nth-child(even), classList.add(selected), table { width: 100%}, text-align: center
 
 14. [ ] 노드를 삭제할 수 있게 하기
+
+    - [ ] testcase 작성
+
 15. [ ] 노드 순서를 변경할 수 있게 하기
 16. [ ] 중간에 끼워넣을 수 있게 하기
 17. [ ] 파일 저장

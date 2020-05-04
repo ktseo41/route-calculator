@@ -331,5 +331,3 @@ describe("RouteNode adjustJobPo & recalculate. 여러 노드 상황 & 이전 노
 describe("노드를 삭제할 수 있다.", () => {});
 
 describe("버튼이 아니라 직접 입력해서 잡포인트를 변경할 수 있다.", () => {});
-
-// test("adjustJobPo를 통해 현재 노드의 잡포인트를 변경할 수 있다.", () => {});

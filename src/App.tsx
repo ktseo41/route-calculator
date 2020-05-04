@@ -75,6 +75,8 @@ export default function App() {
   const [rLL, setRLL] = useState(new RouteLinkedList());
   const [selectedNode, setSelectedNode] = useState(rLL.tail);
   const [selectedNodeIdx, setSelectedNodeIdx] = useState(0);
+  const [job, setJob] = useState(selectedNode?.job);
+  const [jobPo, setJobPo] = useState(selectedNode?.jobPo);
 
   const addNewJob = (event: MouseEvent) => {
     const selectedValue = (event.target as HTMLButtonElement)
@@ -100,7 +102,21 @@ export default function App() {
     }
     const numberedChangeState = +changeState;
     selectedNode?.adjustJobPoint(numberedChangeState);
+    setJob(selectedNode?.job);
+    setJobPo(selectedNode?.jobPo);
   };
+
+  const deleteNode = () => {
+    if (rLL.length === 1) return;
+    rLL.removeAt(selectedNodeIdx);
+    setSelectedNode(rLL.get(selectedNodeIdx - 1));
+    setSelectedNodeIdx(selectedNodeIdx - 1);
+  };
+
+  useEffect(() => {
+    setJob(selectedNode?.job);
+    setJobPo(selectedNode?.jobPo);
+  }, [rLL, selectedNode]);
 
   return (
     <CalculatorWrapper>
@@ -130,13 +146,14 @@ export default function App() {
             </button>
           );
         })}
+        <button onClick={deleteNode}>remove</button>
       </section>
       <section>
         <SelectedNodeDiv>
           <H5Div>선택 노드</H5Div>
           <SelectedInsideDiv>
-            <span>{`직업 : ${selectedNode?.job}`}</span>
-            <span>{` 잡포인트 : ${selectedNode?.jobPo}`}</span>
+            <span>{`직업 : ${job}`}</span>
+            <span>{` 잡포인트 : ${jobPo}`}</span>
           </SelectedInsideDiv>
         </SelectedNodeDiv>
       </section>

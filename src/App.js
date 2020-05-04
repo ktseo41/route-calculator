@@ -54,6 +54,8 @@ function App() {
     var _a = __read(react_1.useState(new RouteLinkedList_1["default"]()), 2), rLL = _a[0], setRLL = _a[1];
     var _b = __read(react_1.useState(rLL.tail), 2), selectedNode = _b[0], setSelectedNode = _b[1];
     var _c = __read(react_1.useState(0), 2), selectedNodeIdx = _c[0], setSelectedNodeIdx = _c[1];
+    var _d = __read(react_1.useState(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.job), 2), job = _d[0], setJob = _d[1];
+    var _e = __read(react_1.useState(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.jobPo), 2), jobPo = _e[0], setJobPo = _e[1];
     var addNewJob = function (event) {
         var _a;
         var selectedValue = event.target
@@ -78,7 +80,20 @@ function App() {
         }
         var numberedChangeState = +changeState;
         selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.adjustJobPoint(numberedChangeState);
+        setJob(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.job);
+        setJobPo(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.jobPo);
     };
+    var deleteNode = function () {
+        if (rLL.length === 1)
+            return;
+        rLL.removeAt(selectedNodeIdx);
+        setSelectedNode(rLL.get(selectedNodeIdx - 1));
+        setSelectedNodeIdx(selectedNodeIdx - 1);
+    };
+    react_1.useEffect(function () {
+        setJob(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.job);
+        setJobPo(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.jobPo);
+    }, [rLL, selectedNode]);
     return (react_1["default"].createElement(CalculatorWrapper, null,
         react_1["default"].createElement("section", null,
             react_1["default"].createElement("label", { htmlFor: "job-select" }),
@@ -86,15 +101,17 @@ function App() {
                 jobButtons.push(react_1["default"].createElement("button", { onClick: addNewJob, key: idx }, jobName));
                 return jobButtons;
             }, [])),
-        react_1["default"].createElement("section", null, buttonStates.map(function (buttonState, idx) {
-            return (react_1["default"].createElement("button", { onClick: adjustJobPoint, key: idx }, buttonState));
-        })),
+        react_1["default"].createElement("section", null,
+            buttonStates.map(function (buttonState, idx) {
+                return (react_1["default"].createElement("button", { onClick: adjustJobPoint, key: idx }, buttonState));
+            }),
+            react_1["default"].createElement("button", { onClick: deleteNode }, "remove")),
         react_1["default"].createElement("section", null,
             react_1["default"].createElement(SelectedNodeDiv, null,
                 react_1["default"].createElement(H5Div, null, "\uC120\uD0DD \uB178\uB4DC"),
                 react_1["default"].createElement(SelectedInsideDiv, null,
-                    react_1["default"].createElement("span", null, "\uC9C1\uC5C5 : " + (selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.job)),
-                    react_1["default"].createElement("span", null, " \uC7A1\uD3EC\uC778\uD2B8 : " + (selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.jobPo))))),
+                    react_1["default"].createElement("span", null, "\uC9C1\uC5C5 : " + job),
+                    react_1["default"].createElement("span", null, " \uC7A1\uD3EC\uC778\uD2B8 : " + jobPo)))),
         react_1["default"].createElement("section", null,
             react_1["default"].createElement(AccusTable, null,
                 react_1["default"].createElement("thead", null,
