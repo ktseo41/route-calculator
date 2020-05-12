@@ -3,6 +3,7 @@ import styled from "styled-components";
 import jobList from "./database/job";
 import { Jobs } from "./database/job";
 import RouteLinkedList, { RouteNode } from "./lib/RouteLinkedList";
+import "bulma/css/bulma.css";
 
 type ButtonState =
   | "1"
@@ -28,9 +29,9 @@ const buttonStates: ButtonState[] = [
 ];
 
 const CalculatorWrapper = styled.div`
-  border: 1px solid black;
+  /* border: 1px solid black;
   width: 50%;
-  min-width: 300px;
+  min-width: 300px; */
 `;
 
 const AccusTable = styled.table`
@@ -120,33 +121,44 @@ export default function App() {
 
   return (
     <CalculatorWrapper>
-      <section>
-        <label htmlFor="job-select"></label>
-        {jobList.reduce(
-          (
-            jobButtons: JSX.Element[],
-            jobName: string,
-            idx: number
-          ): JSX.Element[] => {
-            jobButtons.push(
-              <button onClick={addNewJob} key={idx}>
-                {jobName}
-              </button>
-            );
-            return jobButtons;
-          },
-          []
-        )}
+      <section className="hero">
+        <div className="hero-body">
+          <div className="container">
+            <h1 className="title">일랜시아 루트 계산기</h1>
+            <h2 className="subtitle">by L삼계인</h2>
+          </div>
+        </div>
       </section>
       <section>
+        <div className=" buttons">
+          {jobList.reduce(
+            (
+              jobButtons: JSX.Element[],
+              jobName: string,
+              idx: number
+            ): JSX.Element[] => {
+              jobButtons.push(
+                <button className="button" onClick={addNewJob} key={idx}>
+                  {jobName}
+                </button>
+              );
+              return jobButtons;
+            },
+            []
+          )}
+        </div>
+      </section>
+      <section className="buttons ">
         {buttonStates.map((buttonState, idx) => {
           return (
-            <button onClick={adjustJobPoint} key={idx}>
+            <button className="button " onClick={adjustJobPoint} key={idx}>
               {buttonState}
             </button>
           );
         })}
-        <button onClick={deleteNode}>remove</button>
+        <button className="button column" onClick={deleteNode}>
+          remove
+        </button>
       </section>
       <section>
         <SelectedNodeDiv>

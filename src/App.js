@@ -34,6 +34,7 @@ var react_1 = __importStar(require("react"));
 var styled_components_1 = __importDefault(require("styled-components"));
 var job_1 = __importDefault(require("./database/job"));
 var RouteLinkedList_1 = __importDefault(require("./lib/RouteLinkedList"));
+require("bulma/css/bulma.css");
 var buttonStates = [
     "1",
     "-1",
@@ -45,7 +46,7 @@ var buttonStates = [
     "-100",
     "reset",
 ];
-var CalculatorWrapper = styled_components_1["default"].div(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n  border: 1px solid black;\n  width: 50%;\n  min-width: 300px;\n"], ["\n  border: 1px solid black;\n  width: 50%;\n  min-width: 300px;\n"])));
+var CalculatorWrapper = styled_components_1["default"].div(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n  /* border: 1px solid black;\n  width: 50%;\n  min-width: 300px; */\n"], ["\n  /* border: 1px solid black;\n  width: 50%;\n  min-width: 300px; */\n"])));
 var AccusTable = styled_components_1["default"].table(templateObject_2 || (templateObject_2 = __makeTemplateObject(["\n  border-collapse: collapse;\n  text-align: center;\n  width: 100%;\n\n  & tr {\n    padding: 0 5px;\n  }\n\n  & tr.selected {\n    background-color: #ffbb00 !important;\n  }\n\n  & tr:nth-child(even) {\n    background-color: #efefef;\n  }\n"], ["\n  border-collapse: collapse;\n  text-align: center;\n  width: 100%;\n\n  & tr {\n    padding: 0 5px;\n  }\n\n  & tr.selected {\n    background-color: #ffbb00 !important;\n  }\n\n  & tr:nth-child(even) {\n    background-color: #efefef;\n  }\n"])));
 var H5Div = styled_components_1["default"].div(templateObject_3 || (templateObject_3 = __makeTemplateObject(["\n  display: inline;\n  font-weight: bold;\n  margin: 0px 10px;\n"], ["\n  display: inline;\n  font-weight: bold;\n  margin: 0px 10px;\n"])));
 var SelectedNodeDiv = styled_components_1["default"].div(templateObject_4 || (templateObject_4 = __makeTemplateObject(["\n  display: flex;\n  justify-content: flex-start;\n"], ["\n  display: flex;\n  justify-content: flex-start;\n"])));
@@ -95,17 +96,21 @@ function App() {
         setJobPo(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.jobPo);
     }, [rLL, selectedNode]);
     return (react_1["default"].createElement(CalculatorWrapper, null,
+        react_1["default"].createElement("section", { className: "hero" },
+            react_1["default"].createElement("div", { className: "hero-body" },
+                react_1["default"].createElement("div", { className: "container" },
+                    react_1["default"].createElement("h1", { className: "title" }, "\uC77C\uB79C\uC2DC\uC544 \uB8E8\uD2B8 \uACC4\uC0B0\uAE30"),
+                    react_1["default"].createElement("h2", { className: "subtitle" }, "by L\uC0BC\uACC4\uC778")))),
         react_1["default"].createElement("section", null,
-            react_1["default"].createElement("label", { htmlFor: "job-select" }),
-            job_1["default"].reduce(function (jobButtons, jobName, idx) {
-                jobButtons.push(react_1["default"].createElement("button", { onClick: addNewJob, key: idx }, jobName));
+            react_1["default"].createElement("div", { className: " buttons" }, job_1["default"].reduce(function (jobButtons, jobName, idx) {
+                jobButtons.push(react_1["default"].createElement("button", { className: "button", onClick: addNewJob, key: idx }, jobName));
                 return jobButtons;
-            }, [])),
-        react_1["default"].createElement("section", null,
+            }, []))),
+        react_1["default"].createElement("section", { className: "buttons " },
             buttonStates.map(function (buttonState, idx) {
-                return (react_1["default"].createElement("button", { onClick: adjustJobPoint, key: idx }, buttonState));
+                return (react_1["default"].createElement("button", { className: "button ", onClick: adjustJobPoint, key: idx }, buttonState));
             }),
-            react_1["default"].createElement("button", { onClick: deleteNode }, "remove")),
+            react_1["default"].createElement("button", { className: "button column", onClick: deleteNode }, "remove")),
         react_1["default"].createElement("section", null,
             react_1["default"].createElement(SelectedNodeDiv, null,
                 react_1["default"].createElement(H5Div, null, "\uC120\uD0DD \uB178\uB4DC"),
