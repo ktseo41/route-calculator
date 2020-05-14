@@ -328,6 +328,23 @@ describe("RouteNode adjustJobPo & recalculate. 여러 노드 상황 & 이전 노
   });
 });
 
-describe("노드를 삭제할 수 있다.", () => {});
+describe("노드를 삭제할 수 있다.", () => {
+  const rLL = new RouteLinkedList();
+  rLL.add("무도가");
+  rLL.tail.adjustJobPoint(100);
+  rLL.add("자객");
+  rLL.tail.adjustJobPoint(100);
+  rLL.add("투사");
+  rLL.add("모험가");
+  test("이전 노드 중 선택해서 삭제를 할 수 있다.", () => {
+    rLL.removeAt(1);
+    expect(rLL.tail.currentJobPos).toEqual({
+      무직: 0,
+      자객: 100,
+      투사: 0,
+      모험가: 0,
+    });
+  });
+});
 
 describe("버튼이 아니라 직접 입력해서 잡포인트를 변경할 수 있다.", () => {});

@@ -4,6 +4,7 @@ import jobList from "./database/job";
 import { Jobs } from "./database/job";
 import RouteLinkedList, { RouteNode } from "./lib/RouteLinkedList";
 import "bulma/css/bulma.css";
+import RemoveIcon from "./img/RemoveIcon";
 
 type ButtonState =
   | "1"
@@ -199,6 +200,9 @@ export default function App() {
                   <td>{routeNode?.stats.AGI}</td>
                   <td>{routeNode?.stats.VIT}</td>
                   <td>{routeNode?.jobPo}</td>
+                  <td>
+                    <RemoveIcon />
+                  </td>
                 </tr>
               );
             })}

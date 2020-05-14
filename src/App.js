@@ -35,6 +35,7 @@ var styled_components_1 = __importDefault(require("styled-components"));
 var job_1 = __importDefault(require("./database/job"));
 var RouteLinkedList_1 = __importDefault(require("./lib/RouteLinkedList"));
 require("bulma/css/bulma.css");
+var RemoveIcon_1 = __importDefault(require("./img/RemoveIcon"));
 var buttonStates = [
     "1",
     "-1",
@@ -137,7 +138,9 @@ function App() {
                         react_1["default"].createElement("td", null, routeNode === null || routeNode === void 0 ? void 0 : routeNode.stats.INT),
                         react_1["default"].createElement("td", null, routeNode === null || routeNode === void 0 ? void 0 : routeNode.stats.AGI),
                         react_1["default"].createElement("td", null, routeNode === null || routeNode === void 0 ? void 0 : routeNode.stats.VIT),
-                        react_1["default"].createElement("td", null, routeNode === null || routeNode === void 0 ? void 0 : routeNode.jobPo)));
+                        react_1["default"].createElement("td", null, routeNode === null || routeNode === void 0 ? void 0 : routeNode.jobPo),
+                        react_1["default"].createElement("td", null,
+                            react_1["default"].createElement(RemoveIcon_1["default"], null))));
                 }))))));
 }
 exports["default"] = App;
