@@ -1,9 +1,8 @@
 import React, { useState, useEffect, MouseEvent } from "react";
 import styled from "styled-components";
 import jobList from "./database/job";
-import { Jobs } from "./database/job";
+import { Jobs, classifiedJobs } from "./database/job";
 import RouteLinkedList from "./lib/RouteLinkedList";
-import RemoveIcon from "./img/RemoveIcon";
 
 type ButtonState =
   | "1"
@@ -130,7 +129,31 @@ export default function App() {
       </nav>
       <section className="jobs">
         <div className="buttons are-small">
-          {jobList.reduce(
+          {classifiedJobs.reduce(
+            (jobButtons2: JSX.Element[], classifieds, idx) => {
+              const buttonedClassfiedJobs = classifieds.reduce(
+                (jobButtons1: JSX.Element[], jobName: string, idx2: number) => {
+                  jobButtons1.push(
+                    <button
+                      className="button is-primary"
+                      onClick={addNewJob}
+                      key={idx * 10 + idx2}
+                    >
+                      {jobName}
+                    </button>
+                  );
+                  return jobButtons1;
+                },
+                []
+              );
+              jobButtons2.push(
+                <div className="container">{buttonedClassfiedJobs}</div>
+              );
+              return jobButtons2;
+            },
+            []
+          )}
+          {/* {jobList.reduce(
             (
               jobButtons: JSX.Element[],
               jobName: string,
@@ -148,19 +171,23 @@ export default function App() {
               return jobButtons;
             },
             []
-          )}
+          )} */}
         </div>
       </section>
-      <section className="adjust">
+      <section className="adjust box">
         <div className="buttons are-small">
           {buttonStates.map((buttonState, idx) => {
             return (
-              <button className="button" onClick={adjustJobPoint} key={idx}>
+              <button
+                className="button is-primary"
+                onClick={adjustJobPoint}
+                key={idx}
+              >
                 {buttonState}
               </button>
             );
           })}
-          <button className="button" onClick={deleteNode}>
+          <button className="button is-primary" onClick={deleteNode}>
             remove
           </button>
         </div>

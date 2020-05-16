@@ -32,7 +32,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 exports.__esModule = true;
 var react_1 = __importStar(require("react"));
 var styled_components_1 = __importDefault(require("styled-components"));
-var job_1 = __importDefault(require("./database/job"));
+var job_1 = require("./database/job");
 var RouteLinkedList_1 = __importDefault(require("./lib/RouteLinkedList"));
 var buttonStates = [
     "1",
@@ -46,7 +46,7 @@ var buttonStates = [
     "reset",
 ];
 var CalculatorWrapper = styled_components_1["default"].div(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n  /* border: 1px solid black;\n  width: 50%;\n  min-width: 300px; */\n"], ["\n  /* border: 1px solid black;\n  width: 50%;\n  min-width: 300px; */\n"])));
-var AccusTable = styled_components_1["default"].table(templateObject_2 || (templateObject_2 = __makeTemplateObject(["\n  border-collapse: collapse;\n  text-align: center;\n  width: 100%;\n\n  & tr {\n    padding: 0 5px;\n  }\n\n  & tr.selected {\n    background-color: #ffbb00 !important;\n  }\n\n  & tr:nth-child(even) {\n    background-color: #efefef;\n  }\n"], ["\n  border-collapse: collapse;\n  text-align: center;\n  width: 100%;\n\n  & tr {\n    padding: 0 5px;\n  }\n\n  & tr.selected {\n    background-color: #ffbb00 !important;\n  }\n\n  & tr:nth-child(even) {\n    background-color: #efefef;\n  }\n"])));
+var AccusTable = styled_components_1["default"].table(templateObject_2 || (templateObject_2 = __makeTemplateObject(["\n  /* border-collapse: collapse; */\n  /* text-align: center; */\n  /* width: 100%; */\n\n  /* & tr {\n    padding: 0 5px;\n  }\n\n  & tr.selected {\n    background-color: #ffbb00 !important;\n  }\n\n  & tr:nth-child(even) {\n    background-color: #efefef;\n  } */\n"], ["\n  /* border-collapse: collapse; */\n  /* text-align: center; */\n  /* width: 100%; */\n\n  /* & tr {\n    padding: 0 5px;\n  }\n\n  & tr.selected {\n    background-color: #ffbb00 !important;\n  }\n\n  & tr:nth-child(even) {\n    background-color: #efefef;\n  } */\n"])));
 var H5Div = styled_components_1["default"].div(templateObject_3 || (templateObject_3 = __makeTemplateObject(["\n  display: inline;\n  font-weight: bold;\n  margin: 0px 10px;\n"], ["\n  display: inline;\n  font-weight: bold;\n  margin: 0px 10px;\n"])));
 var SelectedNodeDiv = styled_components_1["default"].div(templateObject_4 || (templateObject_4 = __makeTemplateObject(["\n  display: flex;\n  justify-content: flex-start;\n"], ["\n  display: flex;\n  justify-content: flex-start;\n"])));
 var SelectedInsideDiv = styled_components_1["default"].div(templateObject_5 || (templateObject_5 = __makeTemplateObject(["\n  display: flex;\n  justify-content: space-around;\n\n  & span {\n    margin: 0px 10px;\n  }\n"], ["\n  display: flex;\n  justify-content: space-around;\n\n  & span {\n    margin: 0px 10px;\n  }\n"])));
@@ -94,42 +94,46 @@ function App() {
         setJob(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.job);
         setJobPo(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.jobPo);
     }, [rLL, selectedNode]);
-    return (react_1["default"].createElement(CalculatorWrapper, { className: "container" },
+    return (react_1["default"].createElement(CalculatorWrapper, { className: "container column is-two-thirds" },
         react_1["default"].createElement("nav", { className: "navbar" },
             react_1["default"].createElement("div", { className: "container has-text-centered" },
                 react_1["default"].createElement("a", { className: "navbar-item has-text-dark title is-5" }, "\uC77C\uB79C\uC2DC\uC544 \uB8E8\uD2B8 \uACC4\uC0B0\uAE30"))),
         react_1["default"].createElement("section", { className: "jobs" },
-            react_1["default"].createElement("div", { className: "buttons are-small" }, job_1["default"].reduce(function (jobButtons, jobName, idx) {
-                jobButtons.push(react_1["default"].createElement("button", { className: "button is-primary", onClick: addNewJob, key: idx }, jobName));
-                return jobButtons;
+            react_1["default"].createElement("div", { className: "buttons are-small" }, job_1.classifiedJobs.reduce(function (jobButtons2, classifieds, idx) {
+                var buttonedClassfiedJobs = classifieds.reduce(function (jobButtons1, jobName, idx2) {
+                    jobButtons1.push(react_1["default"].createElement("button", { className: "button is-primary", onClick: addNewJob, key: idx * 10 + idx2 }, jobName));
+                    return jobButtons1;
+                }, []);
+                jobButtons2.push(react_1["default"].createElement("div", { className: "container" }, buttonedClassfiedJobs));
+                return jobButtons2;
             }, []))),
-        react_1["default"].createElement("section", { className: "adjust" },
+        react_1["default"].createElement("section", { className: "adjust box" },
             react_1["default"].createElement("div", { className: "buttons are-small" },
                 buttonStates.map(function (buttonState, idx) {
-                    return (react_1["default"].createElement("button", { className: "button", onClick: adjustJobPoint, key: idx }, buttonState));
+                    return (react_1["default"].createElement("button", { className: "button is-primary", onClick: adjustJobPoint, key: idx }, buttonState));
                 }),
-                react_1["default"].createElement("button", { className: "button", onClick: deleteNode }, "remove"))),
-        react_1["default"].createElement("section", { className: "currentStates" },
-            react_1["default"].createElement(AccusTable, { className: "table is-narrow" },
+                react_1["default"].createElement("button", { className: "button is-primary", onClick: deleteNode }, "remove"))),
+        react_1["default"].createElement("section", { className: "currentStates is-two-thirds" },
+            react_1["default"].createElement(AccusTable, { className: "table is-fullwidth is-narrow is-hoverable" },
                 react_1["default"].createElement("thead", null,
                     react_1["default"].createElement("tr", null,
-                        react_1["default"].createElement("th", null, "\uC9C1\uC5C5"),
-                        react_1["default"].createElement("th", null, "STR"),
-                        react_1["default"].createElement("th", null, "INT"),
-                        react_1["default"].createElement("th", null, "AGI"),
-                        react_1["default"].createElement("th", null, "VIT"),
-                        react_1["default"].createElement("th", null, "\uC7A1\uD3EC\uC778\uD2B8"))),
+                        react_1["default"].createElement("th", { className: "has-text-centered" }, "\uC9C1\uC5C5"),
+                        react_1["default"].createElement("th", { className: "has-text-centered" }, "STR"),
+                        react_1["default"].createElement("th", { className: "has-text-centered" }, "INT"),
+                        react_1["default"].createElement("th", { className: "has-text-centered" }, "AGI"),
+                        react_1["default"].createElement("th", { className: "has-text-centered" }, "VIT"),
+                        react_1["default"].createElement("th", { className: "has-text-centered" }, "\uC7A1\uD3EC"))),
                 react_1["default"].createElement("tbody", null, rLL.getAllNodes().map(function (routeNode, index) {
-                    return (react_1["default"].createElement("tr", { id: "" + index, key: index, className: index === selectedNodeIdx ? "selected" : "", onClick: function (event) {
+                    return (react_1["default"].createElement("tr", { id: "" + index, key: index, className: index === selectedNodeIdx ? "has-background-light" : "", onClick: function (event) {
                             setSelectedNode(rLL.get(+event.currentTarget.id));
                             setSelectedNodeIdx(+event.currentTarget.id);
                         } },
-                        react_1["default"].createElement("td", null, routeNode === null || routeNode === void 0 ? void 0 : routeNode.job),
-                        react_1["default"].createElement("td", null, routeNode === null || routeNode === void 0 ? void 0 : routeNode.stats.STR),
-                        react_1["default"].createElement("td", null, routeNode === null || routeNode === void 0 ? void 0 : routeNode.stats.INT),
-                        react_1["default"].createElement("td", null, routeNode === null || routeNode === void 0 ? void 0 : routeNode.stats.AGI),
-                        react_1["default"].createElement("td", null, routeNode === null || routeNode === void 0 ? void 0 : routeNode.stats.VIT),
-                        react_1["default"].createElement("td", null, routeNode === null || routeNode === void 0 ? void 0 : routeNode.jobPo)));
+                        react_1["default"].createElement("td", { className: "has-text-centered" }, routeNode === null || routeNode === void 0 ? void 0 : routeNode.job),
+                        react_1["default"].createElement("td", { className: "has-text-centered" }, routeNode === null || routeNode === void 0 ? void 0 : routeNode.stats.STR),
+                        react_1["default"].createElement("td", { className: "has-text-centered" }, routeNode === null || routeNode === void 0 ? void 0 : routeNode.stats.INT),
+                        react_1["default"].createElement("td", { className: "has-text-centered" }, routeNode === null || routeNode === void 0 ? void 0 : routeNode.stats.AGI),
+                        react_1["default"].createElement("td", { className: "has-text-centered" }, routeNode === null || routeNode === void 0 ? void 0 : routeNode.stats.VIT),
+                        react_1["default"].createElement("td", { className: "has-text-centered" }, routeNode === null || routeNode === void 0 ? void 0 : routeNode.jobPo)));
                 }))))));
 }
 exports["default"] = App;

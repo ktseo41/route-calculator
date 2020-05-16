@@ -315,9 +315,9 @@ describe("RouteNode adjustJobPo & recalculate. 여러 노드 상황 & 이전 노
   test("이전 노드의 잡포인트를 증가시키면 이후 노드의 잡포인트는 100에 맞춰 줄어든다. (같은 직업일 때)", () => {
     rLL.add("무도가");
     rLL.tail?.adjustJobPoint(100);
-    무도가Node.adjustJobPoint(10);
-    expect(rLL.tail.jobPo).toBe(90);
-    expect(무도가Node.jobPo).toBe(10);
+    무도가Node.adjustJobPoint(30);
+    expect(rLL.tail.jobPo).toBe(70);
+    expect(무도가Node.jobPo).toBe(30);
     expect(rLL.tail.currentJobPos).toEqual({
       무직: 0,
       무도가: 100,
@@ -325,6 +325,11 @@ describe("RouteNode adjustJobPo & recalculate. 여러 노드 상황 & 이전 노
       검객: 0,
     });
     expect(rLL.tail.stats).toEqual({ STR: 5, INT: 5, AGI: 5, VIT: 30 });
+  });
+
+  test("이후 노드의 잡포인트를 증가시키면 총합 100까지만 증가한다. (로직 선택의 여지가 있음 .. )", () => {
+    rLL.tail.adjustJobPoint(10);
+    expect(rLL.tail.jobPo).toBe(70);
   });
 });
 

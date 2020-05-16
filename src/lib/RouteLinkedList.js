@@ -219,11 +219,15 @@ var RouteNode = /** @class */ (function () {
             this.next.recalculate();
     };
     RouteNode.prototype.getActualChange = function (jobPoDelta) {
-        var _a;
+        var _a, _b;
         if (jobPoDelta > 0) {
+            if ((this.jobPo + ((_a = this.prev) === null || _a === void 0 ? void 0 : _a.currentJobPos[this.job]) || 0) ===
+                100) {
+                return 0;
+            }
             return this.jobPo +
                 jobPoDelta +
-                (((_a = this.prev) === null || _a === void 0 ? void 0 : _a.currentJobPos[this.job]) || 0) >
+                (((_b = this.prev) === null || _b === void 0 ? void 0 : _b.currentJobPos[this.job]) || 0) >
                 100
                 ? 100 - this.jobPo
                 : jobPoDelta;
