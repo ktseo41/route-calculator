@@ -2,8 +2,7 @@ import React, { useState, useEffect, MouseEvent } from "react";
 import styled from "styled-components";
 import jobList from "./database/job";
 import { Jobs } from "./database/job";
-import RouteLinkedList, { RouteNode } from "./lib/RouteLinkedList";
-import "bulma/css/bulma.css";
+import RouteLinkedList from "./lib/RouteLinkedList";
 import RemoveIcon from "./img/RemoveIcon";
 
 type ButtonState =
@@ -121,17 +120,16 @@ export default function App() {
   }, [rLL, selectedNode]);
 
   return (
-    <CalculatorWrapper>
-      <section className="hero">
-        <div className="hero-body">
-          <div className="container">
-            <h1 className="title">일랜시아 루트 계산기</h1>
-            <h2 className="subtitle">by L삼계인</h2>
-          </div>
+    <CalculatorWrapper className="container">
+      <nav className="navbar">
+        <div className="container has-text-centered">
+          <a className="navbar-item has-text-dark title is-5">
+            일랜시아 루트 계산기
+          </a>
         </div>
-      </section>
-      <section>
-        <div className=" buttons">
+      </nav>
+      <section className="jobs">
+        <div className="buttons are-small">
           {jobList.reduce(
             (
               jobButtons: JSX.Element[],
@@ -139,7 +137,11 @@ export default function App() {
               idx: number
             ): JSX.Element[] => {
               jobButtons.push(
-                <button className="button" onClick={addNewJob} key={idx}>
+                <button
+                  className="button is-primary"
+                  onClick={addNewJob}
+                  key={idx}
+                >
                   {jobName}
                 </button>
               );
@@ -149,19 +151,21 @@ export default function App() {
           )}
         </div>
       </section>
-      <section className="buttons ">
-        {buttonStates.map((buttonState, idx) => {
-          return (
-            <button className="button " onClick={adjustJobPoint} key={idx}>
-              {buttonState}
-            </button>
-          );
-        })}
-        <button className="button column" onClick={deleteNode}>
-          remove
-        </button>
+      <section className="adjust">
+        <div className="buttons are-small">
+          {buttonStates.map((buttonState, idx) => {
+            return (
+              <button className="button" onClick={adjustJobPoint} key={idx}>
+                {buttonState}
+              </button>
+            );
+          })}
+          <button className="button" onClick={deleteNode}>
+            remove
+          </button>
+        </div>
       </section>
-      <section>
+      {/* <section className="selectedNode box">
         <SelectedNodeDiv>
           <H5Div>선택 노드</H5Div>
           <SelectedInsideDiv>
@@ -169,9 +173,9 @@ export default function App() {
             <span>{` 잡포인트 : ${jobPo}`}</span>
           </SelectedInsideDiv>
         </SelectedNodeDiv>
-      </section>
-      <section>
-        <AccusTable>
+      </section> */}
+      <section className="currentStates">
+        <AccusTable className="table is-narrow">
           <thead>
             <tr>
               <th>직업</th>
@@ -200,9 +204,6 @@ export default function App() {
                   <td>{routeNode?.stats.AGI}</td>
                   <td>{routeNode?.stats.VIT}</td>
                   <td>{routeNode?.jobPo}</td>
-                  <td>
-                    <RemoveIcon />
-                  </td>
                 </tr>
               );
             })}

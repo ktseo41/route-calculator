@@ -34,8 +34,6 @@ var react_1 = __importStar(require("react"));
 var styled_components_1 = __importDefault(require("styled-components"));
 var job_1 = __importDefault(require("./database/job"));
 var RouteLinkedList_1 = __importDefault(require("./lib/RouteLinkedList"));
-require("bulma/css/bulma.css");
-var RemoveIcon_1 = __importDefault(require("./img/RemoveIcon"));
 var buttonStates = [
     "1",
     "-1",
@@ -96,30 +94,23 @@ function App() {
         setJob(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.job);
         setJobPo(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.jobPo);
     }, [rLL, selectedNode]);
-    return (react_1["default"].createElement(CalculatorWrapper, null,
-        react_1["default"].createElement("section", { className: "hero" },
-            react_1["default"].createElement("div", { className: "hero-body" },
-                react_1["default"].createElement("div", { className: "container" },
-                    react_1["default"].createElement("h1", { className: "title" }, "\uC77C\uB79C\uC2DC\uC544 \uB8E8\uD2B8 \uACC4\uC0B0\uAE30"),
-                    react_1["default"].createElement("h2", { className: "subtitle" }, "by L\uC0BC\uACC4\uC778")))),
-        react_1["default"].createElement("section", null,
-            react_1["default"].createElement("div", { className: " buttons" }, job_1["default"].reduce(function (jobButtons, jobName, idx) {
-                jobButtons.push(react_1["default"].createElement("button", { className: "button", onClick: addNewJob, key: idx }, jobName));
+    return (react_1["default"].createElement(CalculatorWrapper, { className: "container" },
+        react_1["default"].createElement("nav", { className: "navbar" },
+            react_1["default"].createElement("div", { className: "container has-text-centered" },
+                react_1["default"].createElement("a", { className: "navbar-item has-text-dark title is-5" }, "\uC77C\uB79C\uC2DC\uC544 \uB8E8\uD2B8 \uACC4\uC0B0\uAE30"))),
+        react_1["default"].createElement("section", { className: "jobs" },
+            react_1["default"].createElement("div", { className: "buttons are-small" }, job_1["default"].reduce(function (jobButtons, jobName, idx) {
+                jobButtons.push(react_1["default"].createElement("button", { className: "button is-primary", onClick: addNewJob, key: idx }, jobName));
                 return jobButtons;
             }, []))),
-        react_1["default"].createElement("section", { className: "buttons " },
-            buttonStates.map(function (buttonState, idx) {
-                return (react_1["default"].createElement("button", { className: "button ", onClick: adjustJobPoint, key: idx }, buttonState));
-            }),
-            react_1["default"].createElement("button", { className: "button column", onClick: deleteNode }, "remove")),
-        react_1["default"].createElement("section", null,
-            react_1["default"].createElement(SelectedNodeDiv, null,
-                react_1["default"].createElement(H5Div, null, "\uC120\uD0DD \uB178\uB4DC"),
-                react_1["default"].createElement(SelectedInsideDiv, null,
-                    react_1["default"].createElement("span", null, "\uC9C1\uC5C5 : " + job),
-                    react_1["default"].createElement("span", null, " \uC7A1\uD3EC\uC778\uD2B8 : " + jobPo)))),
-        react_1["default"].createElement("section", null,
-            react_1["default"].createElement(AccusTable, null,
+        react_1["default"].createElement("section", { className: "adjust" },
+            react_1["default"].createElement("div", { className: "buttons are-small" },
+                buttonStates.map(function (buttonState, idx) {
+                    return (react_1["default"].createElement("button", { className: "button", onClick: adjustJobPoint, key: idx }, buttonState));
+                }),
+                react_1["default"].createElement("button", { className: "button", onClick: deleteNode }, "remove"))),
+        react_1["default"].createElement("section", { className: "currentStates" },
+            react_1["default"].createElement(AccusTable, { className: "table is-narrow" },
                 react_1["default"].createElement("thead", null,
                     react_1["default"].createElement("tr", null,
                         react_1["default"].createElement("th", null, "\uC9C1\uC5C5"),
@@ -138,9 +129,7 @@ function App() {
                         react_1["default"].createElement("td", null, routeNode === null || routeNode === void 0 ? void 0 : routeNode.stats.INT),
                         react_1["default"].createElement("td", null, routeNode === null || routeNode === void 0 ? void 0 : routeNode.stats.AGI),
                         react_1["default"].createElement("td", null, routeNode === null || routeNode === void 0 ? void 0 : routeNode.stats.VIT),
-                        react_1["default"].createElement("td", null, routeNode === null || routeNode === void 0 ? void 0 : routeNode.jobPo),
-                        react_1["default"].createElement("td", null,
-                            react_1["default"].createElement(RemoveIcon_1["default"], null))));
+                        react_1["default"].createElement("td", null, routeNode === null || routeNode === void 0 ? void 0 : routeNode.jobPo)));
                 }))))));
 }
 exports["default"] = App;

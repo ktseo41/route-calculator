@@ -1,0 +1,10 @@
+@charset "utf-8";
+@import "https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css";
+
+$family-sans-serif: "NanumSquare", sans-serif;
+$primary: #f5f5f5;
+$secondary: #333333;
+$background: $primary;
+$navbar-height: 0;
+
+@import "./node_modules/bulma/bulma.sass";

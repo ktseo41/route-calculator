@@ -134,3 +134,11 @@ module.exports = {
 ### source tab에서 src , node_modules 폴더가 보였던 것
 
 - 강력 새로고침을 하니까 사라졌다.
+
+### bulma variable 덮어쓰기가 안되던 것
+
+- `To override any of these variables, just set them before importing Bulma.` 이 한줄을 안봐서 ..
+
+#### 참고
+
+- https://bulma.io/documentation/customize/variables/
