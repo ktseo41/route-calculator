@@ -35,11 +35,11 @@ const CalculatorWrapper = styled.div`
 `;
 
 const AccusTable = styled.table`
-  border-collapse: collapse;
-  text-align: center;
-  width: 100%;
+  /* border-collapse: collapse; */
+  /* text-align: center; */
+  /* width: 100%; */
 
-  & tr {
+  /* & tr {
     padding: 0 5px;
   }
 
@@ -49,7 +49,7 @@ const AccusTable = styled.table`
 
   & tr:nth-child(even) {
     background-color: #efefef;
-  }
+  } */
 `;
 
 const H5Div = styled.div`
@@ -120,7 +120,7 @@ export default function App() {
   }, [rLL, selectedNode]);
 
   return (
-    <CalculatorWrapper className="container">
+    <CalculatorWrapper className="container column is-two-thirds">
       <nav className="navbar">
         <div className="container has-text-centered">
           <a className="navbar-item has-text-dark title is-5">
@@ -174,16 +174,16 @@ export default function App() {
           </SelectedInsideDiv>
         </SelectedNodeDiv>
       </section> */}
-      <section className="currentStates">
-        <AccusTable className="table is-narrow">
+      <section className="currentStates is-two-thirds">
+        <AccusTable className="table is-fullwidth is-narrow is-hoverable">
           <thead>
             <tr>
-              <th>직업</th>
-              <th>STR</th>
-              <th>INT</th>
-              <th>AGI</th>
-              <th>VIT</th>
-              <th>잡포인트</th>
+              <th className="has-text-centered">직업</th>
+              <th className="has-text-centered">STR</th>
+              <th className="has-text-centered">INT</th>
+              <th className="has-text-centered">AGI</th>
+              <th className="has-text-centered">VIT</th>
+              <th className="has-text-centered">잡포</th>
             </tr>
           </thead>
           <tbody>
@@ -192,18 +192,20 @@ export default function App() {
                 <tr
                   id={`${index}`}
                   key={index}
-                  className={index === selectedNodeIdx ? "selected" : ""}
+                  className={
+                    index === selectedNodeIdx ? "has-background-light" : ""
+                  }
                   onClick={(event: MouseEvent) => {
                     setSelectedNode(rLL.get(+event.currentTarget.id));
                     setSelectedNodeIdx(+event.currentTarget.id);
                   }}
                 >
-                  <td>{routeNode?.job}</td>
-                  <td>{routeNode?.stats.STR}</td>
-                  <td>{routeNode?.stats.INT}</td>
-                  <td>{routeNode?.stats.AGI}</td>
-                  <td>{routeNode?.stats.VIT}</td>
-                  <td>{routeNode?.jobPo}</td>
+                  <td className="has-text-centered">{routeNode?.job}</td>
+                  <td className="has-text-centered">{routeNode?.stats.STR}</td>
+                  <td className="has-text-centered">{routeNode?.stats.INT}</td>
+                  <td className="has-text-centered">{routeNode?.stats.AGI}</td>
+                  <td className="has-text-centered">{routeNode?.stats.VIT}</td>
+                  <td className="has-text-centered">{routeNode?.jobPo}</td>
                 </tr>
               );
             })}
