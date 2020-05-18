@@ -3,6 +3,7 @@ import styled from "styled-components";
 import jobList from "./database/job";
 import { Jobs, classifiedJobs } from "./database/job";
 import RouteLinkedList from "./lib/RouteLinkedList";
+import { v4 as uuidv4 } from "uuid";
 
 type ButtonState =
   | "1"
@@ -51,25 +52,25 @@ const AccusTable = styled.table`
   } */
 `;
 
-const H5Div = styled.div`
-  display: inline;
-  font-weight: bold;
-  margin: 0px 10px;
-`;
+// const H5Div = styled.div`
+//   display: inline;
+//   font-weight: bold;
+//   margin: 0px 10px;
+// `;
 
-const SelectedNodeDiv = styled.div`
-  display: flex;
-  justify-content: flex-start;
-`;
+// const SelectedNodeDiv = styled.div`
+//   display: flex;
+//   justify-content: flex-start;
+// `;
 
-const SelectedInsideDiv = styled.div`
-  display: flex;
-  justify-content: space-around;
+// const SelectedInsideDiv = styled.div`
+//   display: flex;
+//   justify-content: space-around;
 
-  & span {
-    margin: 0px 10px;
-  }
-`;
+//   & span {
+//     margin: 0px 10px;
+//   }
+// `;
 
 export default function App() {
   const [rLL, setRLL] = useState(new RouteLinkedList());
@@ -119,15 +120,16 @@ export default function App() {
   }, [rLL, selectedNode]);
 
   return (
-    <CalculatorWrapper className="container column is-two-thirds">
-      <nav className="navbar">
-        <div className="container has-text-centered">
-          <a className="navbar-item has-text-dark title is-5">
-            일랜시아 루트 계산기
-          </a>
+    <CalculatorWrapper className="container column is-two-thirds is-offset-2">
+      <nav>
+        <div
+          style={{ padding: "10px 0px" }}
+          className="has-text-centered title is-5"
+        >
+          일랜시아 루트 계산기
         </div>
       </nav>
-      <section className="jobs">
+      <section className="jobs box">
         <div className="buttons are-small">
           {classifiedJobs.reduce(
             (jobButtons2: JSX.Element[], classifieds, idx) => {
@@ -137,7 +139,7 @@ export default function App() {
                     <button
                       className="button is-primary"
                       onClick={addNewJob}
-                      key={idx * 10 + idx2}
+                      key={uuidv4()}
                     >
                       {jobName}
                     </button>
@@ -147,31 +149,14 @@ export default function App() {
                 []
               );
               jobButtons2.push(
-                <div className="container">{buttonedClassfiedJobs}</div>
+                <div key={uuidv4()} className="container">
+                  {buttonedClassfiedJobs}
+                </div>
               );
               return jobButtons2;
             },
             []
           )}
-          {/* {jobList.reduce(
-            (
-              jobButtons: JSX.Element[],
-              jobName: string,
-              idx: number
-            ): JSX.Element[] => {
-              jobButtons.push(
-                <button
-                  className="button is-primary"
-                  onClick={addNewJob}
-                  key={idx}
-                >
-                  {jobName}
-                </button>
-              );
-              return jobButtons;
-            },
-            []
-          )} */}
         </div>
       </section>
       <section className="adjust box">
@@ -181,7 +166,7 @@ export default function App() {
               <button
                 className="button is-primary"
                 onClick={adjustJobPoint}
-                key={idx}
+                key={uuidv4()}
               >
                 {buttonState}
               </button>
@@ -192,20 +177,13 @@ export default function App() {
           </button>
         </div>
       </section>
-      {/* <section className="selectedNode box">
-        <SelectedNodeDiv>
-          <H5Div>선택 노드</H5Div>
-          <SelectedInsideDiv>
-            <span>{`직업 : ${job}`}</span>
-            <span>{` 잡포인트 : ${jobPo}`}</span>
-          </SelectedInsideDiv>
-        </SelectedNodeDiv>
-      </section> */}
       <section className="currentStates is-two-thirds">
         <AccusTable className="table is-fullwidth is-narrow is-hoverable">
           <thead>
             <tr>
-              <th className="has-text-centered">직업</th>
+              <th style={{ minWidth: "114.5px" }} className="has-text-centered">
+                직업
+              </th>
               <th className="has-text-centered">STR</th>
               <th className="has-text-centered">INT</th>
               <th className="has-text-centered">AGI</th>
@@ -218,7 +196,7 @@ export default function App() {
               return (
                 <tr
                   id={`${index}`}
-                  key={index}
+                  key={uuidv4()}
                   className={
                     index === selectedNodeIdx ? "has-background-light" : ""
                   }
@@ -227,12 +205,24 @@ export default function App() {
                     setSelectedNodeIdx(+event.currentTarget.id);
                   }}
                 >
-                  <td className="has-text-centered">{routeNode?.job}</td>
-                  <td className="has-text-centered">{routeNode?.stats.STR}</td>
-                  <td className="has-text-centered">{routeNode?.stats.INT}</td>
-                  <td className="has-text-centered">{routeNode?.stats.AGI}</td>
-                  <td className="has-text-centered">{routeNode?.stats.VIT}</td>
-                  <td className="has-text-centered">{routeNode?.jobPo}</td>
+                  <td key={uuidv4()} className="has-text-centered">
+                    {routeNode?.job}
+                  </td>
+                  <td key={uuidv4()} className="has-text-centered">
+                    {routeNode?.stats.STR}
+                  </td>
+                  <td key={uuidv4()} className="has-text-centered">
+                    {routeNode?.stats.INT}
+                  </td>
+                  <td key={uuidv4()} className="has-text-centered">
+                    {routeNode?.stats.AGI}
+                  </td>
+                  <td key={uuidv4()} className="has-text-centered">
+                    {routeNode?.stats.VIT}
+                  </td>
+                  <td key={uuidv4()} className="has-text-centered">
+                    {routeNode?.jobPo}
+                  </td>
                 </tr>
               );
             })}

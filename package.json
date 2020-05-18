@@ -20,6 +20,7 @@
     "@babel/preset-env": "^7.9.6",
     "@types/react": "^16.9.34",
     "@types/styled-components": "^5.1.0",
+    "@types/uuid": "^7.0.3",
     "babel-jest": "^25.5.1",
     "bulma": "^0.8.2",
     "gh-pages": "^2.2.0",

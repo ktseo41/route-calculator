@@ -142,3 +142,7 @@ module.exports = {
 #### 참고
 
 - https://bulma.io/documentation/customize/variables/
+
+### bulma 사용 후 모바일에서 반응 속도가 현저히 느려지던 문제
+
+- td마다 uuid를 부여하고 속도가 개선됐다.
