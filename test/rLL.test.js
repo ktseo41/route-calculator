@@ -315,9 +315,9 @@ describe("RouteNode adjustJobPo & recalculate. 여러 노드 상황 & 이전 노
   test("이전 노드의 잡포인트를 증가시키면 이후 노드의 잡포인트는 100에 맞춰 줄어든다. (같은 직업일 때)", () => {
     rLL.add("무도가");
     rLL.tail?.adjustJobPoint(100);
-    무도가Node.adjustJobPoint(10);
-    expect(rLL.tail.jobPo).toBe(90);
-    expect(무도가Node.jobPo).toBe(10);
+    무도가Node.adjustJobPoint(30);
+    expect(rLL.tail.jobPo).toBe(70);
+    expect(무도가Node.jobPo).toBe(30);
     expect(rLL.tail.currentJobPos).toEqual({
       무직: 0,
       무도가: 100,
@@ -326,8 +326,30 @@ describe("RouteNode adjustJobPo & recalculate. 여러 노드 상황 & 이전 노
     });
     expect(rLL.tail.stats).toEqual({ STR: 5, INT: 5, AGI: 5, VIT: 30 });
   });
+
+  test("이후 노드의 잡포인트를 증가시키면 총합 100까지만 증가한다. (로직 선택의 여지가 있음 .. )", () => {
+    rLL.tail.adjustJobPoint(10);
+    expect(rLL.tail.jobPo).toBe(70);
+  });
 });
 
-describe("노드를 삭제할 수 있다.", () => {});
+describe("노드를 삭제할 수 있다.", () => {
+  const rLL = new RouteLinkedList();
+  rLL.add("무도가");
+  rLL.tail.adjustJobPoint(100);
+  rLL.add("자객");
+  rLL.tail.adjustJobPoint(100);
+  rLL.add("투사");
+  rLL.add("모험가");
+  test("이전 노드 중 선택해서 삭제를 할 수 있다.", () => {
+    rLL.removeAt(1);
+    expect(rLL.tail.currentJobPos).toEqual({
+      무직: 0,
+      자객: 100,
+      투사: 0,
+      모험가: 0,
+    });
+  });
+});
 
 describe("버튼이 아니라 직접 입력해서 잡포인트를 변경할 수 있다.", () => {});

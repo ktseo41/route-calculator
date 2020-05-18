@@ -232,6 +232,13 @@ export class RouteNode {
 
   private getActualChange(jobPoDelta: number): number {
     if (jobPoDelta > 0) {
+      if (
+        (this.jobPo + (this.prev?.currentJobPos[this.job] as number) || 0) ===
+        100
+      ) {
+        return 0;
+      }
+
       return this.jobPo +
         jobPoDelta +
         ((this.prev?.currentJobPos[this.job] as number) || 0) >

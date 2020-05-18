@@ -1,8 +1,9 @@
 import React, { useState, useEffect, MouseEvent } from "react";
 import styled from "styled-components";
 import jobList from "./database/job";
-import { Jobs } from "./database/job";
-import RouteLinkedList, { RouteNode } from "./lib/RouteLinkedList";
+import { Jobs, classifiedJobs } from "./database/job";
+import RouteLinkedList from "./lib/RouteLinkedList";
+import { v4 as uuidv4 } from "uuid";
 
 type ButtonState =
   | "1"
@@ -28,17 +29,17 @@ const buttonStates: ButtonState[] = [
 ];
 
 const CalculatorWrapper = styled.div`
-  border: 1px solid black;
+  /* border: 1px solid black;
   width: 50%;
-  min-width: 300px;
+  min-width: 300px; */
 `;
 
 const AccusTable = styled.table`
-  border-collapse: collapse;
-  text-align: center;
-  width: 100%;
+  /* border-collapse: collapse; */
+  /* text-align: center; */
+  /* width: 100%; */
 
-  & tr {
+  /* & tr {
     padding: 0 5px;
   }
 
@@ -48,28 +49,28 @@ const AccusTable = styled.table`
 
   & tr:nth-child(even) {
     background-color: #efefef;
-  }
+  } */
 `;
 
-const H5Div = styled.div`
-  display: inline;
-  font-weight: bold;
-  margin: 0px 10px;
-`;
+// const H5Div = styled.div`
+//   display: inline;
+//   font-weight: bold;
+//   margin: 0px 10px;
+// `;
 
-const SelectedNodeDiv = styled.div`
-  display: flex;
-  justify-content: flex-start;
-`;
+// const SelectedNodeDiv = styled.div`
+//   display: flex;
+//   justify-content: flex-start;
+// `;
 
-const SelectedInsideDiv = styled.div`
-  display: flex;
-  justify-content: space-around;
+// const SelectedInsideDiv = styled.div`
+//   display: flex;
+//   justify-content: space-around;
 
-  & span {
-    margin: 0px 10px;
-  }
-`;
+//   & span {
+//     margin: 0px 10px;
+//   }
+// `;
 
 export default function App() {
   const [rLL, setRLL] = useState(new RouteLinkedList());
@@ -119,54 +120,75 @@ export default function App() {
   }, [rLL, selectedNode]);
 
   return (
-    <CalculatorWrapper>
-      <section>
-        <label htmlFor="job-select"></label>
-        {jobList.reduce(
-          (
-            jobButtons: JSX.Element[],
-            jobName: string,
-            idx: number
-          ): JSX.Element[] => {
-            jobButtons.push(
-              <button onClick={addNewJob} key={idx}>
-                {jobName}
+    <CalculatorWrapper className="container column is-two-thirds is-offset-2">
+      <nav>
+        <div
+          style={{ padding: "10px 0px" }}
+          className="has-text-centered title is-5"
+        >
+          일랜시아 루트 계산기
+        </div>
+      </nav>
+      <section className="jobs box">
+        <div className="buttons are-small">
+          {classifiedJobs.reduce(
+            (jobButtons2: JSX.Element[], classifieds, idx) => {
+              const buttonedClassfiedJobs = classifieds.reduce(
+                (jobButtons1: JSX.Element[], jobName: string, idx2: number) => {
+                  jobButtons1.push(
+                    <button
+                      className="button is-primary"
+                      onClick={addNewJob}
+                      key={uuidv4()}
+                    >
+                      {jobName}
+                    </button>
+                  );
+                  return jobButtons1;
+                },
+                []
+              );
+              jobButtons2.push(
+                <div key={uuidv4()} className="container">
+                  {buttonedClassfiedJobs}
+                </div>
+              );
+              return jobButtons2;
+            },
+            []
+          )}
+        </div>
+      </section>
+      <section className="adjust box">
+        <div className="buttons are-small">
+          {buttonStates.map((buttonState, idx) => {
+            return (
+              <button
+                className="button is-primary"
+                onClick={adjustJobPoint}
+                key={uuidv4()}
+              >
+                {buttonState}
               </button>
             );
-            return jobButtons;
-          },
-          []
-        )}
+          })}
+          <button className="button is-primary" onClick={deleteNode}>
+            remove
+          </button>
+        </div>
       </section>
-      <section>
-        {buttonStates.map((buttonState, idx) => {
-          return (
-            <button onClick={adjustJobPoint} key={idx}>
-              {buttonState}
-            </button>
-          );
-        })}
-        <button onClick={deleteNode}>remove</button>
-      </section>
-      <section>
-        <SelectedNodeDiv>
-          <H5Div>선택 노드</H5Div>
-          <SelectedInsideDiv>
-            <span>{`직업 : ${job}`}</span>
-            <span>{` 잡포인트 : ${jobPo}`}</span>
-          </SelectedInsideDiv>
-        </SelectedNodeDiv>
-      </section>
-      <section>
-        <AccusTable>
+      <section className="currentStates is-two-thirds">
+        <AccusTable className="table is-fullwidth is-narrow is-hoverable">
           <thead>
             <tr>
-              <th>직업</th>
-              <th>STR</th>
-              <th>INT</th>
-              <th>AGI</th>
-              <th>VIT</th>
-              <th>잡포인트</th>
+              <th style={{ minWidth: "114.5px" }} className="has-text-centered">
+                직업
+              </th>
+              <th className="has-text-centered">STR</th>
+              <th className="has-text-centered">INT</th>
+              <th className="has-text-centered">AGI</th>
+              <th className="has-text-centered">VIT</th>
+              <th className="has-text-centered">잡포</th>
             </tr>
           </thead>
           <tbody>
@@ -174,19 +196,33 @@ export default function App() {
               return (
                 <tr
                   id={`${index}`}
-                  key={index}
-                  className={index === selectedNodeIdx ? "selected" : ""}
+                  key={uuidv4()}
+                  className={
+                    index === selectedNodeIdx ? "has-background-light" : ""
+                  }
                   onClick={(event: MouseEvent) => {
                     setSelectedNode(rLL.get(+event.currentTarget.id));
                     setSelectedNodeIdx(+event.currentTarget.id);
                   }}
                 >
-                  <td>{routeNode?.job}</td>
-                  <td>{routeNode?.stats.STR}</td>
-                  <td>{routeNode?.stats.INT}</td>
-                  <td>{routeNode?.stats.AGI}</td>
-                  <td>{routeNode?.stats.VIT}</td>
-                  <td>{routeNode?.jobPo}</td>
+                  <td key={uuidv4()} className="has-text-centered">
+                    {routeNode?.job}
+                  </td>
+                  <td key={uuidv4()} className="has-text-centered">
+                    {routeNode?.stats.STR}
+                  </td>
+                  <td key={uuidv4()} className="has-text-centered">
+                    {routeNode?.stats.INT}
+                  </td>
+                  <td key={uuidv4()} className="has-text-centered">
+                    {routeNode?.stats.AGI}
+                  </td>
+                  <td key={uuidv4()} className="has-text-centered">
+                    {routeNode?.stats.VIT}
+                  </td>
+                  <td key={uuidv4()} className="has-text-centered">
+                    {routeNode?.jobPo}
+                  </td>
                 </tr>
               );
             })}
