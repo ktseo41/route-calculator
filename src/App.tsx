@@ -1,4 +1,4 @@
-import React, { useState, useEffect, MouseEvent } from "react";
+import React, { useState, useEffect, MouseEvent, ChangeEvent } from "react";
 import styled from "styled-components";
 import jobList from "./database/job";
 import { Jobs, classifiedJobs } from "./database/job";
@@ -28,49 +28,7 @@ const buttonStates: ButtonState[] = [
   "reset",
 ];
 
-const CalculatorWrapper = styled.div`
-  /* border: 1px solid black;
-  width: 50%;
-  min-width: 300px; */
-`;
-
-const AccusTable = styled.table`
-  /* border-collapse: collapse; */
-  /* text-align: center; */
-  /* width: 100%; */
-
-  /* & tr {
-    padding: 0 5px;
-  }
-
-  & tr.selected {
-    background-color: #ffbb00 !important;
-  }
-
-  & tr:nth-child(even) {
-    background-color: #efefef;
-  } */
-`;
-
-// const H5Div = styled.div`
-//   display: inline;
-//   font-weight: bold;
-//   margin: 0px 10px;
-// `;
-
-// const SelectedNodeDiv = styled.div`
-//   display: flex;
-//   justify-content: flex-start;
-// `;
-
-// const SelectedInsideDiv = styled.div`
-//   display: flex;
-//   justify-content: space-around;
-
-//   & span {
-//     margin: 0px 10px;
-//   }
-// `;
+const CalculatorWrapper = styled.div``;
 
 export default function App() {
   const [rLL, setRLL] = useState(new RouteLinkedList());
@@ -107,11 +65,13 @@ export default function App() {
     setJobPo(selectedNode?.jobPo);
   };
 
-  const deleteNode = () => {
+  const deleteNode = (selectedNodeIdx: string | undefined) => {
+    if (selectedNodeIdx === undefined) return;
     if (rLL.length === 1) return;
-    rLL.removeAt(selectedNodeIdx);
-    setSelectedNode(rLL.get(selectedNodeIdx - 1));
-    setSelectedNodeIdx(selectedNodeIdx - 1);
+    const numberedIndex = +selectedNodeIdx;
+    rLL.removeAt(numberedIndex);
+    setSelectedNode(rLL.get(numberedIndex - 1));
+    setSelectedNodeIdx(numberedIndex - 1);
   };
 
   useEffect(() => {
@@ -129,7 +89,7 @@ export default function App() {
           일랜시아 루트 계산기
         </div>
       </nav>
-      <section className="jobs box">
+      <section className="jobs box disable-double-tap">
         <div className="buttons are-small">
           {classifiedJobs.reduce(
             (jobButtons2: JSX.Element[], classifieds, idx) => {
@@ -137,8 +97,12 @@ export default function App() {
                 (jobButtons1: JSX.Element[], jobName: string, idx2: number) => {
                   jobButtons1.push(
                     <button
-                      className="button is-primary"
+                      style={{ fontSize: "0.8rem" }}
+                      className="button is-outlined"
                       onClick={addNewJob}
+                      onChange={(evt: React.FormEvent) => {
+                        console.log(evt.type);
+                      }}
                       key={uuidv4()}
                     >
                       {jobName}
@@ -159,12 +123,13 @@ export default function App() {
           )}
         </div>
       </section>
-      <section className="adjust box">
+      <section className="adjust box disable-double-tap">
         <div className="buttons are-small">
           {buttonStates.map((buttonState, idx) => {
             return (
               <button
-                className="button is-primary"
+                style={{ fontSize: "0.8rem" }}
+                className="button is-outlined"
                 onClick={adjustJobPoint}
                 key={uuidv4()}
               >
@@ -172,16 +137,16 @@ export default function App() {
               </button>
             );
           })}
-          <button className="button is-primary" onClick={deleteNode}>
+          {/* <button className="button is-primary" onClick={deleteNode}>
             remove
-          </button>
+          </button> */}
         </div>
       </section>
-      <section className="currentStates is-two-thirds">
-        <AccusTable className="table is-fullwidth is-narrow is-hoverable">
+      <section className="currentStates is-two-thirds disable-double-tap">
+        <table className="table is-fullwidth is-narrow is-hoverable">
           <thead>
             <tr>
-              <th style={{ minWidth: "114.5px" }} className="has-text-centered">
+              <th style={{ minWidth: "104px" }} className="has-text-centered">
                 직업
               </th>
               <th className="has-text-centered">STR</th>
@@ -189,6 +154,7 @@ export default function App() {
               <th className="has-text-centered">AGI</th>
               <th className="has-text-centered">VIT</th>
               <th className="has-text-centered">잡포</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -223,11 +189,27 @@ export default function App() {
                   <td key={uuidv4()} className="has-text-centered">
                     {routeNode?.jobPo}
                   </td>
+                  <td
+                    style={{ minWidth: "37.6px" }}
+                    key={uuidv4()}
+                    className="has-text-centered"
+                  >
+                    {index !== 0 && (
+                      <a
+                        onClick={(event: MouseEvent) => {
+                          deleteNode(
+                            event.currentTarget.parentElement?.parentElement?.id
+                          );
+                        }}
+                        className="delete"
+                      ></a>
+                    )}
+                  </td>
                 </tr>
               );
             })}
           </tbody>
-        </AccusTable>
+        </table>
       </section>
     </CalculatorWrapper>
   );
