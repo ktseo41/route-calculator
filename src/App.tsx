@@ -5,16 +5,8 @@ import { Jobs, classifiedJobs } from "./database/job";
 import RouteLinkedList from "./lib/RouteLinkedList";
 import { v4 as uuidv4 } from "uuid";
 
-type ButtonState =
-  | "1"
-  | "-1"
-  | "5"
-  | "-5"
-  | "10"
-  | "-10"
-  | "100"
-  | "-100"
-  | "reset";
+type ButtonState = "1" | "-1" | "5" | "-5" | "10" | "-10" | "100" | "-100";
+// | "reset";
 
 const buttonStates: ButtonState[] = [
   "1",
@@ -25,7 +17,7 @@ const buttonStates: ButtonState[] = [
   "-10",
   "100",
   "-100",
-  "reset",
+  // "reset",
 ];
 
 const CalculatorWrapper = styled.div``;
@@ -50,15 +42,6 @@ export default function App() {
   const adjustJobPoint = (event: MouseEvent) => {
     const changeState = (event.target as HTMLButtonElement)
       .textContent as ButtonState;
-    if (changeState === "reset") {
-      setRLL(() => {
-        const newRLL = new RouteLinkedList();
-        setSelectedNode(newRLL.tail);
-        setSelectedNodeIdx(0);
-        return newRLL;
-      });
-      return;
-    }
     const numberedChangeState = +changeState;
     selectedNode?.adjustJobPoint(numberedChangeState);
     setJob(selectedNode?.job);
@@ -74,6 +57,15 @@ export default function App() {
     setSelectedNodeIdx(numberedIndex - 1);
   };
 
+  const reset = () => {
+    setRLL(() => {
+      const newRLL = new RouteLinkedList();
+      setSelectedNode(newRLL.tail);
+      setSelectedNodeIdx(0);
+      return newRLL;
+    });
+  };
+
   useEffect(() => {
     setJob(selectedNode?.job);
     setJobPo(selectedNode?.jobPo);
@@ -86,7 +78,9 @@ export default function App() {
           style={{ padding: "10px 0px" }}
           className="has-text-centered title is-5"
         >
-          일랜시아 루트 계산기
+          <span style={{ cursor: "pointer" }} onClick={reset}>
+            일랜시아 루트 계산기
+          </span>
         </div>
       </nav>
       <section className="jobs box disable-double-tap">
@@ -97,7 +91,10 @@ export default function App() {
                 (jobButtons1: JSX.Element[], jobName: string, idx2: number) => {
                   jobButtons1.push(
                     <button
-                      style={{ fontSize: "0.8rem" }}
+                      style={{
+                        fontSize: "0.8rem",
+                        padding: "calc(0.5em - 1px) 1em",
+                      }}
                       className="button is-outlined"
                       onClick={addNewJob}
                       onChange={(evt: React.FormEvent) => {
@@ -124,12 +121,12 @@ export default function App() {
         </div>
       </section>
       <section className="adjust box disable-double-tap">
-        <div className="buttons are-small">
+        <div className="buttons columns is-multiline are-small">
           {buttonStates.map((buttonState, idx) => {
             return (
               <button
-                style={{ fontSize: "0.8rem" }}
-                className="button is-outlined"
+                style={{ fontSize: "0.8rem", padding: "calc(0.5em - 1px) 1em" }}
+                className="button column is-outlined is-mobile"
                 onClick={adjustJobPoint}
                 key={uuidv4()}
               >
@@ -153,7 +150,9 @@ export default function App() {
               <th className="has-text-centered">INT</th>
               <th className="has-text-centered">AGI</th>
               <th className="has-text-centered">VIT</th>
-              <th className="has-text-centered">잡포</th>
+              <th style={{ minWidth: "46.4px" }} className="has-text-centered">
+                잡포
+              </th>
               <th></th>
             </tr>
           </thead>
