@@ -1,22 +1,12 @@
 import React, { useState, useEffect, MouseEvent } from "react";
 import styled from "styled-components";
-import jobList from "./database/job";
 import { Jobs, classifiedJobs } from "./database/job";
 import RouteLinkedList from "./lib/RouteLinkedList";
 import { v4 as uuidv4 } from "uuid";
 
-type ButtonState =
-  | "1"
-  | "-1"
-  | "5"
-  | "-5"
-  | "10"
-  | "-10"
-  | "100"
-  | "-100"
-  | "reset";
+type ButtonState = "1" | "-1" | "5" | "-5" | "10" | "-10" | "100" | "-100";
 
-const buttonStates: ButtonState[] = [
+const buttonsValues: ButtonState[] = [
   "1",
   "-1",
   "5",
@@ -25,52 +15,17 @@ const buttonStates: ButtonState[] = [
   "-10",
   "100",
   "-100",
-  "reset",
 ];
 
-const CalculatorWrapper = styled.div`
-  /* border: 1px solid black;
-  width: 50%;
-  min-width: 300px; */
-`;
+const CalculatorWrapper = styled.div``;
 
-const AccusTable = styled.table`
-  /* border-collapse: collapse; */
-  /* text-align: center; */
-  /* width: 100%; */
+function getJobNameFromSelect(event: MouseEvent) {
+  return (event.target as HTMLButtonElement).textContent as Jobs;
+}
 
-  /* & tr {
-    padding: 0 5px;
-  }
-
-  & tr.selected {
-    background-color: #ffbb00 !important;
-  }
-
-  & tr:nth-child(even) {
-    background-color: #efefef;
-  } */
-`;
-
-// const H5Div = styled.div`
-//   display: inline;
-//   font-weight: bold;
-//   margin: 0px 10px;
-// `;
-
-// const SelectedNodeDiv = styled.div`
-//   display: flex;
-//   justify-content: flex-start;
-// `;
-
-// const SelectedInsideDiv = styled.div`
-//   display: flex;
-//   justify-content: space-around;
-
-//   & span {
-//     margin: 0px 10px;
-//   }
-// `;
+function getAdjustPoint(event: MouseEvent): number {
+  return +((event.target as HTMLButtonElement).textContent as ButtonState);
+}
 
 export default function App() {
   const [rLL, setRLL] = useState(new RouteLinkedList());
@@ -80,38 +35,41 @@ export default function App() {
   const [jobPo, setJobPo] = useState(selectedNode?.jobPo);
 
   const addNewJob = (event: MouseEvent) => {
-    const selectedValue = (event.target as HTMLButtonElement)
-      .textContent as Jobs;
-    if (rLL.tail?.job === selectedValue) return;
-    rLL.add(selectedValue);
+    const jobName = getJobNameFromSelect(event);
+
+    if (rLL.tail?.job === jobName) return;
+    rLL.add(jobName);
 
     setSelectedNode(rLL.tail);
     setSelectedNodeIdx(rLL.length - 1);
   };
 
   const adjustJobPoint = (event: MouseEvent) => {
-    const changeState = (event.target as HTMLButtonElement)
-      .textContent as ButtonState;
-    if (changeState === "reset") {
-      setRLL(() => {
-        const newRLL = new RouteLinkedList();
-        setSelectedNode(newRLL.tail);
-        setSelectedNodeIdx(0);
-        return newRLL;
-      });
-      return;
-    }
-    const numberedChangeState = +changeState;
-    selectedNode?.adjustJobPoint(numberedChangeState);
+    const adjustPoint = getAdjustPoint(event);
+    selectedNode?.adjustJobPoint(adjustPoint);
     setJob(selectedNode?.job);
     setJobPo(selectedNode?.jobPo);
   };
 
-  const deleteNode = () => {
+  const deleteNode = (selectedNodeIdx: string | undefined) => {
+    if (selectedNodeIdx === undefined) return;
     if (rLL.length === 1) return;
-    rLL.removeAt(selectedNodeIdx);
-    setSelectedNode(rLL.get(selectedNodeIdx - 1));
-    setSelectedNodeIdx(selectedNodeIdx - 1);
+
+    const numberedIndex = +selectedNodeIdx;
+    rLL.removeAt(numberedIndex);
+    setSelectedNode(rLL.get(numberedIndex - 1));
+    setSelectedNodeIdx(numberedIndex - 1);
+  };
+
+  const reset = () => {
+    setRLL(() => {
+      const newRLL = new RouteLinkedList();
+
+      setSelectedNode(newRLL.tail);
+      setSelectedNodeIdx(0);
+
+      return newRLL;
+    });
   };
 
   useEffect(() => {
@@ -120,75 +78,88 @@ export default function App() {
   }, [rLL, selectedNode]);
 
   return (
-    <CalculatorWrapper className="container column is-two-thirds is-offset-2">
+    <CalculatorWrapper className="container">
       <nav>
         <div
           style={{ padding: "10px 0px" }}
           className="has-text-centered title is-5"
         >
-          일랜시아 루트 계산기
+          <span style={{ cursor: "pointer" }} onClick={reset}>
+            일랜시아 루트 계산기
+          </span>
         </div>
       </nav>
-      <section className="jobs box">
-        <div className="buttons are-small">
-          {classifiedJobs.reduce(
-            (jobButtons2: JSX.Element[], classifieds, idx) => {
-              const buttonedClassfiedJobs = classifieds.reduce(
-                (jobButtons1: JSX.Element[], jobName: string, idx2: number) => {
-                  jobButtons1.push(
-                    <button
-                      className="button is-primary"
-                      onClick={addNewJob}
-                      key={uuidv4()}
-                    >
-                      {jobName}
-                    </button>
-                  );
-                  return jobButtons1;
-                },
-                []
-              );
-              jobButtons2.push(
-                <div key={uuidv4()} className="container">
-                  {buttonedClassfiedJobs}
-                </div>
-              );
-              return jobButtons2;
-            },
-            []
-          )}
+      <section
+        style={{ marginBottom: "10px" }}
+        className="jobs disable-double-tap container column is-two-thirds-desktop is-two-thirds-tablet"
+      >
+        <div className="container">
+          {classifiedJobs.reduce((jobGroups: JSX.Element[], group) => {
+            const groupedJobButtons = group.reduce(
+              (jobButtons: JSX.Element[], jobName: string) => {
+                jobButtons.push(
+                  <button
+                    style={{
+                      fontSize: "0.8rem",
+                      padding: "calc(0.5em - 1px) 1em",
+                    }}
+                    className="button column is-outlined"
+                    onClick={addNewJob}
+                    key={uuidv4()}
+                  >
+                    {jobName}
+                  </button>
+                );
+                return jobButtons;
+              },
+              []
+            );
+            jobGroups.push(
+              <div
+                key={uuidv4()}
+                className="container buttons is-small columns is-multiline"
+              >
+                {groupedJobButtons}
+              </div>
+            );
+            return jobGroups;
+          }, [])}
         </div>
       </section>
-      <section className="adjust box">
-        <div className="buttons are-small">
-          {buttonStates.map((buttonState, idx) => {
+      <section className="adjust disable-double-tap column is-two-thirds-desktop is-two-thirds-tablet container">
+        <div className="buttons columns is-multiline are-small">
+          {buttonsValues.map((buttonValue) => {
             return (
               <button
-                className="button is-primary"
+                style={{ fontSize: "0.8rem", padding: "calc(0.5em - 1px) 1em" }}
+                className="button column is-outlined is-mobile"
                 onClick={adjustJobPoint}
                 key={uuidv4()}
               >
-                {buttonState}
+                {buttonValue}
               </button>
             );
           })}
-          <button className="button is-primary" onClick={deleteNode}>
+          {/* <button className="button is-primary" onClick={deleteNode}>
             remove
-          </button>
+          </button> */}
         </div>
       </section>
-      <section className="currentStates is-two-thirds">
-        <AccusTable className="table is-fullwidth is-narrow is-hoverable">
+      <section className="currentStates container is-two-thirds-desktop is-two-thirds-tablet disable-double-tap">
+        <table className="table is-fullwidth is-narrow is-hoverable">
           <thead>
             <tr>
-              <th style={{ minWidth: "114.5px" }} className="has-text-centered">
+              <th style={{ minWidth: "104px" }} className="has-text-centered">
                 직업
               </th>
               <th className="has-text-centered">STR</th>
               <th className="has-text-centered">INT</th>
               <th className="has-text-centered">AGI</th>
               <th className="has-text-centered">VIT</th>
-              <th className="has-text-centered">잡포</th>
+              <th style={{ minWidth: "46.4px" }} className="has-text-centered">
+                잡포
+              </th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -223,11 +194,27 @@ export default function App() {
                   <td key={uuidv4()} className="has-text-centered">
                     {routeNode?.jobPo}
                   </td>
+                  <td
+                    style={{ minWidth: "37.6px" }}
+                    key={uuidv4()}
+                    className="has-text-centered"
+                  >
+                    {index !== 0 && (
+                      <a
+                        onClick={(event: MouseEvent) => {
+                          deleteNode(
+                            event.currentTarget.parentElement?.parentElement?.id
+                          );
+                        }}
+                        className="delete"
+                      ></a>
+                    )}
+                  </td>
                 </tr>
               );
             })}
           </tbody>
-        </AccusTable>
+        </table>
       </section>
     </CalculatorWrapper>
   );

@@ -7,4 +7,9 @@ $secondary: #333333;
 $background: $primary;
 $navbar-height: 0;
 
+.disable-double-tap {
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+}
+
 @import "./node_modules/bulma/bulma.sass";
