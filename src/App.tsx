@@ -1,6 +1,5 @@
-import React, { useState, useEffect, MouseEvent, ChangeEvent } from "react";
+import React, { useState, useEffect, MouseEvent } from "react";
 import styled from "styled-components";
-import jobList from "./database/job";
 import { Jobs, classifiedJobs } from "./database/job";
 import RouteLinkedList from "./lib/RouteLinkedList";
 import { v4 as uuidv4 } from "uuid";
@@ -8,7 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 type ButtonState = "1" | "-1" | "5" | "-5" | "10" | "-10" | "100" | "-100";
 // | "reset";
 
-const buttonStates: ButtonState[] = [
+const buttonsValues: ButtonState[] = [
   "1",
   "-1",
   "5",
@@ -22,6 +21,14 @@ const buttonStates: ButtonState[] = [
 
 const CalculatorWrapper = styled.div``;
 
+function getJobNameFromSelect(event: MouseEvent) {
+  return (event.target as HTMLButtonElement).textContent as Jobs;
+}
+
+function getJobPoAdjustPoint(event: MouseEvent) {
+  return (event.target as HTMLButtonElement).textContent as ButtonState;
+}
+
 export default function App() {
   const [rLL, setRLL] = useState(new RouteLinkedList());
   const [selectedNode, setSelectedNode] = useState(rLL.tail);
@@ -30,20 +37,18 @@ export default function App() {
   const [jobPo, setJobPo] = useState(selectedNode?.jobPo);
 
   const addNewJob = (event: MouseEvent) => {
-    const selectedValue = (event.target as HTMLButtonElement)
-      .textContent as Jobs;
-    if (rLL.tail?.job === selectedValue) return;
-    rLL.add(selectedValue);
+    const jobName = getJobNameFromSelect(event);
+
+    if (rLL.tail?.job === jobName) return;
+    rLL.add(jobName);
 
     setSelectedNode(rLL.tail);
     setSelectedNodeIdx(rLL.length - 1);
   };
 
   const adjustJobPoint = (event: MouseEvent) => {
-    const changeState = (event.target as HTMLButtonElement)
-      .textContent as ButtonState;
-    const numberedChangeState = +changeState;
-    selectedNode?.adjustJobPoint(numberedChangeState);
+    const adjustPoint = +getJobPoAdjustPoint(event);
+    selectedNode?.adjustJobPoint(adjustPoint);
     setJob(selectedNode?.job);
     setJobPo(selectedNode?.jobPo);
   };
@@ -51,6 +56,7 @@ export default function App() {
   const deleteNode = (selectedNodeIdx: string | undefined) => {
     if (selectedNodeIdx === undefined) return;
     if (rLL.length === 1) return;
+
     const numberedIndex = +selectedNodeIdx;
     rLL.removeAt(numberedIndex);
     setSelectedNode(rLL.get(numberedIndex - 1));
@@ -60,8 +66,10 @@ export default function App() {
   const reset = () => {
     setRLL(() => {
       const newRLL = new RouteLinkedList();
+
       setSelectedNode(newRLL.tail);
       setSelectedNodeIdx(0);
+
       return newRLL;
     });
   };
@@ -72,7 +80,7 @@ export default function App() {
   }, [rLL, selectedNode]);
 
   return (
-    <CalculatorWrapper className="container column is-two-thirds is-offset-2">
+    <CalculatorWrapper className="container">
       <nav>
         <div
           style={{ padding: "10px 0px" }}
@@ -83,46 +91,46 @@ export default function App() {
           </span>
         </div>
       </nav>
-      <section className="jobs box disable-double-tap">
-        <div className="buttons are-small">
-          {classifiedJobs.reduce(
-            (jobButtons2: JSX.Element[], classifieds, idx) => {
-              const buttonedClassfiedJobs = classifieds.reduce(
-                (jobButtons1: JSX.Element[], jobName: string, idx2: number) => {
-                  jobButtons1.push(
-                    <button
-                      style={{
-                        fontSize: "0.8rem",
-                        padding: "calc(0.5em - 1px) 1em",
-                      }}
-                      className="button is-outlined"
-                      onClick={addNewJob}
-                      onChange={(evt: React.FormEvent) => {
-                        console.log(evt.type);
-                      }}
-                      key={uuidv4()}
-                    >
-                      {jobName}
-                    </button>
-                  );
-                  return jobButtons1;
-                },
-                []
-              );
-              jobButtons2.push(
-                <div key={uuidv4()} className="container">
-                  {buttonedClassfiedJobs}
-                </div>
-              );
-              return jobButtons2;
-            },
-            []
-          )}
+      <section
+        style={{ marginBottom: "10px" }}
+        className="jobs disable-double-tap container column is-two-thirds-desktop is-two-thirds-tablet"
+      >
+        <div className="container">
+          {classifiedJobs.reduce((jobGroups: JSX.Element[], group) => {
+            const groupedJobButtons = group.reduce(
+              (jobButtons: JSX.Element[], jobName: string) => {
+                jobButtons.push(
+                  <button
+                    style={{
+                      fontSize: "0.8rem",
+                      padding: "calc(0.5em - 1px) 1em",
+                    }}
+                    className="button column is-outlined"
+                    onClick={addNewJob}
+                    key={uuidv4()}
+                  >
+                    {jobName}
+                  </button>
+                );
+                return jobButtons;
+              },
+              []
+            );
+            jobGroups.push(
+              <div
+                key={uuidv4()}
+                className="container buttons is-small columns is-multiline"
+              >
+                {groupedJobButtons}
+              </div>
+            );
+            return jobGroups;
+          }, [])}
         </div>
       </section>
-      <section className="adjust box disable-double-tap">
+      <section className="adjust disable-double-tap column is-two-thirds-desktop is-two-thirds-tablet container">
         <div className="buttons columns is-multiline are-small">
-          {buttonStates.map((buttonState, idx) => {
+          {buttonsValues.map((buttonState, idx) => {
             return (
               <button
                 style={{ fontSize: "0.8rem", padding: "calc(0.5em - 1px) 1em" }}
@@ -139,7 +147,7 @@ export default function App() {
           </button> */}
         </div>
       </section>
-      <section className="currentStates is-two-thirds disable-double-tap">
+      <section className="currentStates container is-two-thirds-desktop is-two-thirds-tablet disable-double-tap">
         <table className="table is-fullwidth is-narrow is-hoverable">
           <thead>
             <tr>
