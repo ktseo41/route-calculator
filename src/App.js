@@ -35,7 +35,6 @@ var styled_components_1 = __importDefault(require("styled-components"));
 var job_1 = require("./database/job");
 var RouteLinkedList_1 = __importDefault(require("./lib/RouteLinkedList"));
 var uuid_1 = require("uuid");
-// | "reset";
 var buttonsValues = [
     "1",
     "-1",
@@ -50,8 +49,8 @@ var CalculatorWrapper = styled_components_1["default"].div(templateObject_1 || (
 function getJobNameFromSelect(event) {
     return event.target.textContent;
 }
-function getJobPoAdjustPoint(event) {
-    return event.target.textContent;
+function getAdjustPoint(event) {
+    return +event.target.textContent;
 }
 function App() {
     var _a = __read(react_1.useState(new RouteLinkedList_1["default"]()), 2), rLL = _a[0], setRLL = _a[1];
@@ -69,7 +68,7 @@ function App() {
         setSelectedNodeIdx(rLL.length - 1);
     };
     var adjustJobPoint = function (event) {
-        var adjustPoint = +getJobPoAdjustPoint(event);
+        var adjustPoint = getAdjustPoint(event);
         selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.adjustJobPoint(adjustPoint);
         setJob(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.job);
         setJobPo(selectedNode === null || selectedNode === void 0 ? void 0 : selectedNode.jobPo);
@@ -113,8 +112,8 @@ function App() {
                 return jobGroups;
             }, []))),
         react_1["default"].createElement("section", { className: "adjust disable-double-tap column is-two-thirds-desktop is-two-thirds-tablet container" },
-            react_1["default"].createElement("div", { className: "buttons columns is-multiline are-small" }, buttonsValues.map(function (buttonState, idx) {
-                return (react_1["default"].createElement("button", { style: { fontSize: "0.8rem", padding: "calc(0.5em - 1px) 1em" }, className: "button column is-outlined is-mobile", onClick: adjustJobPoint, key: uuid_1.v4() }, buttonState));
+            react_1["default"].createElement("div", { className: "buttons columns is-multiline are-small" }, buttonsValues.map(function (buttonValue) {
+                return (react_1["default"].createElement("button", { style: { fontSize: "0.8rem", padding: "calc(0.5em - 1px) 1em" }, className: "button column is-outlined is-mobile", onClick: adjustJobPoint, key: uuid_1.v4() }, buttonValue));
             }))),
         react_1["default"].createElement("section", { className: "currentStates container is-two-thirds-desktop is-two-thirds-tablet disable-double-tap" },
             react_1["default"].createElement("table", { className: "table is-fullwidth is-narrow is-hoverable" },

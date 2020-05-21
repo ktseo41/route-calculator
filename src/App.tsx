@@ -5,7 +5,6 @@ import RouteLinkedList from "./lib/RouteLinkedList";
 import { v4 as uuidv4 } from "uuid";
 
 type ButtonState = "1" | "-1" | "5" | "-5" | "10" | "-10" | "100" | "-100";
-// | "reset";
 
 const buttonsValues: ButtonState[] = [
   "1",
@@ -16,7 +15,6 @@ const buttonsValues: ButtonState[] = [
   "-10",
   "100",
   "-100",
-  // "reset",
 ];
 
 const CalculatorWrapper = styled.div``;
@@ -25,8 +23,8 @@ function getJobNameFromSelect(event: MouseEvent) {
   return (event.target as HTMLButtonElement).textContent as Jobs;
 }
 
-function getJobPoAdjustPoint(event: MouseEvent) {
-  return (event.target as HTMLButtonElement).textContent as ButtonState;
+function getAdjustPoint(event: MouseEvent): number {
+  return +((event.target as HTMLButtonElement).textContent as ButtonState);
 }
 
 export default function App() {
@@ -47,7 +45,7 @@ export default function App() {
   };
 
   const adjustJobPoint = (event: MouseEvent) => {
-    const adjustPoint = +getJobPoAdjustPoint(event);
+    const adjustPoint = getAdjustPoint(event);
     selectedNode?.adjustJobPoint(adjustPoint);
     setJob(selectedNode?.job);
     setJobPo(selectedNode?.jobPo);
@@ -130,7 +128,7 @@ export default function App() {
       </section>
       <section className="adjust disable-double-tap column is-two-thirds-desktop is-two-thirds-tablet container">
         <div className="buttons columns is-multiline are-small">
-          {buttonsValues.map((buttonState, idx) => {
+          {buttonsValues.map((buttonValue) => {
             return (
               <button
                 style={{ fontSize: "0.8rem", padding: "calc(0.5em - 1px) 1em" }}
@@ -138,7 +136,7 @@ export default function App() {
                 onClick={adjustJobPoint}
                 key={uuidv4()}
               >
-                {buttonState}
+                {buttonValue}
               </button>
             );
           })}
