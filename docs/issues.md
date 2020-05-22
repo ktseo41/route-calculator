@@ -146,3 +146,12 @@ module.exports = {
 ### bulma 사용 후 모바일에서 반응 속도가 현저히 느려지던 문제
 
 - td마다 uuid를 부여하고 속도가 개선됐다.
+
+### 윈도우에서 gh-pages를 만들고 디렉토리를 삭제하는 과정등을 하고 싶었는데 잘 안됐음
+
+- 아래는 시도
+- powershell을 unix 파이프라인처럼 잘 활용할 수 있을텐데 어려웠다.
+
+```powershell
+pwd | Join-Path -Path { $_.Path } -ChildPath 'gh-pages' | Remove-Item -LiteralPath { $_ } -Recurse; parcel build index.html --public-url ./ --out-dir gh-pages
+```
