@@ -1,7 +1,7 @@
 {
   "name": "route-calculator",
   "homepage": "https://ktseo41.github.io/route-calculator/index.html",
-  "version": "0.6.0",
+  "version": "0.9.1",
   "description": "일랜시아 웹 루트계산기",
   "main": "index.html",
   "scripts": {
