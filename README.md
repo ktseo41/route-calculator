@@ -23,7 +23,6 @@ npm run build
 
 ```sh
 npm i
-npx tsc
 npm test
 ```
 
