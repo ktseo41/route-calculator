@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Jobs, classifiedJobs } from "./database/job";
 import RouteLinkedList from "./lib/RouteLinkedList";
 import { v4 as uuidv4 } from "uuid";
+import NotiMessage from "./components/NotiMessage";
 
 type ButtonState = "1" | "-1" | "5" | "-5" | "10" | "-10" | "100" | "-100";
 
@@ -33,6 +34,7 @@ export default function App() {
   const [selectedNodeIdx, setSelectedNodeIdx] = useState(0);
   const [job, setJob] = useState(selectedNode?.job);
   const [jobPo, setJobPo] = useState(selectedNode?.jobPo);
+  const [isNotiOn, setIsNotiOn] = useState(false);
 
   const addNewJob = (event: MouseEvent) => {
     const jobName = getJobNameFromSelect(event);
@@ -87,6 +89,15 @@ export default function App() {
           <span style={{ cursor: "pointer" }} onClick={reset}>
             일랜시아 루트 계산기
           </span>
+          <span
+            className="button"
+            onClick={() => {
+              setIsNotiOn(!isNotiOn);
+            }}
+          >
+            i
+          </span>
+          {<NotiMessage isNotiOn={isNotiOn} setIsNotiOn={setIsNotiOn} />}
         </div>
       </nav>
       <section
