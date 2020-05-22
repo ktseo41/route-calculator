@@ -294,15 +294,16 @@ export class RouteNode {
   }
 
   increaseStats(quotient: number, stat: Stat, delta: number, limit: number) {
-    if (this.stats[stat] > limit) return;
-
     const prevStats = this.getPrevStats();
     const expectStat = this.stats[stat] + delta * quotient;
     if (delta > 0) {
+      if (this.stats[stat] > limit) return;
       this.stats[stat] = expectStat > limit ? limit : expectStat;
     } else {
-      if (prevStats[stat] > expectStat) {
+      if (prevStats[stat] >= expectStat) {
         this.stats[stat] = expectStat;
+      } else {
+        this.stats[stat] = prevStats[stat];
       }
     }
   }
@@ -315,7 +316,11 @@ export class RouteNode {
         this.stats[stat] =
           expectStat < prevStats[stat] ? prevStats[stat] : expectStat;
       } else {
-        this.stats[stat] = expectStat < 10 ? 10 : expectStat;
+        if (expectStat < prevStats[stat]) {
+          this.stats[stat] = prevStats[stat];
+        } else {
+          this.stats[stat] = 10;
+        }
       }
     } else {
       if (this.stats[stat] < 10) return;

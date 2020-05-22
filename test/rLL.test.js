@@ -352,4 +352,50 @@ describe("노드를 삭제할 수 있다.", () => {
   });
 });
 
+describe("bug : 특정 상황에서 잡포인트를 늘렸다가 줄일 때 스탯이 이전 상태로 돌아가지않는다.", () => {
+  const rLL = new RouteLinkedList();
+  rLL.add("무도가");
+  rLL.tail.adjustJobPoint(100);
+  rLL.add("검사");
+  rLL.tail.adjustJobPoint(100);
+  rLL.add("검객");
+  rLL.tail.adjustJobPoint(100);
+  rLL.add("순수마법사");
+  rLL.tail.adjustJobPoint(100);
+  rLL.add("모험가");
+  rLL.tail.adjustJobPoint(30);
+  rLL.add("네크로멘서");
+  test("0에서부터 늘리기만 하면 제대로 적용된다.", () => {
+    rLL.tail.adjustJobPoint(50);
+    expect(rLL.tail.currentJobPos).toEqual({
+      무직: 0,
+      무도가: 100,
+      검사: 100,
+      검객: 100,
+      순수마법사: 100,
+      모험가: 30,
+      네크로멘서: 50,
+    });
+    expect(rLL.tail.stats).toEqual({
+      STR: 10,
+      INT: 50,
+      AGI: 10,
+      VIT: 10,
+    });
+  });
+  test("늘렸던 잡포인트를 다시 복구 시키면 이전 상태로 돌아간다.", () => {
+    rLL.tail.adjustJobPoint(-10);
+    rLL.tail.adjustJobPoint(-10);
+    rLL.tail.adjustJobPoint(-10);
+    rLL.tail.adjustJobPoint(-10);
+    rLL.tail.adjustJobPoint(-10);
+    expect(rLL.tail.stats).toEqual({
+      STR: 20,
+      INT: 43,
+      AGI: 55,
+      VIT: 30,
+    });
+  });
+});
+
 describe("버튼이 아니라 직접 입력해서 잡포인트를 변경할 수 있다.", () => {});
