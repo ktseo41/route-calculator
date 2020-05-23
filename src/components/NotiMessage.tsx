@@ -9,7 +9,12 @@ export default (notiMessageProps: NotiMessageProps) => {
   const { isNotiOn, setIsNotiOn } = notiMessageProps;
 
   return (
-    <article className={`message is-clearfix ${isNotiOn ? "" : "is-hidden"}`}>
+    <article
+      style={{ position: "fixed", zIndex: 99 }}
+      className={`message column is-half is-offset-one-third ${
+        isNotiOn ? "" : "is-hidden"
+      }`}
+    >
       <div className="message-header">
         <p>Hello World</p>
         <button
