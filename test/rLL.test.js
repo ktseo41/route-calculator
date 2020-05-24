@@ -398,4 +398,19 @@ describe("bug : 특정 상황에서 잡포인트를 늘렸다가 줄일 때 스�
   });
 });
 
+describe("bug : 1씩 증가시킬 때 오류 발생", () => {
+  const rLL1 = new RouteLinkedList();
+  const rLL2 = new RouteLinkedList();
+
+  rLL1.add("순수마법사");
+  rLL1.tail.adjustJobPoint(100);
+  rLL2.add("순수마법사");
+  for (let i = 0; i < 100; i++) {
+    rLL2.tail.adjustJobPoint(1);
+  }
+  test("1씩 증가시켰을 때와 100씩 증가시켰을 때 스탯량이 같아야 한다.", () => {
+    expect(rLL1.tail.stats).toEqual(rLL2.tail.stats);
+  });
+});
+
 describe("버튼이 아니라 직접 입력해서 잡포인트를 변경할 수 있다.", () => {});
