@@ -22,7 +22,7 @@ const NotiButton = styled.span`
   border-style: solid;
   border-width: 1px;
   border-color: #dbdbdb;
-  color: #363636;
+  color: #818181;
   border-radius: 50%;
   font-size: 0.7em;
   padding: 0 3.8px;
