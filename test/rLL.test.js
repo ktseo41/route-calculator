@@ -430,4 +430,34 @@ describe("bug : 스탯이 하한치 이상이고 잡포인트를 1씩 감소 시
   });
 });
 
+describe("bug : 이전 잡포인트가 있음에도 +100을 누르면 적용되는 문제", () => {
+  const rLL1 = new RouteLinkedList();
+  const rLL2 = new RouteLinkedList();
+
+  rLL1.add("무도가");
+  rLL1.tail.adjustJobPoint(100);
+  rLL1.add("검사");
+  rLL1.tail.adjustJobPoint(100);
+  rLL1.add("순수마법사");
+  rLL1.tail.adjustJobPoint(50);
+  rLL1.add("악사");
+  rLL1.tail.adjustJobPoint(100);
+  rLL1.add("순수마법사");
+  rLL1.tail.adjustJobPoint(50);
+  rLL2.add("무도가");
+  rLL2.tail.adjustJobPoint(100);
+  rLL2.add("검사");
+  rLL2.tail.adjustJobPoint(100);
+  rLL2.add("순수마법사");
+  rLL2.tail.adjustJobPoint(50);
+  rLL2.add("악사");
+  rLL2.tail.adjustJobPoint(100);
+  rLL2.add("순수마법사");
+  rLL2.tail.adjustJobPoint(100);
+  test("100만큼 증가시켰어도 이전 잡포인트 포함 총 100까지만 증가해야한다.", () => {
+    expect(rLL1.tail.currentJobPos).toEqual(rLL2.tail.currentJobPos);
+    expect(rLL1.tail.stats).toEqual(rLL2.tail.stats);
+  });
+});
+
 describe("버튼이 아니라 직접 입력해서 잡포인트를 변경할 수 있다.", () => {});
