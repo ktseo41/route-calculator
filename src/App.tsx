@@ -18,6 +18,20 @@ const buttonsValues: ButtonState[] = [
   "-100",
 ];
 
+const NotiButton = styled.span`
+  border-style: solid;
+  border-width: 1px;
+  border-color: #dbdbdb;
+  color: #363636;
+  border-radius: 50%;
+  font-size: 0.7em;
+  padding: 0 3.8px;
+  position: fixed;
+  margin-top: 2px;
+  margin-left: 10px;
+  cursor: pointer;
+`;
+
 const CalculatorWrapper = styled.div``;
 
 function getJobNameFromSelect(event: MouseEvent) {
@@ -104,14 +118,13 @@ export default function App() {
           <span style={{ cursor: "pointer" }} onClick={reset}>
             일랜시아 루트 계산기
           </span>
-          <span
-            className="button"
+          <NotiButton
             onClick={() => {
               setIsNotiOn(!isNotiOn);
             }}
           >
-            i
-          </span>
+            ?
+          </NotiButton>
           {
             <NotiMessage
               isNotiOn={isNotiOn}
