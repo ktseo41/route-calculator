@@ -155,3 +155,11 @@ module.exports = {
 ```powershell
 pwd | Join-Path -Path { $_.Path } -ChildPath 'gh-pages' | Remove-Item -LiteralPath { $_ } -Recurse; parcel build index.html --public-url ./ --out-dir gh-pages
 ```
+
+### IE 11 이상일 때 경고창이 뜨도록 하기
+
+- IE 11일 때 찾을 수 있게 함
+
+#### 참고
+
+- https://stackoverflow.com/questions/9847580/how-to-detect-safari-chrome-ie-firefox-and-opera-browser

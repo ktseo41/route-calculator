@@ -75,6 +75,15 @@ export default function App() {
   };
 
   useEffect(() => {
+    interface Document {
+      documentMode?: any;
+    }
+
+    var isIE11 = /*@cc_on!@*/ false || !!(document as Document).documentMode;
+    if (isIE11) setIsNotiOn(!isNotiOn);
+  }, []);
+
+  useEffect(() => {
     setJob(selectedNode?.job);
     setJobPo(selectedNode?.jobPo);
   }, [rLL, selectedNode]);
