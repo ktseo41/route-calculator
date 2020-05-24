@@ -267,7 +267,7 @@ export class RouteNode {
         const quotient =
           Math.trunc((this.jobPo + actualChange) / +interval) -
           Math.trunc(this.jobPo / +interval);
-        if (quotient === 0) return;
+        if (quotient === 0) continue;
         Object.entries(
           this.jobPointMap[interval as Intervals] as StatMap
         ).forEach(([stat, deltaInfo]) => {
