@@ -383,7 +383,7 @@ describe("bug : 특정 상황에서 잡포인트를 늘렸다가 줄일 때 스�
       VIT: 10,
     });
   });
-  test("늘렸던 잡포인트를 다시 복구 시키면 이전 상태로 돌아간다.", () => {
+  test("순차를 나눠서 돌아가면 이전 스탯으로 돌아가지 않는 것이 돌아가야 한다.", () => {
     rLL.tail.adjustJobPoint(-10);
     rLL.tail.adjustJobPoint(-10);
     rLL.tail.adjustJobPoint(-10);
@@ -410,6 +410,23 @@ describe("bug : 1씩 증가시킬 때 오류 발생", () => {
   }
   test("1씩 증가시켰을 때와 100씩 증가시켰을 때 스탯량이 같아야 한다.", () => {
     expect(rLL1.tail.stats).toEqual(rLL2.tail.stats);
+  });
+});
+
+describe("bug : 스탯이 하한치 이상이고 잡포인트를 1씩 감소 시켜 스탯을 감소시킬 때 오류 발생", () => {
+  const rLL = new RouteLinkedList();
+
+  rLL.add("무도가");
+  rLL.tail.adjustJobPoint(100);
+  rLL.add("검사");
+  rLL.tail.adjustJobPoint(100);
+  rLL.add("순수마법사");
+  rLL.tail.adjustJobPoint(100);
+  for (let i = 0; i < 2; i++) {
+    rLL.tail.adjustJobPoint(-1);
+  }
+  test("해당 스탯이 하한치 (10)으로 감소해버린다.", () => {
+    expect(rLL.tail.stats).toEqual({ STR: 21, INT: 42, AGI: 29, VIT: 21 });
   });
 });
 
