@@ -312,22 +312,19 @@ export class RouteNode {
     const prevStats = this.getPrevStats();
     const expectStat = this.stats[stat] + delta * quotient;
     if (delta > 0) {
-      if (prevStats[stat] < 10) {
-        this.stats[stat] =
-          expectStat < prevStats[stat] ? prevStats[stat] : expectStat;
-      } else {
-        if (expectStat < prevStats[stat]) {
-          this.stats[stat] = prevStats[stat];
-        } else {
-          this.stats[stat] = 10;
-        }
-      }
+      this.stats[stat] =
+        expectStat <= prevStats[stat] ? prevStats[stat] : expectStat;
     } else {
-      if (this.stats[stat] < 10) return;
+      /*
+      잡포인트를 증가시켜서 스탯이 감소하는 경우
+      1. 이전 스탯이 10 이하인 경우 --> 변경할 필요 없음
+      2. 이전 스탯이 limit 이하인 경우 --> 변경할 필요 없음
+      3. 이전 스탯이 limit 초과인 경우
+        1. 기대 스탯이 limit 미만인 경우
+        2. 기대 스탯이 limit 이상인 경우
+      */
       if (prevStats[stat] > limit) {
         this.stats[stat] = expectStat < limit ? limit : expectStat;
-      } else {
-        this.stats[stat] = expectStat < 10 ? 10 : expectStat;
       }
     }
   }
