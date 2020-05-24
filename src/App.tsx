@@ -35,6 +35,7 @@ export default function App() {
   const [job, setJob] = useState(selectedNode?.job);
   const [jobPo, setJobPo] = useState(selectedNode?.jobPo);
   const [isNotiOn, setIsNotiOn] = useState(false);
+  const [iE11Message, setIE11Message] = useState("");
 
   const addNewJob = (event: MouseEvent) => {
     const jobName = getJobNameFromSelect(event);
@@ -80,7 +81,12 @@ export default function App() {
     }
 
     var isIE11 = /*@cc_on!@*/ false || !!(document as Document).documentMode;
-    if (isIE11) setIsNotiOn(!isNotiOn);
+    if (isIE11) {
+      setIE11Message(
+        "Internet Explorer 11이하는 지원하지 않습니다. 엣지브라우저, 크롬브라우저, 네이버웨일, 파이어폭스, 오페라브라우저 등을 사용해주세요!"
+      );
+      setIsNotiOn(!isNotiOn);
+    }
   }, []);
 
   useEffect(() => {
@@ -106,7 +112,13 @@ export default function App() {
           >
             i
           </span>
-          {<NotiMessage isNotiOn={isNotiOn} setIsNotiOn={setIsNotiOn} />}
+          {
+            <NotiMessage
+              isNotiOn={isNotiOn}
+              setIsNotiOn={setIsNotiOn}
+              iE11Message={iE11Message}
+            />
+          }
         </div>
       </nav>
       <section
