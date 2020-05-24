@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Jobs, classifiedJobs } from "./database/job";
 import RouteLinkedList from "./lib/RouteLinkedList";
 import { v4 as uuidv4 } from "uuid";
+import NotiMessage from "./components/NotiMessage";
 
 type ButtonState = "1" | "-1" | "5" | "-5" | "10" | "-10" | "100" | "-100";
 
@@ -16,6 +17,20 @@ const buttonsValues: ButtonState[] = [
   "100",
   "-100",
 ];
+
+const NotiButton = styled.span`
+  border-style: solid;
+  border-width: 1px;
+  border-color: #dbdbdb;
+  color: #363636;
+  border-radius: 50%;
+  font-size: 0.7em;
+  padding: 0 3.8px;
+  position: fixed;
+  margin-top: 2px;
+  margin-left: 10px;
+  cursor: pointer;
+`;
 
 const CalculatorWrapper = styled.div``;
 
@@ -33,6 +48,8 @@ export default function App() {
   const [selectedNodeIdx, setSelectedNodeIdx] = useState(0);
   const [job, setJob] = useState(selectedNode?.job);
   const [jobPo, setJobPo] = useState(selectedNode?.jobPo);
+  const [isNotiOn, setIsNotiOn] = useState(false);
+  const [iE11Message, setIE11Message] = useState("");
 
   const addNewJob = (event: MouseEvent) => {
     const jobName = getJobNameFromSelect(event);
@@ -73,6 +90,20 @@ export default function App() {
   };
 
   useEffect(() => {
+    interface Document {
+      documentMode?: any;
+    }
+
+    var isIE11 = /*@cc_on!@*/ false || !!(document as Document).documentMode;
+    if (isIE11) {
+      setIE11Message(
+        "Internet Explorer 11이하는 지원하지 않습니다. 엣지브라우저, 크롬브라우저, 네이버웨일, 파이어폭스, 오페라브라우저 등을 사용해주세요!"
+      );
+      setIsNotiOn(!isNotiOn);
+    }
+  }, []);
+
+  useEffect(() => {
     setJob(selectedNode?.job);
     setJobPo(selectedNode?.jobPo);
   }, [rLL, selectedNode]);
@@ -87,6 +118,20 @@ export default function App() {
           <span style={{ cursor: "pointer" }} onClick={reset}>
             일랜시아 루트 계산기
           </span>
+          <NotiButton
+            onClick={() => {
+              setIsNotiOn(!isNotiOn);
+            }}
+          >
+            ?
+          </NotiButton>
+          {
+            <NotiMessage
+              isNotiOn={isNotiOn}
+              setIsNotiOn={setIsNotiOn}
+              iE11Message={iE11Message}
+            />
+          }
         </div>
       </nav>
       <section
