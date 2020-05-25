@@ -26,8 +26,8 @@ const NotiButton = styled.span`
   border-radius: 50%;
   font-size: 0.7em;
   padding: 0 3.8px;
-  position: fixed;
-  margin-top: 2px;
+  position: relative;
+  /* margin-top: 2px; */
   margin-left: 10px;
   cursor: pointer;
 `;

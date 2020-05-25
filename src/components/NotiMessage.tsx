@@ -28,7 +28,7 @@ export default (notiMessageProps: NotiMessageProps) => {
   return (
     <article
       style={{ position: "fixed", zIndex: 99 }}
-      className={`message column is-half is-offset-one-third ${
+      className={`message column is-half is-offset-one-third card ${
         isNotiOn ? "" : "is-hidden"
       }`}
     >
