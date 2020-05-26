@@ -24,6 +24,9 @@ jobs:
       - name: install dependencies
         run: npm i
 
+      - name: where the hell
+        run: cd .. && ls
+
       - name: where am i?
         run: pwd
 
