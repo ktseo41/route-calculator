@@ -243,7 +243,7 @@ export class RouteNode {
         jobPoDelta +
         ((this.prev?.currentJobPos[this.job] as number) || 0) >
         100
-        ? 100 - this.jobPo
+        ? 100 - this.jobPo - (this.prev?.currentJobPos[this.job] || 0)
         : jobPoDelta;
     } else {
       return this.jobPo + jobPoDelta < 0 ? -this.jobPo : jobPoDelta;
