@@ -1,4 +1,4 @@
-import RouteLinkedList from "../src/lib/RouteLinkedList";
+import RouteLinkedList from "../src/lib/RouteLinkedList.ts";
 
 describe("rLL 기본 테스트", () => {
   let rLL;
