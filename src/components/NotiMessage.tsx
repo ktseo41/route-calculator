@@ -44,11 +44,16 @@ export default (notiMessageProps: NotiMessageProps) => {
           <span className="is-size-7"> - 버전 0.9.3</span> <br /> <br />
           <span className="has-text-weight-semibold">
             * 타이틀을 누르면 reset 됩니다.
-          </span>{" "}
+          </span>
+          <br />
+          <span className="has-text-weight-semibold">
+            * 익스플로러 11 이하는 지원하지 않습니다. 크롬, 웨일, 엣지,
+            파이어폭스, 오페라 등을 이용해주세요!
+          </span>
           <br /> <br />
           추가 예정 기능
           <br /> <br />
-          1. 기존 직업 포인트, 스탯 입력 기능
+          1. 저장, 불러오기 기능
           <br />
           2. 이미지로 내보내기
           <br />
