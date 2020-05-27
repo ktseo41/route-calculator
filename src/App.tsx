@@ -51,6 +51,13 @@ export default function App() {
   const [isNotiOn, setIsNotiOn] = useState(false);
   const [iE11Message, setIE11Message] = useState("");
 
+  // useEffect(() => {
+  //   let params = new URLSearchParams(location.search);
+  //   params.forEach((val, key) => {
+  //     console.log(`${key}=${val}`);
+  //   });
+  // }, []);
+
   const addNewJob = (event: MouseEvent) => {
     const jobName = getJobNameFromSelect(event);
 
