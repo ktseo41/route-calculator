@@ -1,8 +1,9 @@
 import React, { useState, useEffect, MouseEvent } from "react";
-import styled from "styled-components";
-import { Jobs, classifiedJobs } from "./database/job";
-import RouteLinkedList from "./lib/RouteLinkedList";
 import { v4 as uuidv4 } from "uuid";
+import styled from "styled-components";
+import { CustomSystem } from "./database/customsystem";
+import { Jobs, classifiedJobs, NumberedJobs } from "./database/job";
+import RouteLinkedList from "./lib/RouteLinkedList";
 import NotiMessage from "./components/NotiMessage";
 
 type ButtonState = "1" | "-1" | "5" | "-5" | "10" | "-10" | "100" | "-100";
@@ -40,6 +41,63 @@ function getJobNameFromSelect(event: MouseEvent) {
 
 function getAdjustPoint(event: MouseEvent): number {
   return +((event.target as HTMLButtonElement).textContent as ButtonState);
+}
+
+function getCustomQueryFromRLL(rLL: RouteLinkedList): string {
+  let result = "";
+  let point = rLL.head?.next;
+
+  while (point) {
+    result += CustomSystem[NumberedJobs[point.job]];
+    if (point.jobPo > 57 && point.jobPo !== 100) {
+      result += CustomSystem[57];
+      result += CustomSystem[point.jobPo - 57];
+    } else {
+      result += CustomSystem[point.jobPo];
+    }
+    point = point.next;
+  }
+
+  return result;
+}
+function getCurrentJobsFromQuery({ search }: Location): RouteLinkedList {
+  /*
+  _가 발견되면 다음 _가 있는지 탐색한다.
+   */
+  let isJob: boolean = true;
+  const newRLL = new RouteLinkedList();
+  for (let index = 1; index < search.length; index++) {
+    const charCustom = search[index] as keyof typeof CustomSystem;
+    let decimalNumber = CustomSystem[charCustom];
+
+    if (isJob) {
+      const job = NumberedJobs[decimalNumber];
+      newRLL.add(job as Jobs);
+      isJob = !isJob;
+    } else {
+      if (decimalNumber === 57) {
+        if (isOverFiftySeven(search.slice(index + 1))) {
+          const nextCharCustom = search[index + 1] as keyof typeof CustomSystem;
+          const nextDecimal = CustomSystem[nextCharCustom];
+
+          decimalNumber += nextDecimal;
+          index += 1;
+        }
+      }
+      newRLL.tail?.adjustJobPoint(decimalNumber);
+      isJob = !isJob;
+    }
+  }
+
+  return newRLL;
+}
+
+function isOverFiftySeven(restString: string): boolean {
+  const nextFiftySevenIndex = restString.indexOf("_");
+  if (nextFiftySevenIndex === -1) {
+    return restString.length % 2 === 1;
+  }
+  return nextFiftySevenIndex % 2 === 0;
 }
 
 export default function App() {
@@ -87,7 +145,14 @@ export default function App() {
 
       return newRLL;
     });
+
+    location.replace(location.origin);
   };
+
+  useEffect(() => {
+    if (location.search.length === 0) return;
+    setRLL(getCurrentJobsFromQuery(location));
+  }, []);
 
   useEffect(() => {
     interface Document {
@@ -125,6 +190,14 @@ export default function App() {
           >
             ?
           </NotiButton>
+          <button
+            onClick={() => {
+              const queryToSave = getCustomQueryFromRLL(rLL);
+              location.replace(location.origin + "/?" + queryToSave);
+            }}
+          >
+            save
+          </button>
           {
             <NotiMessage
               isNotiOn={isNotiOn}
@@ -176,7 +249,10 @@ export default function App() {
           {buttonsValues.map((buttonValue) => {
             return (
               <button
-                style={{ fontSize: "0.8rem", padding: "calc(0.5em - 1px) 1em" }}
+                style={{
+                  fontSize: "0.8rem",
+                  padding: "calc(0.5em - 1px) 1em",
+                }}
                 className="button column is-outlined is-mobile"
                 onClick={adjustJobPoint}
                 key={uuidv4()}

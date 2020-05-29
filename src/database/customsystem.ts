@@ -24,8 +24,8 @@ export enum CustomSystem {
   "h",
   "i",
   "j",
-  "k",
-  "l",
+  "k" = 10, // 무직
+  "l", // 무도가 ..
   "m",
   "n",
   "o",
@@ -70,6 +70,6 @@ export enum CustomSystem {
   "=",
   "*",
   "^",
-  "-",
-  "_" = 58,
+  "_" = 57,
+  "-" = 100,
 }

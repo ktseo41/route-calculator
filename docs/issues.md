@@ -163,3 +163,11 @@ pwd | Join-Path -Path { $_.Path } -ChildPath 'gh-pages' | Remove-Item -LiteralPa
 #### 참고
 
 - https://stackoverflow.com/questions/9847580/how-to-detect-safari-chrome-ie-firefox-and-opera-browser
+
+### enum을 key로 사용해서 value를 얻을 수 있도록 하기
+
+- https://stackoverflow.com/questions/36316326/typescript-ts7015-error-when-accessing-an-enum-using-a-string-type-parameter
+
+```ts
+as keyof typeof ENUM // 으로 가능했음
+```
