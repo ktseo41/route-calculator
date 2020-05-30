@@ -180,16 +180,18 @@ export default function App() {
           style={{ padding: "10px 0px" }}
           className="has-text-centered title is-5"
         >
-          <span style={{ cursor: "pointer" }} onClick={reset}>
-            일랜시아 루트 계산기
-          </span>
-          <NotiButton
-            onClick={() => {
-              setIsNotiOn(!isNotiOn);
-            }}
-          >
-            ?
-          </NotiButton>
+          <div>
+            <span style={{ cursor: "pointer" }} onClick={reset}>
+              일랜시아 루트 계산기
+            </span>
+            <NotiButton
+              onClick={() => {
+                setIsNotiOn(!isNotiOn);
+              }}
+            >
+              ?
+            </NotiButton>
+          </div>
           <button
             onClick={() => {
               const queryToSave = getCustomQueryFromRLL(rLL);
