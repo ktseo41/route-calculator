@@ -175,10 +175,14 @@ export default function App() {
 
   return (
     <CalculatorWrapper className="container">
-      <nav>
+      <nav
+        className="is-flex"
+        style={{ alignItems: "center", justifyContent: "space-around" }}
+      >
+        <div id="dummy-flex-item" style={{ width: 43 }}></div>
         <div
           style={{ padding: "10px 0px" }}
-          className="has-text-centered title is-5"
+          className="has-text-centered is-size-5 has-text-weight-semibold"
         >
           <div>
             <span style={{ cursor: "pointer" }} onClick={reset}>
@@ -192,14 +196,7 @@ export default function App() {
               ?
             </NotiButton>
           </div>
-          <button
-            onClick={() => {
-              const queryToSave = getCustomQueryFromRLL(rLL);
-              location.replace(location.origin + "/?" + queryToSave);
-            }}
-          >
-            save
-          </button>
+
           {
             <NotiMessage
               isNotiOn={isNotiOn}
@@ -208,6 +205,15 @@ export default function App() {
             />
           }
         </div>
+        <span
+          onClick={() => {
+            const queryToSave = getCustomQueryFromRLL(rLL);
+            if (queryToSave.length === 0) return;
+            location.replace(location.origin + "/?" + queryToSave);
+          }}
+        >
+          save
+        </span>
       </nav>
       <section
         style={{ marginBottom: "10px" }}
