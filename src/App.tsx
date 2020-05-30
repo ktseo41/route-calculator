@@ -56,6 +56,11 @@ const UtilBarItem = styled.div`
   cursor: pointer;
 `;
 
+const CustomButton = styled.div`
+  font-size: 0.8rem;
+  padding: calc(0.5em - 1px) 1em;
+`;
+
 const CalculatorWrapper = styled.div``;
 
 function getJobNameFromSelect(event: MouseEvent) {
@@ -208,7 +213,7 @@ export default function App() {
                 location.reload();
               }}
             >
-              일랜시아 루트 계산기
+              ✔️ 루트 계산기
             </span>
           </div>
 
@@ -254,17 +259,13 @@ export default function App() {
             const groupedJobButtons = group.reduce(
               (jobButtons: JSX.Element[], jobName: string) => {
                 jobButtons.push(
-                  <button
-                    style={{
-                      fontSize: "0.8rem",
-                      padding: "calc(0.5em - 1px) 1em",
-                    }}
+                  <CustomButton
                     className="button column is-outlined"
                     onClick={addNewJob}
                     key={uuidv4()}
                   >
                     {jobName}
-                  </button>
+                  </CustomButton>
                 );
                 return jobButtons;
               },
@@ -286,17 +287,13 @@ export default function App() {
         <div className="buttons columns is-multiline are-small">
           {buttonsValues.map((buttonValue) => {
             return (
-              <button
-                style={{
-                  fontSize: "0.8rem",
-                  padding: "calc(0.5em - 1px) 1em",
-                }}
+              <CustomButton
                 className="button column is-outlined is-mobile"
                 onClick={adjustJobPoint}
                 key={uuidv4()}
               >
                 {buttonValue}
-              </button>
+              </CustomButton>
             );
           })}
           {/* <button className="button is-primary" onClick={deleteNode}>
