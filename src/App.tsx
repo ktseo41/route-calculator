@@ -19,6 +19,10 @@ const buttonsValues: ButtonState[] = [
   "-100",
 ];
 
+const Title = styled.div`
+  padding-top: 10px;
+`;
+
 const NotiButton = styled.span`
   border-style: solid;
   border-width: 1px;
@@ -28,7 +32,26 @@ const NotiButton = styled.span`
   font-size: 0.7em;
   padding: 0 3.8px;
   position: relative;
-  /* margin-top: 2px; */
+  margin-bottom: 3px;
+  margin-left: 10px;
+  cursor: pointer;
+`;
+
+const UtilBarSection = styled.section`
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 10px 10px 0px;
+`;
+
+const UtilBarLeft = styled.div`
+  display: flex;
+`;
+
+const UtilBarRight = styled.div`
+  display: flex;
+`;
+
+const UtilBarItem = styled.div`
   margin-left: 10px;
   cursor: pointer;
 `;
@@ -60,6 +83,7 @@ function getCustomQueryFromRLL(rLL: RouteLinkedList): string {
 
   return result;
 }
+
 function getCurrentJobsFromQuery({ search }: Location): RouteLinkedList {
   /*
   _가 발견되면 다음 _가 있는지 탐색한다.
@@ -175,26 +199,17 @@ export default function App() {
 
   return (
     <CalculatorWrapper className="container">
-      <nav
-        className="is-flex"
-        style={{ alignItems: "center", justifyContent: "space-around" }}
-      >
-        <div id="dummy-flex-item" style={{ width: 43 }}></div>
-        <div
-          style={{ padding: "10px 0px" }}
-          className="has-text-centered is-size-5 has-text-weight-semibold"
-        >
+      <section>
+        <Title className="has-text-centered is-size-5 has-text-weight-semibold">
           <div>
-            <span style={{ cursor: "pointer" }} onClick={reset}>
-              일랜시아 루트 계산기
-            </span>
-            <NotiButton
+            <span
+              style={{ cursor: "pointer" }}
               onClick={() => {
-                setIsNotiOn(!isNotiOn);
+                location.reload();
               }}
             >
-              ?
-            </NotiButton>
+              일랜시아 루트 계산기
+            </span>
           </div>
 
           {
@@ -204,17 +219,32 @@ export default function App() {
               iE11Message={iE11Message}
             />
           }
-        </div>
-        <span
-          onClick={() => {
-            const queryToSave = getCustomQueryFromRLL(rLL);
-            if (queryToSave.length === 0) return;
-            location.replace(location.origin + "/?" + queryToSave);
-          }}
-        >
-          save
-        </span>
-      </nav>
+        </Title>
+      </section>
+      <UtilBarSection className="util-bar container column is-two-thirds-desktop is-two-thirds-tablet">
+        <UtilBarLeft>
+          <UtilBarItem
+            onClick={() => {
+              setIsNotiOn(!isNotiOn);
+            }}
+          >
+            info
+          </UtilBarItem>
+        </UtilBarLeft>
+        <UtilBarRight>
+          <UtilBarItem
+            onClick={() => {
+              const queryToSave = getCustomQueryFromRLL(rLL);
+              if (queryToSave.length === 0) return;
+              location.replace(location.origin + "/?" + queryToSave);
+            }}
+          >
+            save
+          </UtilBarItem>
+          <UtilBarItem>load</UtilBarItem>
+          <UtilBarItem onClick={reset}>reset</UtilBarItem>
+        </UtilBarRight>
+      </UtilBarSection>
       <section
         style={{ marginBottom: "10px" }}
         className="jobs disable-double-tap container column is-two-thirds-desktop is-two-thirds-tablet"
