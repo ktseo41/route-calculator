@@ -1,8 +1,9 @@
 import React, { useState, useEffect, MouseEvent } from "react";
-import styled from "styled-components";
-import { Jobs, classifiedJobs } from "./database/job";
-import RouteLinkedList from "./lib/RouteLinkedList";
 import { v4 as uuidv4 } from "uuid";
+import styled from "styled-components";
+import { CustomSystem } from "./database/customsystem";
+import { Jobs, classifiedJobs, NumberedJobs } from "./database/job";
+import RouteLinkedList from "./lib/RouteLinkedList";
 import NotiMessage from "./components/NotiMessage";
 
 type ButtonState = "1" | "-1" | "5" | "-5" | "10" | "-10" | "100" | "-100";
@@ -18,6 +19,10 @@ const buttonsValues: ButtonState[] = [
   "-100",
 ];
 
+const Title = styled.div`
+  padding-top: 10px;
+`;
+
 const NotiButton = styled.span`
   border-style: solid;
   border-width: 1px;
@@ -27,9 +32,33 @@ const NotiButton = styled.span`
   font-size: 0.7em;
   padding: 0 3.8px;
   position: relative;
-  /* margin-top: 2px; */
+  margin-bottom: 3px;
   margin-left: 10px;
   cursor: pointer;
+`;
+
+const UtilBarSection = styled.section`
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 10px 10px 0px;
+`;
+
+const UtilBarLeft = styled.div`
+  display: flex;
+`;
+
+const UtilBarRight = styled.div`
+  display: flex;
+`;
+
+const UtilBarItem = styled.div`
+  margin-left: 10px;
+  cursor: pointer;
+`;
+
+const CustomButton = styled.div`
+  font-size: 0.8rem;
+  padding: calc(0.5em - 1px) 1em;
 `;
 
 const CalculatorWrapper = styled.div``;
@@ -40,6 +69,64 @@ function getJobNameFromSelect(event: MouseEvent) {
 
 function getAdjustPoint(event: MouseEvent): number {
   return +((event.target as HTMLButtonElement).textContent as ButtonState);
+}
+
+function getCustomQueryFromRLL(rLL: RouteLinkedList): string {
+  let result = "";
+  let point = rLL.head?.next;
+
+  while (point) {
+    result += CustomSystem[NumberedJobs[point.job]];
+    if (point.jobPo > 57 && point.jobPo !== 100) {
+      result += CustomSystem[57];
+      result += CustomSystem[point.jobPo - 57];
+    } else {
+      result += CustomSystem[point.jobPo];
+    }
+    point = point.next;
+  }
+
+  return result;
+}
+
+function getCurrentJobsFromQuery({ search }: Location): RouteLinkedList {
+  /*
+  _가 발견되면 다음 _가 있는지 탐색한다.
+   */
+  let isJob: boolean = true;
+  const newRLL = new RouteLinkedList();
+  for (let index = 1; index < search.length; index++) {
+    const charCustom = search[index] as keyof typeof CustomSystem;
+    let decimalNumber = CustomSystem[charCustom];
+
+    if (isJob) {
+      const job = NumberedJobs[decimalNumber];
+      newRLL.add(job as Jobs);
+      isJob = !isJob;
+    } else {
+      if (decimalNumber === 57) {
+        if (isOverFiftySeven(search.slice(index + 1))) {
+          const nextCharCustom = search[index + 1] as keyof typeof CustomSystem;
+          const nextDecimal = CustomSystem[nextCharCustom];
+
+          decimalNumber += nextDecimal;
+          index += 1;
+        }
+      }
+      newRLL.tail?.adjustJobPoint(decimalNumber);
+      isJob = !isJob;
+    }
+  }
+
+  return newRLL;
+}
+
+function isOverFiftySeven(restString: string): boolean {
+  const nextFiftySevenIndex = restString.indexOf("_");
+  if (nextFiftySevenIndex === -1) {
+    return restString.length % 2 === 1;
+  }
+  return nextFiftySevenIndex % 2 === 0;
 }
 
 export default function App() {
@@ -94,7 +181,14 @@ export default function App() {
 
       return newRLL;
     });
+
+    location.replace(location.origin);
   };
+
+  useEffect(() => {
+    if (location.search.length === 0) return;
+    setRLL(getCurrentJobsFromQuery(location));
+  }, []);
 
   useEffect(() => {
     interface Document {
@@ -117,21 +211,19 @@ export default function App() {
 
   return (
     <CalculatorWrapper className="container">
-      <nav>
-        <div
-          style={{ padding: "10px 0px" }}
-          className="has-text-centered title is-5"
-        >
-          <span style={{ cursor: "pointer" }} onClick={reset}>
-            일랜시아 루트 계산기
-          </span>
-          <NotiButton
-            onClick={() => {
-              setIsNotiOn(!isNotiOn);
-            }}
-          >
-            ?
-          </NotiButton>
+      <section>
+        <Title className="has-text-centered is-size-5 has-text-weight-semibold">
+          <div>
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                location.reload();
+              }}
+            >
+              ✔️ 루트 계산기
+            </span>
+          </div>
+
           {
             <NotiMessage
               isNotiOn={isNotiOn}
@@ -139,8 +231,32 @@ export default function App() {
               iE11Message={iE11Message}
             />
           }
-        </div>
-      </nav>
+        </Title>
+      </section>
+      <UtilBarSection className="util-bar container column is-two-thirds-desktop is-two-thirds-tablet">
+        <UtilBarLeft>
+          <UtilBarItem
+            onClick={() => {
+              setIsNotiOn(!isNotiOn);
+            }}
+          >
+            info
+          </UtilBarItem>
+        </UtilBarLeft>
+        <UtilBarRight>
+          <UtilBarItem
+            onClick={() => {
+              const queryToSave = getCustomQueryFromRLL(rLL);
+              if (queryToSave.length === 0) return;
+              location.replace(location.origin + "/?" + queryToSave);
+            }}
+          >
+            save
+          </UtilBarItem>
+          <UtilBarItem>load</UtilBarItem>
+          <UtilBarItem onClick={reset}>reset</UtilBarItem>
+        </UtilBarRight>
+      </UtilBarSection>
       <section
         style={{ marginBottom: "10px" }}
         className="jobs disable-double-tap container column is-two-thirds-desktop is-two-thirds-tablet"
@@ -150,17 +266,13 @@ export default function App() {
             const groupedJobButtons = group.reduce(
               (jobButtons: JSX.Element[], jobName: string) => {
                 jobButtons.push(
-                  <button
-                    style={{
-                      fontSize: "0.8rem",
-                      padding: "calc(0.5em - 1px) 1em",
-                    }}
+                  <CustomButton
                     className="button column is-outlined"
                     onClick={addNewJob}
                     key={uuidv4()}
                   >
                     {jobName}
-                  </button>
+                  </CustomButton>
                 );
                 return jobButtons;
               },
@@ -182,14 +294,13 @@ export default function App() {
         <div className="buttons columns is-multiline are-small">
           {buttonsValues.map((buttonValue) => {
             return (
-              <button
-                style={{ fontSize: "0.8rem", padding: "calc(0.5em - 1px) 1em" }}
+              <CustomButton
                 className="button column is-outlined is-mobile"
                 onClick={adjustJobPoint}
                 key={uuidv4()}
               >
                 {buttonValue}
-              </button>
+              </CustomButton>
             );
           })}
           {/* <button className="button is-primary" onClick={deleteNode}>
