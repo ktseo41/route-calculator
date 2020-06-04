@@ -5,6 +5,7 @@ import { CustomSystem } from "./database/customsystem";
 import { Jobs, classifiedJobs, NumberedJobs } from "./database/job";
 import RouteLinkedList from "./lib/RouteLinkedList";
 import NotiMessage from "./components/NotiMessage";
+import Modal from "./components/Modal";
 
 type ButtonState = "1" | "-1" | "5" | "-5" | "10" | "-10" | "100" | "-100";
 
@@ -143,6 +144,7 @@ export default function App() {
   const [jobPo, setJobPo] = useState(selectedNode?.jobPo);
   const [isNotiOn, setIsNotiOn] = useState(false);
   const [iE11Message, setIE11Message] = useState("");
+  const [isModalActive, setIsModalActive] = useState(true);
 
   // useEffect(() => {
   //   let params = new URLSearchParams(location.search);
@@ -383,6 +385,7 @@ export default function App() {
           </tbody>
         </table>
       </section>
+      <Modal isActive={isModalActive} setIsActive={setIsModalActive} />
     </CalculatorWrapper>
   );
 }
