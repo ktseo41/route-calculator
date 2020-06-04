@@ -129,6 +129,12 @@ function isOverFiftySeven(restString: string): boolean {
   return nextFiftySevenIndex % 2 === 0;
 }
 
+function save(rLL: RouteLinkedList) {
+  const queryToSave = getCustomQueryFromRLL(rLL);
+  if (queryToSave.length === 0) return;
+  location.replace(location.origin + "/?" + queryToSave);
+}
+
 export default function App() {
   const [rLL, setRLL] = useState(new RouteLinkedList());
   const [selectedNode, setSelectedNode] = useState(rLL.tail);
@@ -220,7 +226,7 @@ export default function App() {
                 location.reload();
               }}
             >
-              ✔️ 루트 계산기
+              ✔️ 일랜시아 루트 계산기
             </span>
           </div>
 
@@ -246,9 +252,7 @@ export default function App() {
         <UtilBarRight>
           <UtilBarItem
             onClick={() => {
-              const queryToSave = getCustomQueryFromRLL(rLL);
-              if (queryToSave.length === 0) return;
-              location.replace(location.origin + "/?" + queryToSave);
+              save(rLL);
             }}
           >
             save
