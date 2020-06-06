@@ -185,7 +185,7 @@ export default function App() {
       return newRLL;
     });
 
-    location.replace(location.origin);
+    location.replace(`${location.origin}${location.pathname}`);
   };
 
   useEffect(() => {
@@ -259,7 +259,6 @@ export default function App() {
                 })
               );
               setIsModalActive(true);
-              // save(rLL);
             }}
           >
             save
