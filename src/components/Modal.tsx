@@ -4,9 +4,11 @@ import styled from "styled-components";
 type ModalProps = {
   ["isActive"]: boolean;
   ["setIsActive"]: React.Dispatch<React.SetStateAction<boolean>>;
+  ["title"]: JSX.Element;
+  ["content"]: JSX.Element;
 };
 
-export default ({ isActive, setIsActive }: ModalProps) => {
+export default ({ isActive, setIsActive, title, content }: ModalProps) => {
   return (
     <div className={isActive ? "modal is-active" : "modal"}>
       <div
@@ -18,7 +20,7 @@ export default ({ isActive, setIsActive }: ModalProps) => {
       <div className="modal-content">
         <div className="card">
           <header className="card-header">
-            <p className="card-header-title">modal example</p>
+            <p className="card-header-title">{title}</p>
             <button
               className="modal-close is-large"
               aria-label="close"
@@ -27,7 +29,7 @@ export default ({ isActive, setIsActive }: ModalProps) => {
               }}
             ></button>
           </header>
-          <div className="card-content">content here</div>
+          <div className="card-content"> {content}</div>
         </div>
       </div>
     </div>

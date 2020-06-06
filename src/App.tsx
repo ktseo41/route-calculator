@@ -4,7 +4,9 @@ import styled from "styled-components";
 import { CustomSystem } from "./database/customsystem";
 import { Jobs, classifiedJobs, NumberedJobs } from "./database/job";
 import RouteLinkedList from "./lib/RouteLinkedList";
-import NotiMessage from "./components/NotiMessage";
+import { NotiTitle, NotiMessage } from "./components/NotiMessage";
+import { SaveTitle, SaveContent } from "./components/Save";
+import { LoadTitle, LoadContent } from "./components/Load";
 import Modal from "./components/Modal";
 
 type ButtonState = "1" | "-1" | "5" | "-5" | "10" | "-10" | "100" | "-100";
@@ -142,16 +144,9 @@ export default function App() {
   const [selectedNodeIdx, setSelectedNodeIdx] = useState(0);
   const [job, setJob] = useState(selectedNode?.job);
   const [jobPo, setJobPo] = useState(selectedNode?.jobPo);
-  const [isNotiOn, setIsNotiOn] = useState(false);
-  const [iE11Message, setIE11Message] = useState("");
-  const [isModalActive, setIsModalActive] = useState(true);
-
-  // useEffect(() => {
-  //   let params = new URLSearchParams(location.search);
-  //   params.forEach((val, key) => {
-  //     console.log(`${key}=${val}`);
-  //   });
-  // }, []);
+  const [isModalActive, setIsModalActive] = useState(false);
+  const [modalTitle, setModalTitle] = useState(<></>);
+  const [modalContent, setModalContent] = useState(<></>);
 
   const addNewJob = (event: MouseEvent) => {
     const jobName = getJobNameFromSelect(event);
@@ -205,10 +200,14 @@ export default function App() {
 
     var isIE11 = /*@cc_on!@*/ false || !!(document as Document).documentMode;
     if (isIE11) {
-      setIE11Message(
-        "Internet Explorer 11이하는 지원하지 않습니다. 엣지브라우저, 크롬브라우저, 네이버웨일, 파이어폭스, 오페라브라우저 등을 사용해주세요!"
+      setModalTitle(
+        <div>
+          Internet Explorer 11이하는 지원하지 않습니다. 엣지브라우저,
+          크롬브라우저, 네이버웨일, 파이어폭스, 오페라브라우저 등을
+          사용해주세요!
+        </div>
       );
-      setIsNotiOn(!isNotiOn);
+      setIsModalActive(!isModalActive);
     }
   }, []);
 
@@ -231,21 +230,15 @@ export default function App() {
               ✔️ 일랜시아 루트 계산기
             </span>
           </div>
-
-          {
-            <NotiMessage
-              isNotiOn={isNotiOn}
-              setIsNotiOn={setIsNotiOn}
-              iE11Message={iE11Message}
-            />
-          }
         </Title>
       </section>
       <UtilBarSection className="util-bar container column is-two-thirds-desktop is-two-thirds-tablet">
         <UtilBarLeft>
           <UtilBarItem
             onClick={() => {
-              setIsNotiOn(!isNotiOn);
+              setModalTitle(NotiTitle);
+              setModalContent(NotiMessage);
+              setIsModalActive(true);
             }}
           >
             info
@@ -254,12 +247,32 @@ export default function App() {
         <UtilBarRight>
           <UtilBarItem
             onClick={() => {
-              save(rLL);
+              const queryToSave = getCustomQueryFromRLL(rLL);
+              const urlToSave = `${location.origin}${
+                queryToSave.length === 0 ? "" : `/?${queryToSave}`
+              }`;
+
+              setModalTitle(SaveTitle);
+              setModalContent(
+                SaveContent({
+                  urlToSave,
+                })
+              );
+              setIsModalActive(true);
+              // save(rLL);
             }}
           >
             save
           </UtilBarItem>
-          <UtilBarItem>load</UtilBarItem>
+          <UtilBarItem
+            onClick={() => {
+              setModalTitle(LoadTitle);
+              setModalContent(LoadContent);
+              setIsModalActive(true);
+            }}
+          >
+            load
+          </UtilBarItem>
           <UtilBarItem onClick={reset}>reset</UtilBarItem>
         </UtilBarRight>
       </UtilBarSection>
@@ -385,7 +398,12 @@ export default function App() {
           </tbody>
         </table>
       </section>
-      <Modal isActive={isModalActive} setIsActive={setIsModalActive} />
+      <Modal
+        isActive={isModalActive}
+        setIsActive={setIsModalActive}
+        title={modalTitle}
+        content={modalContent}
+      />
     </CalculatorWrapper>
   );
 }
