@@ -248,8 +248,8 @@ export default function App() {
           <UtilBarItem
             onClick={() => {
               const queryToSave = getCustomQueryFromRLL(rLL);
-              const urlToSave = `${location.origin}${
-                queryToSave.length === 0 ? "" : `/?${queryToSave}`
+              const urlToSave = `${location.origin}${location.pathname}${
+                queryToSave.length === 0 ? "" : `?${queryToSave}`
               }`;
 
               setModalTitle(SaveTitle);
