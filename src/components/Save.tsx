@@ -39,7 +39,14 @@ const CopyButton = styled.span`
 `;
 
 export const SaveTitle = () => {
-  return <div>저장하기</div>;
+  return (
+    <div>
+      저장하기{" "}
+      <span className="is-size-7">
+        복사된 url로 접속하면 불러올 수 있습니다.
+      </span>
+    </div>
+  );
 };
 
 type SaveContentProps = {

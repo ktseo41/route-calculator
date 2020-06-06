@@ -20,7 +20,7 @@ export default ({ isActive, setIsActive, title, content }: ModalProps) => {
       <div className="modal-content">
         <div className="card">
           <header className="card-header">
-            <p className="card-header-title">{title}</p>
+            <div className="card-header-title">{title}</div>
             <button
               className="modal-close is-large"
               aria-label="close"

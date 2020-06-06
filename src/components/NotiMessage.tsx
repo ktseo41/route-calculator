@@ -24,10 +24,7 @@ export const NotiMessage = () => {
     <NotiMessageBody className="message-body has-text-left has-text-weight-normal">
       <span className="has-text-weight-semibold">추가 예정 기능</span>
       <br /> <br />
-      <span style={{ textDecoration: "line-through" }}>
-        1. 저장, 불러오기 기능
-      </span>
-      (완료)
+      <span>1. 저장, 불러오기 기능 (진행중)</span>
       <br />
       2. 이미지로 내보내기
       <br />
