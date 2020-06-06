@@ -1,7 +1,7 @@
 {
   "name": "route-calculator",
   "homepage": "https://ktseo41.github.io/route-calculator/index.html",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "일랜시아 웹 루트계산기",
   "main": "index.html",
   "scripts": {
@@ -21,6 +21,7 @@
     "@babel/preset-typescript": "^7.9.0",
     "@types/fastclick": "^1.0.29",
     "@types/react": "^16.9.34",
+    "@types/react-copy-to-clipboard": "^4.3.0",
     "@types/styled-components": "^5.1.0",
     "@types/uuid": "^7.0.3",
     "babel-jest": "^25.5.1",

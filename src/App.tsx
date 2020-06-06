@@ -1,9 +1,13 @@
 import React, { useState, useEffect, MouseEvent } from "react";
-import styled from "styled-components";
-import { Jobs, classifiedJobs } from "./database/job";
-import RouteLinkedList from "./lib/RouteLinkedList";
 import { v4 as uuidv4 } from "uuid";
-import NotiMessage from "./components/NotiMessage";
+import styled from "styled-components";
+import { CustomSystem } from "./database/customsystem";
+import { Jobs, classifiedJobs, NumberedJobs } from "./database/job";
+import RouteLinkedList from "./lib/RouteLinkedList";
+import { NotiTitle, NotiMessage } from "./components/NotiMessage";
+import { SaveTitle, SaveContent } from "./components/Save";
+import { LoadTitle, LoadContent } from "./components/Load";
+import Modal from "./components/Modal";
 
 type ButtonState = "1" | "-1" | "5" | "-5" | "10" | "-10" | "100" | "-100";
 
@@ -18,6 +22,10 @@ const buttonsValues: ButtonState[] = [
   "-100",
 ];
 
+const Title = styled.div`
+  padding-top: 10px;
+`;
+
 const NotiButton = styled.span`
   border-style: solid;
   border-width: 1px;
@@ -27,9 +35,33 @@ const NotiButton = styled.span`
   font-size: 0.7em;
   padding: 0 3.8px;
   position: relative;
-  /* margin-top: 2px; */
+  margin-bottom: 3px;
   margin-left: 10px;
   cursor: pointer;
+`;
+
+const UtilBarSection = styled.section`
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 10px 10px 0px;
+`;
+
+const UtilBarLeft = styled.div`
+  display: flex;
+`;
+
+const UtilBarRight = styled.div`
+  display: flex;
+`;
+
+const UtilBarItem = styled.div`
+  margin-left: 10px;
+  cursor: pointer;
+`;
+
+const CustomButton = styled.div`
+  font-size: 0.8rem;
+  padding: calc(0.5em - 1px) 1em;
 `;
 
 const CalculatorWrapper = styled.div``;
@@ -42,21 +74,79 @@ function getAdjustPoint(event: MouseEvent): number {
   return +((event.target as HTMLButtonElement).textContent as ButtonState);
 }
 
+function getCustomQueryFromRLL(rLL: RouteLinkedList): string {
+  let result = "";
+  let point = rLL.head?.next;
+
+  while (point) {
+    result += CustomSystem[NumberedJobs[point.job]];
+    if (point.jobPo > 57 && point.jobPo !== 100) {
+      result += CustomSystem[57];
+      result += CustomSystem[point.jobPo - 57];
+    } else {
+      result += CustomSystem[point.jobPo];
+    }
+    point = point.next;
+  }
+
+  return result;
+}
+
+function getCurrentJobsFromQuery({ search }: Location): RouteLinkedList {
+  /*
+  _가 발견되면 다음 _가 있는지 탐색한다.
+   */
+  let isJob: boolean = true;
+  const newRLL = new RouteLinkedList();
+  for (let index = 1; index < search.length; index++) {
+    const charCustom = search[index] as keyof typeof CustomSystem;
+    let decimalNumber = CustomSystem[charCustom];
+
+    if (isJob) {
+      const job = NumberedJobs[decimalNumber];
+      newRLL.add(job as Jobs);
+      isJob = !isJob;
+    } else {
+      if (decimalNumber === 57) {
+        if (isOverFiftySeven(search.slice(index + 1))) {
+          const nextCharCustom = search[index + 1] as keyof typeof CustomSystem;
+          const nextDecimal = CustomSystem[nextCharCustom];
+
+          decimalNumber += nextDecimal;
+          index += 1;
+        }
+      }
+      newRLL.tail?.adjustJobPoint(decimalNumber);
+      isJob = !isJob;
+    }
+  }
+
+  return newRLL;
+}
+
+function isOverFiftySeven(restString: string): boolean {
+  const nextFiftySevenIndex = restString.indexOf("_");
+  if (nextFiftySevenIndex === -1) {
+    return restString.length % 2 === 1;
+  }
+  return nextFiftySevenIndex % 2 === 0;
+}
+
+function save(rLL: RouteLinkedList) {
+  const queryToSave = getCustomQueryFromRLL(rLL);
+  if (queryToSave.length === 0) return;
+  location.replace(location.origin + "/?" + queryToSave);
+}
+
 export default function App() {
   const [rLL, setRLL] = useState(new RouteLinkedList());
   const [selectedNode, setSelectedNode] = useState(rLL.tail);
   const [selectedNodeIdx, setSelectedNodeIdx] = useState(0);
   const [job, setJob] = useState(selectedNode?.job);
   const [jobPo, setJobPo] = useState(selectedNode?.jobPo);
-  const [isNotiOn, setIsNotiOn] = useState(false);
-  const [iE11Message, setIE11Message] = useState("");
-
-  // useEffect(() => {
-  //   let params = new URLSearchParams(location.search);
-  //   params.forEach((val, key) => {
-  //     console.log(`${key}=${val}`);
-  //   });
-  // }, []);
+  const [isModalActive, setIsModalActive] = useState(false);
+  const [modalTitle, setModalTitle] = useState(<></>);
+  const [modalContent, setModalContent] = useState(<></>);
 
   const addNewJob = (event: MouseEvent) => {
     const jobName = getJobNameFromSelect(event);
@@ -94,7 +184,14 @@ export default function App() {
 
       return newRLL;
     });
+
+    location.replace(location.origin);
   };
+
+  useEffect(() => {
+    if (location.search.length === 0) return;
+    setRLL(getCurrentJobsFromQuery(location));
+  }, []);
 
   useEffect(() => {
     interface Document {
@@ -103,10 +200,14 @@ export default function App() {
 
     var isIE11 = /*@cc_on!@*/ false || !!(document as Document).documentMode;
     if (isIE11) {
-      setIE11Message(
-        "Internet Explorer 11이하는 지원하지 않습니다. 엣지브라우저, 크롬브라우저, 네이버웨일, 파이어폭스, 오페라브라우저 등을 사용해주세요!"
+      setModalTitle(
+        <div>
+          Internet Explorer 11이하는 지원하지 않습니다. 엣지브라우저,
+          크롬브라우저, 네이버웨일, 파이어폭스, 오페라브라우저 등을
+          사용해주세요!
+        </div>
       );
-      setIsNotiOn(!isNotiOn);
+      setIsModalActive(!isModalActive);
     }
   }, []);
 
@@ -117,30 +218,64 @@ export default function App() {
 
   return (
     <CalculatorWrapper className="container">
-      <nav>
-        <div
-          style={{ padding: "10px 0px" }}
-          className="has-text-centered title is-5"
-        >
-          <span style={{ cursor: "pointer" }} onClick={reset}>
-            일랜시아 루트 계산기
-          </span>
-          <NotiButton
+      <section>
+        <Title className="has-text-centered is-size-5 has-text-weight-semibold">
+          <div>
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                location.reload();
+              }}
+            >
+              ✔️ 일랜시아 루트 계산기
+            </span>
+          </div>
+        </Title>
+      </section>
+      <UtilBarSection className="util-bar container column is-two-thirds-desktop is-two-thirds-tablet">
+        <UtilBarLeft>
+          <UtilBarItem
             onClick={() => {
-              setIsNotiOn(!isNotiOn);
+              setModalTitle(NotiTitle);
+              setModalContent(NotiMessage);
+              setIsModalActive(true);
             }}
           >
-            ?
-          </NotiButton>
-          {
-            <NotiMessage
-              isNotiOn={isNotiOn}
-              setIsNotiOn={setIsNotiOn}
-              iE11Message={iE11Message}
-            />
-          }
-        </div>
-      </nav>
+            info
+          </UtilBarItem>
+        </UtilBarLeft>
+        <UtilBarRight>
+          <UtilBarItem
+            onClick={() => {
+              const queryToSave = getCustomQueryFromRLL(rLL);
+              const urlToSave = `${location.origin}${
+                queryToSave.length === 0 ? "" : `/?${queryToSave}`
+              }`;
+
+              setModalTitle(SaveTitle);
+              setModalContent(
+                SaveContent({
+                  urlToSave,
+                })
+              );
+              setIsModalActive(true);
+              // save(rLL);
+            }}
+          >
+            save
+          </UtilBarItem>
+          <UtilBarItem
+            onClick={() => {
+              setModalTitle(LoadTitle);
+              setModalContent(LoadContent);
+              setIsModalActive(true);
+            }}
+          >
+            load
+          </UtilBarItem>
+          <UtilBarItem onClick={reset}>reset</UtilBarItem>
+        </UtilBarRight>
+      </UtilBarSection>
       <section
         style={{ marginBottom: "10px" }}
         className="jobs disable-double-tap container column is-two-thirds-desktop is-two-thirds-tablet"
@@ -150,17 +285,13 @@ export default function App() {
             const groupedJobButtons = group.reduce(
               (jobButtons: JSX.Element[], jobName: string) => {
                 jobButtons.push(
-                  <button
-                    style={{
-                      fontSize: "0.8rem",
-                      padding: "calc(0.5em - 1px) 1em",
-                    }}
+                  <CustomButton
                     className="button column is-outlined"
                     onClick={addNewJob}
                     key={uuidv4()}
                   >
                     {jobName}
-                  </button>
+                  </CustomButton>
                 );
                 return jobButtons;
               },
@@ -182,14 +313,13 @@ export default function App() {
         <div className="buttons columns is-multiline are-small">
           {buttonsValues.map((buttonValue) => {
             return (
-              <button
-                style={{ fontSize: "0.8rem", padding: "calc(0.5em - 1px) 1em" }}
+              <CustomButton
                 className="button column is-outlined is-mobile"
                 onClick={adjustJobPoint}
                 key={uuidv4()}
               >
                 {buttonValue}
-              </button>
+              </CustomButton>
             );
           })}
           {/* <button className="button is-primary" onClick={deleteNode}>
@@ -268,6 +398,12 @@ export default function App() {
           </tbody>
         </table>
       </section>
+      <Modal
+        isActive={isModalActive}
+        setIsActive={setIsModalActive}
+        title={modalTitle}
+        content={modalContent}
+      />
     </CalculatorWrapper>
   );
 }
