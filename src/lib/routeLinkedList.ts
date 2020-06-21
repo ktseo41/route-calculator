@@ -330,9 +330,12 @@ export class RouteNode {
   }
 
   getPrevStats(): Stats {
-    return this.prev
-      ? { ...this.prev.stats }
-      : { STR: 5, INT: 5, AGI: 5, VIT: 5 };
+    // !this.prev 조건을 사실 검사해주지 않아도 되기 때문에 코드 개선이 필요할 것 같다.
+    if (!this.prev) return { STR: 5, INT: 5, AGI: 5, VIT: 5 };
+    if (this.prev.job === Jobs.네크로멘서)
+      return { ...this.prev.stats, INT: 5 };
+
+    return { ...this.prev.stats };
   }
 
   public getPrevs(): void {
