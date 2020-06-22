@@ -32,7 +32,9 @@ export const NotiMessage = () => {
       <br /> <br />
       <span className="has-text-weight-semibold">현재 버그들 (v0.9.4)</span>
       <br /> <br />
-      1. 네크로멘서를 사면했을 때 인트가 5로 돌아가지 않는 문제
+      <span style={{ textDecoration: "line-through" }}>
+        1. 네크로멘서를 사면했을 때 인트가 5로 돌아가지 않는 문제
+      </span>
       <hr />
       버그를 발견하셨나요? 아래 카페 게시글에 댓글로 달아주세요!
       <br /> <br />

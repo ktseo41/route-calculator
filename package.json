@@ -7,7 +7,7 @@
   "scripts": {
     "start": "parcel index.html",
     "build": "parcel build index.html --public-url ./",
-    "test": "jest",
+    "test": "jest --watch",
     "watch": "parcel watch index.html --public-url ./",
     "predeploy": "parcel build index.html --no-source-maps --public-url ./ --out-dir gh-pages",
     "deploy": "gh-pages -d gh-pages",
