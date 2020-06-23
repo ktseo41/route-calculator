@@ -35,6 +35,12 @@ export const NotiMessage = () => {
       <span style={{ textDecoration: "line-through" }}>
         1. 네크로멘서를 사면했을 때 인트가 5로 돌아가지 않는 문제
       </span>
+      - L엠일님 제보
+      <br />
+      <span style={{ textDecoration: "line-through" }}>
+        2. 같은 직업 이전 노드의 잡포인트가 제대로 반영되지 않던 문제
+      </span>
+      - L아리냥님 제보
       <hr />
       버그를 발견하셨나요? 아래 카페 게시글에 댓글로 달아주세요!
       <br /> <br />
