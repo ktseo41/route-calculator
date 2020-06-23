@@ -223,7 +223,8 @@ export class RouteNode {
       actualChange = this.getActualChange(jobPoDelta);
     }
 
-    this.shouldChangeStats(actualChange) && this.changeStats(actualChange);
+    this.shouldChangeStats(actualChange, isRecalculating) &&
+      this.changeStats(actualChange, isRecalculating);
     this.jobPo += actualChange;
     (this.currentJobPos[this.job] as number) += actualChange;
 
@@ -250,23 +251,31 @@ export class RouteNode {
     }
   }
 
-  private shouldChangeStats(actualChange: number) {
+  private shouldChangeStats(actualChange: number, isRecalculating?: boolean) {
+    const currentJobpo = isRecalculating
+      ? 0
+      : this.currentJobPos[this.job] || 0;
+
     return Object.keys(this.jobPointMap).some((interval) => {
       return (
         Math.abs(
-          Math.trunc((this.jobPo + actualChange) / +interval) -
-            Math.trunc(this.jobPo / +interval)
+          Math.trunc((currentJobpo + actualChange) / +interval) -
+            Math.trunc(currentJobpo / +interval)
         ) >= 1
       );
     });
   }
 
-  private changeStats(actualChange: number) {
+  private changeStats(actualChange: number, isRecalculating?: boolean) {
+    const currentJobpo = isRecalculating
+      ? 0
+      : this.currentJobPos[this.job] || 0;
+
     for (const interval in this.jobPointMap) {
       if (this.jobPointMap.hasOwnProperty(interval)) {
         const quotient =
-          Math.trunc((this.jobPo + actualChange) / +interval) -
-          Math.trunc(this.jobPo / +interval);
+          Math.trunc((currentJobpo + actualChange) / +interval) -
+          Math.trunc(currentJobpo / +interval);
         if (quotient === 0) continue;
         Object.entries(
           this.jobPointMap[interval as Intervals] as StatMap
