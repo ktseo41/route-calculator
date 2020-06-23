@@ -460,7 +460,7 @@ describe("bug : 이전 잡포인트가 있음에도 +100을 누르면 적용되�
   });
 });
 
-describe("네크로맨서 직업을 가진 후 다른 직업으로 바꾸면 INT가 5가 된다.", () => {
+describe("bug : 네크로맨서 직업을 가진 후 다른 직업으로 바꾸면 INT가 5가 된다.", () => {
   const rLL1 = new RouteLinkedList();
 
   rLL1.add("악사");
@@ -469,6 +469,32 @@ describe("네크로맨서 직업을 가진 후 다른 직업으로 바꾸면 INT
   rLL1.add("모험가");
   test("INT가 5가 된다.", () => {
     expect(rLL1.tail.stats).toEqual({ STR: 5, INT: 5, AGI: 10, VIT: 5 });
+  });
+});
+
+describe("bug : 스탯 반영 오류", () => {
+  const rLL = new RouteLinkedList();
+  const rLL2 = new RouteLinkedList();
+
+  rLL.add("악사");
+  rLL.tail.adjustJobPoint(100);
+  rLL.add("순수기사");
+  rLL.tail.adjustJobPoint(5);
+  rLL.add("순수마법사");
+  rLL.add("순수기사");
+  rLL.tail.adjustJobPoint(1);
+  test("중간에 직업을 바꾼 후 잡포인트를 증가시켰을 때 이전 잡포인트가 반영이 안된다.", () => {
+    expect(rLL.tail.stats).toEqual({ STR: 7, INT: 29, AGI: 10, VIT: 7 });
+  });
+
+  rLL2.add("무도가");
+  rLL2.tail.adjustJobPoint(2);
+  rLL2.add("모험가");
+  rLL2.add("무도가");
+  rLL2.tail.adjustJobPoint(1);
+  rLL2.add("순수기사");
+  test("중간에 직업을 바꾼 후 잡포인트를 증가시켰을 때 이전 잡포인트가 반영이 안된다. 2", () => {
+    expect(rLL2.tail.stats).toEqual({ STR: 5, INT: 5, AGI: 5, VIT: 6 });
   });
 });
 
