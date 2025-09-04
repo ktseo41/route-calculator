@@ -22,10 +22,6 @@ const buttonsValues: ButtonState[] = [
   "-100",
 ];
 
-const Title = styled.div`
-  padding-top: 10px;
-`;
-
 const NotiButton = styled.span`
   border-style: solid;
   border-width: 1px;
@@ -219,7 +215,7 @@ export default function App() {
   return (
     <CalculatorWrapper className="">
       <section>
-        <Title className="">
+        <div className="pt-4">
           <div>
             <span
               style={{ cursor: "pointer" }}
@@ -230,7 +226,7 @@ export default function App() {
               ✔️ 일랜시아 루트 계산기
             </span>
           </div>
-        </Title>
+        </div>
       </section>
       <UtilBarSection className="util-bar">
         <UtilBarLeft>

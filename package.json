@@ -2,6 +2,7 @@
   "name": "route-calculator",
   "homepage": "https://ktseo41.github.io/route-calculator/index.html",
   "version": "0.9.4",
+  "type": "module",
   "description": "일랜시아 웹 루트계산기",
   "main": "index.html",
   "scripts": {
@@ -33,5 +34,9 @@
     "uuid": "^11.1.0",
     "vite": "^7.1.4",
     "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.12",
+    "tailwindcss": "^4.1.12"
   }
 }
