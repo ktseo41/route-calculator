@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import CopyToClipboard from "react-copy-to-clipboard";
+import useCopyToClipboard from "../hooks/useCopyToClipboard";
 
 const NoLinedInput = styled.input`
   border-style: none;
@@ -54,12 +54,20 @@ type SaveContentProps = {
 };
 
 export const SaveContent = ({ urlToSave }: SaveContentProps) => {
+  // 커스텀 훅 사용
+  const { isCopied, copyToClipboard } = useCopyToClipboard();
+
+  const handleCopyClick = () => {
+    copyToClipboard(urlToSave);
+  };
+
   return (
     <InputBox className="input">
       <NoLinedInput readOnly value={urlToSave} size={urlToSave.length} />
-      <CopyToClipboard text={urlToSave}>
-        <CopyButton>복사</CopyButton>
-      </CopyToClipboard>
+      {/* CopyToClipboard 컴포넌트 대신 onClick 이벤트 핸들러를 사용 */}
+      <CopyButton onClick={handleCopyClick}>
+        {isCopied ? "복사됨!" : "복사"}
+      </CopyButton>
     </InputBox>
   );
 };

@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import styled from "styled-components";
 import { CustomSystem } from "./database/customsystem";
 import { Jobs, classifiedJobs, NumberedJobs } from "./database/job";
-import RouteLinkedList from "./lib/RouteLinkedList";
+import RouteLinkedList from "./lib/routeLinkedList";
 import { NotiTitle, NotiMessage } from "./components/NotiMessage";
 import { SaveTitle, SaveContent } from "./components/Save";
 import { LoadTitle, LoadContent } from "./components/Load";
@@ -236,8 +236,8 @@ export default function App() {
         <UtilBarLeft>
           <UtilBarItem
             onClick={() => {
-              setModalTitle(NotiTitle);
-              setModalContent(NotiMessage);
+              setModalTitle(<NotiTitle />);
+              setModalContent(<NotiMessage />);
               setIsModalActive(true);
             }}
           >
@@ -248,15 +248,12 @@ export default function App() {
           <UtilBarItem
             onClick={() => {
               const queryToSave = getCustomQueryFromRLL(rLL);
-              const urlToSave = `${location.origin}${location.pathname}${
-                queryToSave.length === 0 ? "" : `?${queryToSave}`
-              }`;
+              const urlToSave = `${location.origin}${location.pathname}${queryToSave.length === 0 ? "" : `?${queryToSave}`
+                }`;
 
-              setModalTitle(SaveTitle);
+              setModalTitle(<SaveTitle />);
               setModalContent(
-                SaveContent({
-                  urlToSave,
-                })
+                <SaveContent urlToSave={urlToSave} />
               );
               setIsModalActive(true);
             }}
@@ -265,8 +262,8 @@ export default function App() {
           </UtilBarItem>
           <UtilBarItem
             onClick={() => {
-              setModalTitle(LoadTitle);
-              setModalContent(LoadContent);
+              setModalTitle(<LoadTitle />);
+              setModalContent(<LoadContent />);
               setIsModalActive(true);
             }}
           >
@@ -285,7 +282,7 @@ export default function App() {
               (jobButtons: JSX.Element[], jobName: string) => {
                 jobButtons.push(
                   <CustomButton
-                    className="button column is-outlined"
+                    className="button column"
                     onClick={addNewJob}
                     key={uuidv4()}
                   >
@@ -309,11 +306,11 @@ export default function App() {
         </div>
       </section>
       <section className="adjust disable-double-tap column is-two-thirds-desktop is-two-thirds-tablet container">
-        <div className="buttons columns is-multiline are-small">
+        <div className="buttons columns are-small">
           {buttonsValues.map((buttonValue) => {
             return (
               <CustomButton
-                className="button column is-outlined is-mobile"
+                className="button column is-mobile"
                 onClick={adjustJobPoint}
                 key={uuidv4()}
               >
