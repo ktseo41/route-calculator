@@ -217,9 +217,9 @@ export default function App() {
   }, [rLL, selectedNode]);
 
   return (
-    <CalculatorWrapper className="container">
+    <CalculatorWrapper className="">
       <section>
-        <Title className="has-text-centered is-size-5 has-text-weight-semibold">
+        <Title className="">
           <div>
             <span
               style={{ cursor: "pointer" }}
@@ -232,7 +232,7 @@ export default function App() {
           </div>
         </Title>
       </section>
-      <UtilBarSection className="util-bar container column is-two-thirds-desktop is-two-thirds-tablet">
+      <UtilBarSection className="util-bar">
         <UtilBarLeft>
           <UtilBarItem
             onClick={() => {
@@ -274,15 +274,15 @@ export default function App() {
       </UtilBarSection>
       <section
         style={{ marginBottom: "10px" }}
-        className="jobs disable-double-tap container column is-two-thirds-desktop is-two-thirds-tablet"
+        className="jobs disable-double-tap"
       >
-        <div className="container">
+        <div className="">
           {classifiedJobs.reduce((jobGroups: JSX.Element[], group) => {
             const groupedJobButtons = group.reduce(
               (jobButtons: JSX.Element[], jobName: string) => {
                 jobButtons.push(
                   <CustomButton
-                    className="button column"
+                    className=""
                     onClick={addNewJob}
                     key={uuidv4()}
                   >
@@ -296,7 +296,7 @@ export default function App() {
             jobGroups.push(
               <div
                 key={uuidv4()}
-                className="container buttons is-small columns is-multiline"
+                className=""
               >
                 {groupedJobButtons}
               </div>
@@ -305,12 +305,12 @@ export default function App() {
           }, [])}
         </div>
       </section>
-      <section className="adjust disable-double-tap column is-two-thirds-desktop is-two-thirds-tablet container">
-        <div className="buttons columns are-small">
+      <section className="adjust disable-double-tap">
+        <div className="">
           {buttonsValues.map((buttonValue) => {
             return (
               <CustomButton
-                className="button column is-mobile"
+                className=""
                 onClick={adjustJobPoint}
                 key={uuidv4()}
               >
@@ -318,23 +318,23 @@ export default function App() {
               </CustomButton>
             );
           })}
-          {/* <button className="button is-primary" onClick={deleteNode}>
+          {/* <button className="" onClick={deleteNode}>
             remove
           </button> */}
         </div>
       </section>
-      <section className="currentStates container is-two-thirds-desktop is-two-thirds-tablet disable-double-tap">
-        <table className="table is-fullwidth is-narrow is-hoverable">
+      <section className="currentStates disable-double-tap">
+        <table className="">
           <thead>
             <tr>
-              <th style={{ minWidth: "104px" }} className="has-text-centered">
+              <th style={{ minWidth: "104px" }} className="">
                 직업
               </th>
-              <th className="has-text-centered">STR</th>
-              <th className="has-text-centered">INT</th>
-              <th className="has-text-centered">AGI</th>
-              <th className="has-text-centered">VIT</th>
-              <th style={{ minWidth: "46.4px" }} className="has-text-centered">
+              <th className="">STR</th>
+              <th className="">INT</th>
+              <th className="">AGI</th>
+              <th className="">VIT</th>
+              <th style={{ minWidth: "46.4px" }} className="">
                 잡포
               </th>
               <th></th>
@@ -346,36 +346,34 @@ export default function App() {
                 <tr
                   id={`${index}`}
                   key={uuidv4()}
-                  className={
-                    index === selectedNodeIdx ? "has-background-light" : ""
-                  }
+                  className={index === selectedNodeIdx ? "" : ""}
                   onClick={(event: MouseEvent) => {
                     setSelectedNode(rLL.get(+event.currentTarget.id));
                     setSelectedNodeIdx(+event.currentTarget.id);
                   }}
                 >
-                  <td key={uuidv4()} className="has-text-centered">
+                  <td key={uuidv4()} className="">
                     {routeNode?.job}
                   </td>
-                  <td key={uuidv4()} className="has-text-centered">
+                  <td key={uuidv4()} className="">
                     {routeNode?.stats.STR}
                   </td>
-                  <td key={uuidv4()} className="has-text-centered">
+                  <td key={uuidv4()} className="">
                     {routeNode?.stats.INT}
                   </td>
-                  <td key={uuidv4()} className="has-text-centered">
+                  <td key={uuidv4()} className="">
                     {routeNode?.stats.AGI}
                   </td>
-                  <td key={uuidv4()} className="has-text-centered">
+                  <td key={uuidv4()} className="">
                     {routeNode?.stats.VIT}
                   </td>
-                  <td key={uuidv4()} className="has-text-centered">
+                  <td key={uuidv4()} className="">
                     {routeNode?.jobPo}
                   </td>
                   <td
                     style={{ minWidth: "37.6px" }}
                     key={uuidv4()}
-                    className="has-text-centered"
+                    className=""
                   >
                     {index !== 0 && (
                       <a
@@ -384,7 +382,7 @@ export default function App() {
                             event.currentTarget.parentElement?.parentElement?.id
                           );
                         }}
-                        className="delete"
+                        className=""
                       ></a>
                     )}
                   </td>

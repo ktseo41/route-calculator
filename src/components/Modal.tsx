@@ -10,26 +10,26 @@ type ModalProps = {
 
 export default ({ isActive, setIsActive, title, content }: ModalProps) => {
   return (
-    <div className={isActive ? "modal is-active" : "modal"}>
+    <div className={isActive ? "" : ""}>
       <div
-        className="modal-background"
+        className=""
         onClick={() => {
           setIsActive(false);
         }}
       ></div>
-      <div className="modal-content">
-        <div className="card">
-          <header className="card-header">
-            <div className="card-header-title">{title}</div>
+      <div className="">
+        <div className="">
+          <header className="">
+            <div className="">{title}</div>
             <button
-              className="modal-close is-large"
+              className=""
               aria-label="close"
               onClick={() => {
                 setIsActive(false);
               }}
             ></button>
           </header>
-          <div className="card-content"> {content}</div>
+          <div className=""> {content}</div>
         </div>
       </div>
     </div>

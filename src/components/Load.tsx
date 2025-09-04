@@ -43,7 +43,7 @@ export const LoadTitle = () => {
 
 export const LoadContent = () => {
   return (
-    <InputBox className="input">
+    <InputBox className="">
       <NoLinedInput autoFocus placeholder={"URL을 입력하세요"} />
       <CopyButton onClick={() => {}}>불러오기</CopyButton>
     </InputBox>
