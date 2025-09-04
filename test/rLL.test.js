@@ -1,4 +1,5 @@
-import RouteLinkedList from "../src/lib/RouteLinkedList";
+import { describe, test, expect } from 'vitest';
+import RouteLinkedList from "../src/lib/routeLinkedList.ts";
 
 describe("rLL 기본 테스트", () => {
   let rLL;
@@ -498,4 +499,3 @@ describe("bug : 스탯 반영 오류", () => {
   });
 });
 
-describe("버튼이 아니라 직접 입력해서 잡포인트를 변경할 수 있다.", () => {});
