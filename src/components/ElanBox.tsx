@@ -1,17 +1,17 @@
-import React from 'react';
+import React from "react";
 
 // 사용법:
-// 
+//
 // 1. 고정 크기 (기존 API 호환):
 // <GameWindowFrameTW width="300px" height="500px">
 //   <p>고정 크기 컨텐츠</p>
 // </GameWindowFrameTW>
-// 
+//
 // 2. 유연한 크기 (CSS Framework Card 스타일):
 // <GameWindowFrameTW className="w-full max-w-md">
 //   <p>반응형 컨텐츠</p>
 // </GameWindowFrameTW>
-// 
+//
 // <GameWindowFrameTW className="w-96 h-64">
 //   <p>Tailwind 크기 클래스 사용</p>
 // </GameWindowFrameTW>
@@ -21,9 +21,6 @@ import React from 'react';
 //   <p>인벤토리 컨텐츠</p>
 // </GameWindowFrameTW>
 //
-// 주의: 폰트는 기존과 동일하게 'VT323'을 사용하므로 프로젝트의
-// index.html <head>에 폰트 링크를 추가하세요.
-// <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 // --------------------------------------------------------------------------
 
 type Props = {
@@ -31,69 +28,32 @@ type Props = {
   width?: string; // Optional fixed width (e.g. '280px')
   height?: string; // Optional fixed height (e.g. '450px')
   className?: string; // Additional Tailwind classes for flexibility
-  title?: string; // Optional title displayed at top-left corner
+  // Optional title displayed at top-left corner. Accepts plain text or any React node
+  title?: React.ReactNode;
 };
 
-/**
- * 
- * @param {Object} props
- * @param {React.ReactNode} props.children - Content to be wrapped inside the frame
- * @param {string} [props.width] - Optional fixed width (e.g. '280px')
- * @param {string} [props.height] - Optional fixed height (e.g. '450px')
- * @param {string} [props.className] - Additional Tailwind classes for flexibility
- * @param {string} [props.title] - Optional title displayed at top-left corner
- * @returns 
- */
-const GameWindowFrameTW: React.FC<Props> = ({ children, width, height, className = '', title }) => {
+const GameWindowFrameTW: React.FC<Props> = ({
+  children,
+  width,
+  height,
+  className = "",
+  title,
+}) => {
   // Use inline styles only if width/height are explicitly provided
   // Otherwise, let Tailwind classes handle sizing for flexibility
   const sizeStyle: React.CSSProperties = {
-    fontFamily: "'VT323', monospace",
     ...(width && { width }),
     ...(height && { height }),
   };
 
   return (
     <div
-      className={`bg-black p-[3px] box-border relative ${className}`}
-      style={{ ...sizeStyle, boxShadow: '0 0 15px rgba(0,0,0,0.5)' }}
+      className={`bg-black p-[3px] box-border relative ${className} shadow-[0_0_15px_rgba(0,0,0,0.5)]`}
+      style={{ ...sizeStyle }}
     >
-      {title && (
-        <div
-          className="absolute -top-1 left-2 px-3 py-1 text-white text-sm font-bold z-10"
-          style={{
-            fontFamily: "'VT323', monospace",
-            background: 'linear-gradient(135deg, #6a6a6a 0%, #4a4a4a 50%, #2a2a2a 100%)',
-            border: '2px solid',
-            borderTopColor: '#8a8a8a',
-            borderLeftColor: '#8a8a8a',
-            borderBottomColor: '#1a1a1a',
-            borderRightColor: '#1a1a1a',
-            borderRadius: '3px',
-            textShadow: '1px 1px 2px rgba(0,0,0,0.8), -1px -1px 1px rgba(0,0,0,0.5)',
-            boxShadow: 'inset 1px 1px 1px rgba(255,255,255,0.2), inset -1px -1px 1px rgba(0,0,0,0.3)',
-          }}
-        >
-          {title}
-        </div>
-      )}
-      <div
-        className="w-full h-full bg-black border-2 rounded-sm relative p-2 box-border"
-        style={{
-          borderTopColor: '#a8a8a8',
-          borderLeftColor: '#a8a8a8',
-          borderBottomColor: '#3f3f3f',
-          borderRightColor: '#3f3f3f',
-        }}
-      >
-        <div
-          className="bg-black h-full relative box-border text-white"
-          style={{
-            border: '2px solid #1a1a1a',
-            borderTopColor: '#5a5a5e',
-            borderLeftColor: '#5a5a5e',
-          }}
-        >
+      {title ? title : null}
+      <div className="w-full h-full bg-black border-2 rounded-sm relative p-2 box-border border-t-[#a8a8a8] border-l-[#a8a8a8] border-b-[#3f3f3f] border-r-[#3f3f3f]">
+        <div className="bg-black h-full relative box-border text-white border-[2px] border-[#1a1a1a] border-t-[#5a5a5e] border-l-[#5a5a5e]">
           {children}
         </div>
       </div>

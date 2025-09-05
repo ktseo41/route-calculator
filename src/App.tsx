@@ -9,6 +9,7 @@ import { SaveTitle, SaveContent } from "./components/Save";
 import { LoadTitle, LoadContent } from "./components/Load";
 import Modal from "./components/Modal";
 import ElanBox from "./components/ElanBox";
+import { cn } from "./lib/utils";
 
 type ButtonState = "1" | "-1" | "5" | "-5" | "10" | "-10" | "100" | "-100";
 
@@ -22,8 +23,6 @@ const buttonsValues: ButtonState[] = [
   "100",
   "-100",
 ];
-
-
 
 function getJobNameFromSelect(event: MouseEvent) {
   return (event.target as HTMLButtonElement).textContent as Jobs;
@@ -96,6 +95,24 @@ function save(rLL: RouteLinkedList) {
   if (queryToSave.length === 0) return;
   location.replace(location.origin + "/?" + queryToSave);
 }
+
+const Title = () => (
+  <div
+    className={cn(
+      "absolute top-[3px] left-2 pl-2 pr-3 py-0.5 flex items-center z-10",
+      "text-white text-lg leading-none font-normal font-[jaro] not-italic [font-optical-sizing:auto] text-shadow-[1px_1px_2px_rgba(0,0,0,0.8),_-1px_-1px_1px_rgba(0,0,0,0.5)]",
+      "bg-[#6a6a6a] border-2 border-t-[#8a8a8a] border-l-[#8a8a8a] border-b-[#1a1a1a] border-r-[#1a1a1a]",
+      "rounded-[3px] shadow-[inset_1px_1px_1px_rgba(255,255,255,0.2),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)]"
+    )}
+  >
+    <img
+      src="/src/img/faviconV2.png"
+      alt="Elan Logo"
+      className="inline-block w-4 h-4 mr-1 align-middle"
+    />
+    ROUTE CALCULATOR
+  </div>
+);
 
 export default function App() {
   const [rLL, setRLL] = useState(new RouteLinkedList());
@@ -176,250 +193,268 @@ export default function App() {
   }, [rLL, selectedNode]);
 
   return (
-    <ElanBox title={'test'}>
+    <ElanBox title={<Title />}>
       <div className="max-w-4xl mx-auto p-2 bg-gray-50 min-h-screen">
-      {/* Header Section */}
-      <section className="mb-6">
-        <div className="pt-4">
-          <div>
-            <span
-              className="text-xl font-bold text-gray-800 cursor-pointer hover:text-blue-600 transition-colors"
+        {/* Utility Bar */}
+        <section className="flex justify-between items-center mb-6 px-2 py-3 bg-white rounded-lg shadow-sm">
+          <div className="flex gap-4">
+            <button
+              className="px-3 py-1 text-sm text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded transition-colors"
               onClick={() => {
-                location.reload();
+                setModalTitle(<NotiTitle />);
+                setModalContent(<NotiMessage />);
+                setIsModalActive(true);
               }}
             >
-              ✔️ 일랜시아 루트 계산기
-            </span>
+              info
+            </button>
           </div>
-        </div>
-      </section>
-
-      {/* Utility Bar */}
-      <section className="flex justify-between items-center mb-6 px-2 py-3 bg-white rounded-lg shadow-sm">
-        <div className="flex gap-4">
-          <button
-            className="px-3 py-1 text-sm text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded transition-colors"
-            onClick={() => {
-              setModalTitle(<NotiTitle />);
-              setModalContent(<NotiMessage />);
-              setIsModalActive(true);
-            }}
-          >
-            info
-          </button>
-        </div>
-        <div className="flex gap-4">
-          <button
-            className="px-3 py-1 text-sm text-green-600 hover:text-green-800 hover:bg-green-50 rounded transition-colors"
-            onClick={() => {
-              const queryToSave = getCustomQueryFromRLL(rLL);
-              const urlToSave = `${location.origin}${location.pathname}${queryToSave.length === 0 ? "" : `?${queryToSave}`
+          <div className="flex gap-4">
+            <button
+              className="px-3 py-1 text-sm text-green-600 hover:text-green-800 hover:bg-green-50 rounded transition-colors"
+              onClick={() => {
+                const queryToSave = getCustomQueryFromRLL(rLL);
+                const urlToSave = `${location.origin}${location.pathname}${
+                  queryToSave.length === 0 ? "" : `?${queryToSave}`
                 }`;
 
-              setModalTitle(<SaveTitle />);
-              setModalContent(
-                <SaveContent urlToSave={urlToSave} />
-              );
-              setIsModalActive(true);
-            }}
-          >
-            save
-          </button>
-          <button
-            className="px-3 py-1 text-sm text-purple-600 hover:text-purple-800 hover:bg-purple-50 rounded transition-colors"
-            onClick={() => {
-              setModalTitle(<LoadTitle />);
-              setModalContent(<LoadContent />);
-              setIsModalActive(true);
-            }}
-          >
-            load
-          </button>
-          <button
-            className="px-3 py-1 text-sm text-red-600 hover:text-red-800 hover:bg-red-50 rounded transition-colors"
-            onClick={reset}
-          >
-            reset
-          </button>
-        </div>
-      </section>
-
-      {/* Job Selection Section */}
-      <section className="mb-6 disable-double-tap">
-        <h3 className="text-lg font-semibold text-gray-700 mb-2">직업 선택</h3>
-        <div className="bg-white p-3 rounded-lg shadow-sm">
-          {/* 전사 계열 직업 */}
-          <div className="mb-4 pb-4 border-b border-gray-100">
-            {/* 1차 직업 */}
-            <div className="mb-3">
-              <div className="flex flex-wrap gap-2">
-                {["무도가", "투사", "전사", "검사", "검객", "자객", "궁사", "악사", "네크로멘서"].map((jobName) => (
-                  <button
-                    key={jobName}
-                    className="text-sm px-3 py-2 bg-red-50 hover:bg-red-100 hover:text-red-700 rounded border border-red-200 transition-all duration-200 hover:border-red-300"
-                    onClick={addNewJob}
-                  >
-                    {jobName}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* 2차 직업 */}
-            <div className="mb-1">
-              <div className="flex flex-wrap gap-2">
-                {["순수기사", "빛의기사", "어둠의기사", "순수마법사", "빛의마법사", "어둠의마법사"].map((jobName) => (
-                  <button
-                    key={jobName}
-                    className="text-sm px-3 py-2 bg-orange-50 hover:bg-orange-100 hover:text-orange-700 rounded border border-orange-200 transition-all duration-200 hover:border-orange-300"
-                    onClick={addNewJob}
-                  >
-                    {jobName}
-                  </button>
-                ))}
-              </div>
-            </div>
+                setModalTitle(<SaveTitle />);
+                setModalContent(<SaveContent urlToSave={urlToSave} />);
+                setIsModalActive(true);
+              }}
+            >
+              save
+            </button>
+            <button
+              className="px-3 py-1 text-sm text-purple-600 hover:text-purple-800 hover:bg-purple-50 rounded transition-colors"
+              onClick={() => {
+                setModalTitle(<LoadTitle />);
+                setModalContent(<LoadContent />);
+                setIsModalActive(true);
+              }}
+            >
+              load
+            </button>
+            <button
+              className="px-3 py-1 text-sm text-red-600 hover:text-red-800 hover:bg-red-50 rounded transition-colors"
+              onClick={reset}
+            >
+              reset
+            </button>
           </div>
+        </section>
 
-          {/* 모험가 계열 직업 */}
-          <div className="mb-4 pb-4 border-b border-gray-100">
-            <div className="flex flex-wrap items-center gap-2">
+        {/* Job Selection Section */}
+        <section className="mb-6 disable-double-tap">
+          <h3 className="text-lg font-semibold text-gray-700 mb-2">
+            직업 선택
+          </h3>
+          <div className="bg-white p-3 rounded-lg shadow-sm">
+            {/* 전사 계열 직업 */}
+            <div className="mb-4 pb-4 border-b border-gray-100">
               {/* 1차 직업 */}
-              <button
-                className="text-sm px-3 py-2 bg-green-50 hover:bg-green-100 hover:text-green-700 rounded border border-green-200 transition-all duration-200 hover:border-green-300"
-                onClick={addNewJob}
-              >
-                모험가
-              </button>
-              
-              {/* 세로 구분선 */}
-              <div className="h-8 w-px bg-gray-200"></div>
-              
+              <div className="mb-3">
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    "무도가",
+                    "투사",
+                    "전사",
+                    "검사",
+                    "검객",
+                    "자객",
+                    "궁사",
+                    "악사",
+                    "네크로멘서",
+                  ].map((jobName) => (
+                    <button
+                      key={jobName}
+                      className="text-sm px-3 py-2 bg-red-50 hover:bg-red-100 hover:text-red-700 rounded border border-red-200 transition-all duration-200 hover:border-red-300"
+                      onClick={addNewJob}
+                    >
+                      {jobName}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               {/* 2차 직업 */}
-              {["탐색가", "자연인", "음유시인"].map((jobName) => (
+              <div className="mb-1">
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    "순수기사",
+                    "빛의기사",
+                    "어둠의기사",
+                    "순수마법사",
+                    "빛의마법사",
+                    "어둠의마법사",
+                  ].map((jobName) => (
+                    <button
+                      key={jobName}
+                      className="text-sm px-3 py-2 bg-orange-50 hover:bg-orange-100 hover:text-orange-700 rounded border border-orange-200 transition-all duration-200 hover:border-orange-300"
+                      onClick={addNewJob}
+                    >
+                      {jobName}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* 모험가 계열 직업 */}
+            <div className="mb-4 pb-4 border-b border-gray-100">
+              <div className="flex flex-wrap items-center gap-2">
+                {/* 1차 직업 */}
                 <button
-                  key={jobName}
-                  className="text-sm px-3 py-2 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 rounded border border-blue-200 transition-all duration-200 hover:border-blue-300"
+                  className="text-sm px-3 py-2 bg-green-50 hover:bg-green-100 hover:text-green-700 rounded border border-green-200 transition-all duration-200 hover:border-green-300"
                   onClick={addNewJob}
                 >
-                  {jobName}
+                  모험가
                 </button>
-              ))}
-              
-              {/* 세로 구분선 */}
-              <div className="h-8 w-px bg-gray-200"></div>
-              
-              {/* 3차 직업 */}
-              <button
-                className="text-sm px-3 py-2 bg-purple-50 hover:bg-purple-100 hover:text-purple-700 rounded border border-purple-200 transition-all duration-200 hover:border-purple-300"
-                onClick={addNewJob}
-              >
-                정령술사
-              </button>
-            </div>
-          </div>
 
-          {/* 상인 계열 직업 */}
-          <div>
-            <div className="flex flex-wrap gap-2">
-              <button
-                className="text-sm px-3 py-2 bg-yellow-50 hover:bg-yellow-100 hover:text-yellow-700 rounded border border-yellow-200 transition-all duration-200 hover:border-yellow-300"
-                onClick={addNewJob}
-              >
-                상인
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
+                {/* 세로 구분선 */}
+                <div className="h-8 w-px bg-gray-200"></div>
 
-      {/* Point Adjustment Section */}
-      <section className="mb-6 disable-double-tap">
-        <h3 className="text-lg font-semibold text-gray-700 mb-3">포인트 조정</h3>
-        <div className="bg-white p-4 rounded-lg shadow-sm">
-          <div className="flex flex-wrap gap-2 justify-center">
-            {buttonsValues.map((buttonValue) => {
-              const isPositive = !buttonValue.startsWith('-');
-              const buttonClass = isPositive
-                ? "bg-green-100 hover:bg-green-200 text-green-700 border-green-300"
-                : "bg-red-100 hover:bg-red-200 text-red-700 border-red-300";
+                {/* 2차 직업 */}
+                {["탐색가", "자연인", "음유시인"].map((jobName) => (
+                  <button
+                    key={jobName}
+                    className="text-sm px-3 py-2 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 rounded border border-blue-200 transition-all duration-200 hover:border-blue-300"
+                    onClick={addNewJob}
+                  >
+                    {jobName}
+                  </button>
+                ))}
 
-              return (
+                {/* 세로 구분선 */}
+                <div className="h-8 w-px bg-gray-200"></div>
+
+                {/* 3차 직업 */}
                 <button
-                  className={`text-sm px-4 py-2 rounded border transition-all duration-200 font-medium ${buttonClass}`}
-                  onClick={adjustJobPoint}
-                  key={uuidv4()}
+                  className="text-sm px-3 py-2 bg-purple-50 hover:bg-purple-100 hover:text-purple-700 rounded border border-purple-200 transition-all duration-200 hover:border-purple-300"
+                  onClick={addNewJob}
                 >
-                  {buttonValue}
+                  정령술사
                 </button>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+              </div>
+            </div>
 
-      {/* Results Table Section */}
-      {/* Results Table */}
-      <section>
-        <h3 className="text-lg font-semibold text-gray-700 mb-3">현재 상태</h3>
-        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-xs sm:text-sm">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-2 sm:px-3 py-2 text-left font-medium text-gray-600 border-b">직업</th>
-                  <th className="px-1 sm:px-2 py-2 text-center font-medium text-gray-600 border-b">STR</th>
-                  <th className="px-1 sm:px-2 py-2 text-center font-medium text-gray-600 border-b">INT</th>
-                  <th className="px-1 sm:px-2 py-2 text-center font-medium text-gray-600 border-b">AGI</th>
-                  <th className="px-1 sm:px-2 py-2 text-center font-medium text-gray-600 border-b">VIT</th>
-                  <th className="px-1 sm:px-2 py-2 text-center font-medium text-gray-600 border-b">잡포</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rLL.getAllNodes().map((routeNode, index) => {
-                  return (
-                    <tr
-                      key={uuidv4()}
-                      className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
-                      id={`${index}`}
-                      onClick={(event: MouseEvent) => {
-                        setSelectedNode(rLL.get(+event.currentTarget.id));
-                        setSelectedNodeIdx(+event.currentTarget.id);
-                      }}
-                    >
-                      <td className="px-2 sm:px-3 py-2 font-medium text-gray-800 border-b text-xs sm:text-sm whitespace-nowrap cursor-pointer">
-                        {routeNode?.job}
-                      </td>
-                      <td className="px-1 sm:px-2 py-2 text-center text-gray-600 border-b cursor-pointer">
-                        {routeNode?.stats.STR}
-                      </td>
-                      <td className="px-1 sm:px-2 py-2 text-center text-gray-600 border-b cursor-pointer">
-                        {routeNode?.stats.INT}
-                      </td>
-                      <td className="px-1 sm:px-2 py-2 text-center text-gray-600 border-b cursor-pointer">
-                        {routeNode?.stats.AGI}
-                      </td>
-                      <td className="px-1 sm:px-2 py-2 text-center text-gray-600 border-b cursor-pointer">
-                        {routeNode?.stats.VIT}
-                      </td>
-                      <td className="px-1 sm:px-2 py-2 text-center text-gray-600 border-b cursor-pointer">
-                        {routeNode?.jobPo}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+            {/* 상인 계열 직업 */}
+            <div>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  className="text-sm px-3 py-2 bg-yellow-50 hover:bg-yellow-100 hover:text-yellow-700 rounded border border-yellow-200 transition-all duration-200 hover:border-yellow-300"
+                  onClick={addNewJob}
+                >
+                  상인
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <Modal
-        isActive={isModalActive}
-        setIsActive={setIsModalActive}
-        title={modalTitle}
-        content={modalContent}
-      />
+        {/* Point Adjustment Section */}
+        <section className="mb-6 disable-double-tap">
+          <h3 className="text-lg font-semibold text-gray-700 mb-3">
+            포인트 조정
+          </h3>
+          <div className="bg-white p-4 rounded-lg shadow-sm">
+            <div className="flex flex-wrap gap-2 justify-center">
+              {buttonsValues.map((buttonValue) => {
+                const isPositive = !buttonValue.startsWith("-");
+                const buttonClass = isPositive
+                  ? "bg-green-100 hover:bg-green-200 text-green-700 border-green-300"
+                  : "bg-red-100 hover:bg-red-200 text-red-700 border-red-300";
+
+                return (
+                  <button
+                    className={`text-sm px-4 py-2 rounded border transition-all duration-200 font-medium ${buttonClass}`}
+                    onClick={adjustJobPoint}
+                    key={uuidv4()}
+                  >
+                    {buttonValue}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* Results Table Section */}
+        {/* Results Table */}
+        <section>
+          <h3 className="text-lg font-semibold text-gray-700 mb-3">
+            현재 상태
+          </h3>
+          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs sm:text-sm">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-2 sm:px-3 py-2 text-left font-medium text-gray-600 border-b">
+                      직업
+                    </th>
+                    <th className="px-1 sm:px-2 py-2 text-center font-medium text-gray-600 border-b">
+                      STR
+                    </th>
+                    <th className="px-1 sm:px-2 py-2 text-center font-medium text-gray-600 border-b">
+                      INT
+                    </th>
+                    <th className="px-1 sm:px-2 py-2 text-center font-medium text-gray-600 border-b">
+                      AGI
+                    </th>
+                    <th className="px-1 sm:px-2 py-2 text-center font-medium text-gray-600 border-b">
+                      VIT
+                    </th>
+                    <th className="px-1 sm:px-2 py-2 text-center font-medium text-gray-600 border-b">
+                      잡포
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rLL.getAllNodes().map((routeNode, index) => {
+                    return (
+                      <tr
+                        key={uuidv4()}
+                        className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                        id={`${index}`}
+                        onClick={(event: MouseEvent) => {
+                          setSelectedNode(rLL.get(+event.currentTarget.id));
+                          setSelectedNodeIdx(+event.currentTarget.id);
+                        }}
+                      >
+                        <td className="px-2 sm:px-3 py-2 font-medium text-gray-800 border-b text-xs sm:text-sm whitespace-nowrap cursor-pointer">
+                          {routeNode?.job}
+                        </td>
+                        <td className="px-1 sm:px-2 py-2 text-center text-gray-600 border-b cursor-pointer">
+                          {routeNode?.stats.STR}
+                        </td>
+                        <td className="px-1 sm:px-2 py-2 text-center text-gray-600 border-b cursor-pointer">
+                          {routeNode?.stats.INT}
+                        </td>
+                        <td className="px-1 sm:px-2 py-2 text-center text-gray-600 border-b cursor-pointer">
+                          {routeNode?.stats.AGI}
+                        </td>
+                        <td className="px-1 sm:px-2 py-2 text-center text-gray-600 border-b cursor-pointer">
+                          {routeNode?.stats.VIT}
+                        </td>
+                        <td className="px-1 sm:px-2 py-2 text-center text-gray-600 border-b cursor-pointer">
+                          {routeNode?.jobPo}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <Modal
+          isActive={isModalActive}
+          setIsActive={setIsModalActive}
+          title={modalTitle}
+          content={modalContent}
+        />
       </div>
     </ElanBox>
   );

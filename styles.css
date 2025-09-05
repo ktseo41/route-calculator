@@ -13,3 +13,11 @@
   -ms-touch-action: manipulation;
   touch-action: manipulation;
 }
+
+/* Jaro font utility class for titles */
+.jaro-title {
+  font-family: "Jaro", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
