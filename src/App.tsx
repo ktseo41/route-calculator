@@ -8,6 +8,7 @@ import { NotiTitle, NotiMessage } from "./components/NotiMessage";
 import { SaveTitle, SaveContent } from "./components/Save";
 import { LoadTitle, LoadContent } from "./components/Load";
 import Modal from "./components/Modal";
+import ElanBox from "./components/ElanBox";
 
 type ButtonState = "1" | "-1" | "5" | "-5" | "10" | "-10" | "100" | "-100";
 
@@ -175,7 +176,8 @@ export default function App() {
   }, [rLL, selectedNode]);
 
   return (
-    <div className="max-w-4xl mx-auto p-2 bg-gray-50 min-h-screen">
+    <ElanBox>
+      <div className="max-w-4xl mx-auto p-2 bg-gray-50 min-h-screen">
       {/* Header Section */}
       <section className="mb-6">
         <div className="pt-4">
@@ -418,6 +420,7 @@ export default function App() {
         title={modalTitle}
         content={modalContent}
       />
-    </div>
+      </div>
+    </ElanBox>
   );
 }
