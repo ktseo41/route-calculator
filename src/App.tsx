@@ -176,7 +176,7 @@ export default function App() {
   }, [rLL, selectedNode]);
 
   return (
-    <ElanBox>
+    <ElanBox title={'test'}>
       <div className="max-w-4xl mx-auto p-2 bg-gray-50 min-h-screen">
       {/* Header Section */}
       <section className="mb-6">
