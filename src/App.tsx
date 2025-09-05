@@ -6,10 +6,10 @@ import { Jobs, classifiedJobs, NumberedJobs } from "./database/job";
 import RouteLinkedList from "./lib/routeLinkedList";
 import { NotiTitle, NotiMessage } from "./components/NotiMessage";
 import { SaveTitle, SaveContent } from "./components/Save";
-import { LoadTitle, LoadContent } from "./components/Load";
 import Modal from "./components/Modal";
 import ElanBox from "./components/ElanBox";
 import { cn } from "./lib/utils";
+import ElanButton from "./components/ElanButton";
 
 type ButtonState = "1" | "-1" | "5" | "-5" | "10" | "-10" | "100" | "-100";
 
@@ -99,7 +99,7 @@ function save(rLL: RouteLinkedList) {
 const Title = () => (
   <div
     className={cn(
-      "absolute top-[3px] left-2 pl-2 pr-3 py-0.5 flex items-center z-10",
+      "absolute top-[3px] left-3 pl-2 pr-3 py-0.5 flex items-center z-10",
       "text-white text-lg leading-none font-normal font-[jaro] not-italic [font-optical-sizing:auto] text-shadow-[1px_1px_2px_rgba(0,0,0,0.8),_-1px_-1px_1px_rgba(0,0,0,0.5)]",
       "bg-[#6a6a6a] border-2 border-t-[#8a8a8a] border-l-[#8a8a8a] border-b-[#1a1a1a] border-r-[#1a1a1a]",
       "rounded-[3px] shadow-[inset_1px_1px_1px_rgba(255,255,255,0.2),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)]"
@@ -209,9 +209,8 @@ export default function App() {
               info
             </button>
           </div>
-          <div className="flex gap-4">
-            <button
-              className="px-3 py-1 text-sm text-green-600 hover:text-green-800 hover:bg-green-50 rounded transition-colors"
+          <div className="absolute right-1 top-[3px] flex">
+            <ElanButton
               onClick={() => {
                 const queryToSave = getCustomQueryFromRLL(rLL);
                 const urlToSave = `${location.origin}${location.pathname}${
@@ -224,23 +223,8 @@ export default function App() {
               }}
             >
               save
-            </button>
-            <button
-              className="px-3 py-1 text-sm text-purple-600 hover:text-purple-800 hover:bg-purple-50 rounded transition-colors"
-              onClick={() => {
-                setModalTitle(<LoadTitle />);
-                setModalContent(<LoadContent />);
-                setIsModalActive(true);
-              }}
-            >
-              load
-            </button>
-            <button
-              className="px-3 py-1 text-sm text-red-600 hover:text-red-800 hover:bg-red-50 rounded transition-colors"
-              onClick={reset}
-            >
-              reset
-            </button>
+            </ElanButton>
+            <ElanButton onClick={reset}>reset</ElanButton>
           </div>
         </section>
 
