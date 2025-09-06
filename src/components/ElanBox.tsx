@@ -48,12 +48,11 @@ const GameWindowFrameTW: React.FC<Props> = ({
 
   return (
     <div
-      className={`bg-black p-[3px] box-border ${className} shadow-[0_0_15px_rgba(0,0,0,0.5)]`}
+      className={`bg-black p-[3px] box-border ${className} shadow-[0_0_15px_rgba(0,0,0,0.7)]`}
       style={{ ...sizeStyle }}
     >
-      {title ? title : null}
-      <div className="w-full h-full bg-black border-2 rounded-sm p-2 box-border border-t-[#a8a8a8] border-l-[#a8a8a8] border-b-[#3f3f3f] border-r-[#3f3f3f]">
-        <div className="bg-black h-full box-border text-white border-[2px] border-[#1a1a1a] border-t-[#5a5a5e] border-l-[#5a5a5e]">
+      <div className="w-full h-full border-2 rounded-sm p-2 pt-8 box-border border-t-[#6a6a6a] border-l-[#6a6a6a] border-b-[#2a2a2a] border-r-[#2a2a2a]">
+        <div className="h-full box-border text-white rounded-[2px] border-[2px] border-[#3a3a3a] border-t-[#4a4a4e] border-l-[#4a4a4e]">
           {children}
         </div>
       </div>

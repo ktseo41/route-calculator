@@ -101,8 +101,8 @@ const Title = () => (
     className={cn(
       "absolute top-[3px] left-3 pl-2 pr-3 py-0.5 flex items-center z-10",
       "text-white text-lg leading-none font-normal font-[jaro] not-italic [font-optical-sizing:auto] text-shadow-[1px_1px_2px_rgba(0,0,0,0.8),_-1px_-1px_1px_rgba(0,0,0,0.5)]",
-      "bg-[#6a6a6a] border-2 border-t-[#8a8a8a] border-l-[#8a8a8a] border-b-[#1a1a1a] border-r-[#1a1a1a]",
-      "rounded-[3px] shadow-[inset_1px_1px_1px_rgba(255,255,255,0.2),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)]"
+      "bg-[#4a4a4a] border-2 border-t-[#6a6a6a] border-l-[#6a6a6a] border-b-[#2a2a2a] border-r-[#2a2a2a]",
+      "rounded-[3px] shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.5)]"
     )}
   >
     <img
@@ -193,49 +193,32 @@ export default function App() {
   }, [rLL, selectedNode]);
 
   return (
-    <ElanBox title={<Title />}>
-      <div className="max-w-4xl mx-auto p-2 bg-gray-50 min-h-screen">
+    <ElanBox>
+      <Title />
+      <div className="max-w-4xl mx-auto min-h-screen">
         {/* Utility Bar */}
-        <section className="flex justify-between items-center mb-6 px-2 py-3 bg-white rounded-lg shadow-sm">
-          <div className="flex gap-4">
-            <button
-              className="px-3 py-1 text-sm text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded transition-colors"
-              onClick={() => {
-                setModalTitle(<NotiTitle />);
-                setModalContent(<NotiMessage />);
-                setIsModalActive(true);
-              }}
-            >
-              info
-            </button>
-          </div>
-          <div className="absolute right-1 top-[3px] flex">
-            <ElanButton
-              onClick={() => {
-                const queryToSave = getCustomQueryFromRLL(rLL);
-                const urlToSave = `${location.origin}${location.pathname}${
-                  queryToSave.length === 0 ? "" : `?${queryToSave}`
-                }`;
+        <div className="absolute right-1 top-[3px] flex">
+          <ElanButton
+            onClick={() => {
+              const queryToSave = getCustomQueryFromRLL(rLL);
+              const urlToSave = `${location.origin}${location.pathname}${
+                queryToSave.length === 0 ? "" : `?${queryToSave}`
+              }`;
 
-                setModalTitle(<SaveTitle />);
-                setModalContent(<SaveContent urlToSave={urlToSave} />);
-                setIsModalActive(true);
-              }}
-            >
-              save
-            </ElanButton>
-            <ElanButton onClick={reset}>reset</ElanButton>
-          </div>
-        </section>
-
+              setModalTitle(<SaveTitle />);
+              setModalContent(<SaveContent urlToSave={urlToSave} />);
+              setIsModalActive(true);
+            }}
+          >
+            save
+          </ElanButton>
+          <ElanButton onClick={reset}>reset</ElanButton>
+        </div>
         {/* Job Selection Section */}
         <section className="mb-6 disable-double-tap">
-          <h3 className="text-lg font-semibold text-gray-700 mb-2">
-            직업 선택
-          </h3>
-          <div className="bg-white p-3 rounded-lg shadow-sm">
+          <div className="p-2">
             {/* 전사 계열 직업 */}
-            <div className="mb-4 pb-4 border-b border-gray-100">
+            <div className="mb-4 pb-4 border-b border-gray-600">
               {/* 1차 직업 */}
               <div className="mb-3">
                 <div className="flex flex-wrap gap-2">
@@ -252,7 +235,7 @@ export default function App() {
                   ].map((jobName) => (
                     <button
                       key={jobName}
-                      className="text-sm px-3 py-2 bg-red-50 hover:bg-red-100 hover:text-red-700 rounded border border-red-200 transition-all duration-200 hover:border-red-300"
+                      className="text-sm px-3 py-2 bg-gray-700 hover:bg-red-600 text-red-300 hover:text-white rounded border border-red-500 transition-all duration-200 hover:border-red-400 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)]"
                       onClick={addNewJob}
                     >
                       {jobName}
@@ -274,7 +257,7 @@ export default function App() {
                   ].map((jobName) => (
                     <button
                       key={jobName}
-                      className="text-sm px-3 py-2 bg-orange-50 hover:bg-orange-100 hover:text-orange-700 rounded border border-orange-200 transition-all duration-200 hover:border-orange-300"
+                      className="text-sm px-3 py-2 bg-gray-700 hover:bg-orange-600 text-orange-300 hover:text-white rounded border border-orange-500 transition-all duration-200 hover:border-orange-400 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)]"
                       onClick={addNewJob}
                     >
                       {jobName}
@@ -285,24 +268,24 @@ export default function App() {
             </div>
 
             {/* 모험가 계열 직업 */}
-            <div className="mb-4 pb-4 border-b border-gray-100">
+            <div className="mb-4 pb-4 border-b border-gray-600">
               <div className="flex flex-wrap items-center gap-2">
                 {/* 1차 직업 */}
                 <button
-                  className="text-sm px-3 py-2 bg-green-50 hover:bg-green-100 hover:text-green-700 rounded border border-green-200 transition-all duration-200 hover:border-green-300"
+                  className="text-sm px-3 py-2 bg-gray-700 hover:bg-green-600 text-green-300 hover:text-white rounded border border-green-500 transition-all duration-200 hover:border-green-400 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)]"
                   onClick={addNewJob}
                 >
                   모험가
                 </button>
 
                 {/* 세로 구분선 */}
-                <div className="h-8 w-px bg-gray-200"></div>
+                <div className="h-8 w-px bg-gray-600"></div>
 
                 {/* 2차 직업 */}
                 {["탐색가", "자연인", "음유시인"].map((jobName) => (
                   <button
                     key={jobName}
-                    className="text-sm px-3 py-2 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 rounded border border-blue-200 transition-all duration-200 hover:border-blue-300"
+                    className="text-sm px-3 py-2 bg-gray-700 hover:bg-blue-600 text-blue-300 hover:text-white rounded border border-blue-500 transition-all duration-200 hover:border-blue-400 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)]"
                     onClick={addNewJob}
                   >
                     {jobName}
@@ -310,11 +293,11 @@ export default function App() {
                 ))}
 
                 {/* 세로 구분선 */}
-                <div className="h-8 w-px bg-gray-200"></div>
+                <div className="h-8 w-px bg-gray-600"></div>
 
                 {/* 3차 직업 */}
                 <button
-                  className="text-sm px-3 py-2 bg-purple-50 hover:bg-purple-100 hover:text-purple-700 rounded border border-purple-200 transition-all duration-200 hover:border-purple-300"
+                  className="text-sm px-3 py-2 bg-gray-700 hover:bg-purple-600 text-purple-300 hover:text-white rounded border border-purple-500 transition-all duration-200 hover:border-purple-400 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)]"
                   onClick={addNewJob}
                 >
                   정령술사
@@ -326,7 +309,7 @@ export default function App() {
             <div>
               <div className="flex flex-wrap gap-2">
                 <button
-                  className="text-sm px-3 py-2 bg-yellow-50 hover:bg-yellow-100 hover:text-yellow-700 rounded border border-yellow-200 transition-all duration-200 hover:border-yellow-300"
+                  className="text-sm px-3 py-2 bg-gray-700 hover:bg-yellow-600 text-yellow-300 hover:text-white rounded border border-yellow-500 transition-all duration-200 hover:border-yellow-400 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)]"
                   onClick={addNewJob}
                 >
                   상인
@@ -338,20 +321,20 @@ export default function App() {
 
         {/* Point Adjustment Section */}
         <section className="mb-6 disable-double-tap">
-          <h3 className="text-lg font-semibold text-gray-700 mb-3">
+          <h3 className="text-lg font-semibold text-gray-300 mb-3">
             포인트 조정
           </h3>
-          <div className="bg-white p-4 rounded-lg shadow-sm">
+          <div className="p-4 border-t border-b border-gray-700">
             <div className="flex flex-wrap gap-2 justify-center">
               {buttonsValues.map((buttonValue) => {
                 const isPositive = !buttonValue.startsWith("-");
                 const buttonClass = isPositive
-                  ? "bg-green-100 hover:bg-green-200 text-green-700 border-green-300"
-                  : "bg-red-100 hover:bg-red-200 text-red-700 border-red-300";
+                  ? "bg-gray-700 hover:bg-green-600 text-green-300 hover:text-white border-green-500 hover:border-green-400"
+                  : "bg-gray-700 hover:bg-red-600 text-red-300 hover:text-white border-red-500 hover:border-red-400";
 
                 return (
                   <button
-                    className={`text-sm px-4 py-2 rounded border transition-all duration-200 font-medium ${buttonClass}`}
+                    className={`text-sm px-4 py-2 rounded border transition-all duration-200 font-medium shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)] ${buttonClass}`}
                     onClick={adjustJobPoint}
                     key={uuidv4()}
                   >
@@ -364,32 +347,28 @@ export default function App() {
         </section>
 
         {/* Results Table Section */}
-        {/* Results Table */}
         <section>
-          <h3 className="text-lg font-semibold text-gray-700 mb-3">
-            현재 상태
-          </h3>
-          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+          <div className="bg-gray-800 rounded-lg shadow-sm overflow-hidden border border-gray-700">
             <div className="overflow-x-auto">
               <table className="w-full text-xs sm:text-sm">
-                <thead className="bg-gray-50">
+                <thead className="bg-gray-700">
                   <tr>
-                    <th className="px-2 sm:px-3 py-2 text-left font-medium text-gray-600 border-b">
+                    <th className="px-2 sm:px-3 py-2 text-left font-medium text-gray-300 border-b border-gray-600">
                       직업
                     </th>
-                    <th className="px-1 sm:px-2 py-2 text-center font-medium text-gray-600 border-b">
+                    <th className="px-1 sm:px-2 py-2 text-center font-medium text-gray-300 border-b border-gray-600">
                       STR
                     </th>
-                    <th className="px-1 sm:px-2 py-2 text-center font-medium text-gray-600 border-b">
+                    <th className="px-1 sm:px-2 py-2 text-center font-medium text-gray-300 border-b border-gray-600">
                       INT
                     </th>
-                    <th className="px-1 sm:px-2 py-2 text-center font-medium text-gray-600 border-b">
+                    <th className="px-1 sm:px-2 py-2 text-center font-medium text-gray-300 border-b border-gray-600">
                       AGI
                     </th>
-                    <th className="px-1 sm:px-2 py-2 text-center font-medium text-gray-600 border-b">
+                    <th className="px-1 sm:px-2 py-2 text-center font-medium text-gray-300 border-b border-gray-600">
                       VIT
                     </th>
-                    <th className="px-1 sm:px-2 py-2 text-center font-medium text-gray-600 border-b">
+                    <th className="px-1 sm:px-2 py-2 text-center font-medium text-gray-300 border-b border-gray-600">
                       잡포
                     </th>
                   </tr>
@@ -399,29 +378,31 @@ export default function App() {
                     return (
                       <tr
                         key={uuidv4()}
-                        className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                        className={
+                          index % 2 === 0 ? "bg-gray-800" : "bg-gray-750"
+                        }
                         id={`${index}`}
                         onClick={(event: MouseEvent) => {
                           setSelectedNode(rLL.get(+event.currentTarget.id));
                           setSelectedNodeIdx(+event.currentTarget.id);
                         }}
                       >
-                        <td className="px-2 sm:px-3 py-2 font-medium text-gray-800 border-b text-xs sm:text-sm whitespace-nowrap cursor-pointer">
+                        <td className="px-2 sm:px-3 py-2 font-medium text-gray-200 border-b border-gray-600 text-xs sm:text-sm whitespace-nowrap cursor-pointer">
                           {routeNode?.job}
                         </td>
-                        <td className="px-1 sm:px-2 py-2 text-center text-gray-600 border-b cursor-pointer">
+                        <td className="px-1 sm:px-2 py-2 text-center text-gray-300 border-b border-gray-600 cursor-pointer">
                           {routeNode?.stats.STR}
                         </td>
-                        <td className="px-1 sm:px-2 py-2 text-center text-gray-600 border-b cursor-pointer">
+                        <td className="px-1 sm:px-2 py-2 text-center text-gray-300 border-b border-gray-600 cursor-pointer">
                           {routeNode?.stats.INT}
                         </td>
-                        <td className="px-1 sm:px-2 py-2 text-center text-gray-600 border-b cursor-pointer">
+                        <td className="px-1 sm:px-2 py-2 text-center text-gray-300 border-b border-gray-600 cursor-pointer">
                           {routeNode?.stats.AGI}
                         </td>
-                        <td className="px-1 sm:px-2 py-2 text-center text-gray-600 border-b cursor-pointer">
+                        <td className="px-1 sm:px-2 py-2 text-center text-gray-300 border-b border-gray-600 cursor-pointer">
                           {routeNode?.stats.VIT}
                         </td>
-                        <td className="px-1 sm:px-2 py-2 text-center text-gray-600 border-b cursor-pointer">
+                        <td className="px-1 sm:px-2 py-2 text-center text-gray-300 border-b border-gray-600 cursor-pointer">
                           {routeNode?.jobPo}
                         </td>
                       </tr>
