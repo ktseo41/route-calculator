@@ -51,8 +51,14 @@ const GameWindowFrameTW: React.FC<Props> = ({
       className={`bg-black p-[3px] box-border ${className} shadow-[0_0_15px_rgba(0,0,0,0.7)]`}
       style={{ ...sizeStyle }}
     >
-      <div className="w-full h-full border-2 rounded-sm p-2 pt-8 box-border border-t-[#6a6a6a] border-l-[#6a6a6a] border-b-[#2a2a2a] border-r-[#2a2a2a]">
-        <div className="h-full box-border text-white rounded-[2px] border-[2px] border-[#3a3a3a] border-t-[#4a4a4e] border-l-[#4a4a4e]">
+      <div
+        className="w-full h-full border rounded-sm p-2 pt-8 box-border border-[#f7f7f7]"
+        style={{
+          boxShadow:
+            "inset 0 0 1px 1px #ffffff, inset 0 0 1px 2px rgb(74, 74, 74), 0 0 1px 0px #ffffff, 0 0 1px 2px rgb(74, 74, 74)",
+        }}
+      >
+        <div className="h-full box-border text-white rounded-[2px]">
           {children}
         </div>
       </div>
