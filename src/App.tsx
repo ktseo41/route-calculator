@@ -196,6 +196,80 @@ export default function App() {
     <ElanBox className="pretendard">
       <Title />
       <div className="max-w-4xl mx-auto min-h-screen">
+        {/* Results Table Section */}
+        <section>
+          <div className="bg-stone-900 rounded-sm shadow-sm overflow-hidden border border-stone-700">
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs sm:text-sm">
+                <thead className="bg-stone-800">
+                  <tr>
+                    <th className="px-2 sm:px-3 py-2 text-left font-medium text-stone-300 border-b border-stone-600 text-sm">
+                      직업
+                    </th>
+                    <th className="px-1 sm:px-2 py-2 text-center font-medium text-stone-300 border-b border-stone-600 text-sm">
+                      STR
+                    </th>
+                    <th className="px-1 sm:px-2 py-2 text-center font-medium text-stone-300 border-b border-stone-600 text-sm">
+                      INT
+                    </th>
+                    <th className="px-1 sm:px-2 py-2 text-center font-medium text-stone-300 border-b border-stone-600 text-sm">
+                      AGI
+                    </th>
+                    <th className="px-1 sm:px-2 py-2 text-center font-medium text-stone-300 border-b border-stone-600 text-sm">
+                      VIT
+                    </th>
+                    <th className="px-1 sm:px-2 py-2 text-center font-medium text-stone-300 border-b border-stone-600 text-sm">
+                      잡포
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Array.from(
+                    { length: Math.max(10, rLL.getAllNodes().length) },
+                    (_, index) => {
+                      const routeNode = rLL.get(index);
+                      return (
+                        <tr
+                          key={uuidv4()}
+                          className={
+                            index % 2 === 0 ? "bg-stone-900" : "bg-stone-800"
+                          }
+                          id={`${index}`}
+                          onClick={(event: MouseEvent) => {
+                            if (routeNode) {
+                              setSelectedNode(rLL.get(+event.currentTarget.id));
+                              setSelectedNodeIdx(+event.currentTarget.id);
+                            }
+                          }}
+                        >
+                          <td className="px-2 sm:px-3 py-2 h-8 font-medium text-stone-200 border-b border-stone-600 text-sm whitespace-nowrap cursor-pointer">
+                            {routeNode?.job || ""}
+                          </td>
+                          <td className="px-1 sm:px-2 py-2 h-8 text-center text-stone-300 border-b border-stone-600 text-sm cursor-pointer">
+                            {routeNode?.stats.STR || ""}
+                          </td>
+                          <td className="px-1 sm:px-2 py-2 h-8 text-center text-stone-300 border-b border-stone-600 text-sm cursor-pointer">
+                            {routeNode?.stats.INT || ""}
+                          </td>
+                          <td className="px-1 sm:px-2 py-2 h-8 text-center text-stone-300 border-b border-stone-600 text-sm cursor-pointer">
+                            {routeNode?.stats.AGI || ""}
+                          </td>
+                          <td className="px-1 sm:px-2 py-2 h-8 text-center text-stone-300 border-b border-stone-600 text-sm cursor-pointer">
+                            {routeNode?.stats.VIT || ""}
+                          </td>
+                          <td className="px-1 sm:px-2 py-2 h-8 text-center text-stone-300 border-b border-stone-600 text-sm cursor-pointer">
+                            {routeNode?.jobPo || ""}
+                          </td>
+                        </tr>
+                      );
+                    }
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
         {/* Utility Bar */}
         <div className="absolute right-2 top-[3px] flex">
           <ElanButton
@@ -214,6 +288,7 @@ export default function App() {
           </ElanButton>
           <ElanButton onClick={reset}>reset</ElanButton>
         </div>
+
         {/* Job Selection Section */}
         <section className="mb-6 disable-double-tap">
           <div className="p-2">
@@ -342,74 +417,6 @@ export default function App() {
                   </button>
                 );
               })}
-            </div>
-          </div>
-        </section>
-
-        {/* Results Table Section */}
-        <section>
-          <div className="bg-gray-800 rounded-lg shadow-sm overflow-hidden border border-gray-700">
-            <div className="overflow-x-auto">
-              <table className="w-full text-xs sm:text-sm">
-                <thead className="bg-gray-700">
-                  <tr>
-                    <th className="px-2 sm:px-3 py-2 text-left font-medium text-gray-300 border-b border-gray-600">
-                      직업
-                    </th>
-                    <th className="px-1 sm:px-2 py-2 text-center font-medium text-gray-300 border-b border-gray-600">
-                      STR
-                    </th>
-                    <th className="px-1 sm:px-2 py-2 text-center font-medium text-gray-300 border-b border-gray-600">
-                      INT
-                    </th>
-                    <th className="px-1 sm:px-2 py-2 text-center font-medium text-gray-300 border-b border-gray-600">
-                      AGI
-                    </th>
-                    <th className="px-1 sm:px-2 py-2 text-center font-medium text-gray-300 border-b border-gray-600">
-                      VIT
-                    </th>
-                    <th className="px-1 sm:px-2 py-2 text-center font-medium text-gray-300 border-b border-gray-600">
-                      잡포
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {rLL.getAllNodes().map((routeNode, index) => {
-                    return (
-                      <tr
-                        key={uuidv4()}
-                        className={
-                          index % 2 === 0 ? "bg-gray-800" : "bg-gray-750"
-                        }
-                        id={`${index}`}
-                        onClick={(event: MouseEvent) => {
-                          setSelectedNode(rLL.get(+event.currentTarget.id));
-                          setSelectedNodeIdx(+event.currentTarget.id);
-                        }}
-                      >
-                        <td className="px-2 sm:px-3 py-2 font-medium text-gray-200 border-b border-gray-600 text-xs sm:text-sm whitespace-nowrap cursor-pointer">
-                          {routeNode?.job}
-                        </td>
-                        <td className="px-1 sm:px-2 py-2 text-center text-gray-300 border-b border-gray-600 cursor-pointer">
-                          {routeNode?.stats.STR}
-                        </td>
-                        <td className="px-1 sm:px-2 py-2 text-center text-gray-300 border-b border-gray-600 cursor-pointer">
-                          {routeNode?.stats.INT}
-                        </td>
-                        <td className="px-1 sm:px-2 py-2 text-center text-gray-300 border-b border-gray-600 cursor-pointer">
-                          {routeNode?.stats.AGI}
-                        </td>
-                        <td className="px-1 sm:px-2 py-2 text-center text-gray-300 border-b border-gray-600 cursor-pointer">
-                          {routeNode?.stats.VIT}
-                        </td>
-                        <td className="px-1 sm:px-2 py-2 text-center text-gray-300 border-b border-gray-600 cursor-pointer">
-                          {routeNode?.jobPo}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
             </div>
           </div>
         </section>
