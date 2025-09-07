@@ -197,7 +197,7 @@ export default function App() {
       <Title />
       <div className="max-w-4xl mx-auto min-h-screen">
         {/* Utility Bar */}
-        <div className="absolute right-1 top-[3px] flex">
+        <div className="absolute right-2 top-[3px] flex">
           <ElanButton
             onClick={() => {
               const queryToSave = getCustomQueryFromRLL(rLL);
