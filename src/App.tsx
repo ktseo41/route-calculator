@@ -235,7 +235,7 @@ export default function App() {
                   ].map((jobName) => (
                     <button
                       key={jobName}
-                      className="text-sm px-3 py-2 bg-gray-700 hover:bg-red-600 text-red-300 hover:text-white rounded border border-red-500 transition-all duration-200 hover:border-red-400 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)]"
+                      className="text-sm px-3 py-2 bg-[#cfcfcf] hover:bg-[#00a4ff] text-[#000000] hover:text-white rounded-none border-2 border-[#000000] transition-all duration-200 hover:border-[#00a4ff] shadow-[inset_2px_2px_0px_rgba(255,255,255,0.5),_inset_-2px_-2px_0px_rgba(0,0,0,0.5)]"
                       onClick={addNewJob}
                     >
                       {jobName}
@@ -257,7 +257,7 @@ export default function App() {
                   ].map((jobName) => (
                     <button
                       key={jobName}
-                      className="text-sm px-3 py-2 bg-gray-700 hover:bg-orange-600 text-orange-300 hover:text-white rounded border border-orange-500 transition-all duration-200 hover:border-orange-400 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)]"
+                      className="text-sm px-3 py-2 bg-[#cfcfcf] hover:bg-[#00a4ff] text-[#000000] hover:text-white rounded-none border-2 border-[#000000] transition-all duration-200 hover:border-[#00a4ff] shadow-[inset_2px_2px_0px_rgba(255,255,255,0.5),_inset_-2px_-2px_0px_rgba(0,0,0,0.5)]"
                       onClick={addNewJob}
                     >
                       {jobName}
@@ -272,7 +272,7 @@ export default function App() {
               <div className="flex flex-wrap items-center gap-2">
                 {/* 1차 직업 */}
                 <button
-                  className="text-sm px-3 py-2 bg-gray-700 hover:bg-green-600 text-green-300 hover:text-white rounded border border-green-500 transition-all duration-200 hover:border-green-400 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)]"
+                  className="text-sm px-3 py-2 bg-[#cfcfcf] hover:bg-[#00a4ff] text-[#000000] hover:text-white rounded-none border-2 border-[#000000] transition-all duration-200 hover:border-[#00a4ff] shadow-[inset_2px_2px_0px_rgba(255,255,255,0.5),_inset_-2px_-2px_0px_rgba(0,0,0,0.5)]"
                   onClick={addNewJob}
                 >
                   모험가
@@ -285,7 +285,7 @@ export default function App() {
                 {["탐색가", "자연인", "음유시인"].map((jobName) => (
                   <button
                     key={jobName}
-                    className="text-sm px-3 py-2 bg-gray-700 hover:bg-blue-600 text-blue-300 hover:text-white rounded border border-blue-500 transition-all duration-200 hover:border-blue-400 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)]"
+                    className="text-sm px-3 py-2 bg-[#cfcfcf] hover:bg-[#00a4ff] text-[#000000] hover:text-white rounded-none border-2 border-[#000000] transition-all duration-200 hover:border-[#00a4ff] shadow-[inset_2px_2px_0px_rgba(255,255,255,0.5),_inset_-2px_-2px_0px_rgba(0,0,0,0.5)]"
                     onClick={addNewJob}
                   >
                     {jobName}
@@ -297,7 +297,7 @@ export default function App() {
 
                 {/* 3차 직업 */}
                 <button
-                  className="text-sm px-3 py-2 bg-gray-700 hover:bg-purple-600 text-purple-300 hover:text-white rounded border border-purple-500 transition-all duration-200 hover:border-purple-400 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)]"
+                  className="text-sm px-3 py-2 bg-[#cfcfcf] hover:bg-[#00a4ff] text-[#000000] hover:text-white rounded-none border-2 border-[#000000] transition-all duration-200 hover:border-[#00a4ff] shadow-[inset_2px_2px_0px_rgba(255,255,255,0.5),_inset_-2px_-2px_0px_rgba(0,0,0,0.5)]"
                   onClick={addNewJob}
                 >
                   정령술사
@@ -309,7 +309,7 @@ export default function App() {
             <div>
               <div className="flex flex-wrap gap-2">
                 <button
-                  className="text-sm px-3 py-2 bg-gray-700 hover:bg-yellow-600 text-yellow-300 hover:text-white rounded border border-yellow-500 transition-all duration-200 hover:border-yellow-400 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)]"
+                  className="text-sm px-3 py-2 bg-[#cfcfcf] hover:bg-[#00a4ff] text-[#000000] hover:text-white rounded-none border-2 border-[#000000] transition-all duration-200 hover:border-[#00a4ff] shadow-[inset_2px_2px_0px_rgba(255,255,255,0.5),_inset_-2px_-2px_0px_rgba(0,0,0,0.5)]"
                   onClick={addNewJob}
                 >
                   상인
