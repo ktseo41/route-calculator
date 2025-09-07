@@ -193,7 +193,7 @@ export default function App() {
   }, [rLL, selectedNode]);
 
   return (
-    <ElanBox>
+    <ElanBox className="pretendard">
       <Title />
       <div className="max-w-4xl mx-auto min-h-screen">
         {/* Utility Bar */}
