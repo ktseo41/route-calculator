@@ -1,10 +1,8 @@
 import React, { useState, useEffect, MouseEvent } from "react";
 import { v4 as uuidv4 } from "uuid";
-import styled from "styled-components";
 import { CustomSystem } from "./database/customsystem";
-import { Jobs, classifiedJobs, NumberedJobs } from "./database/job";
+import { Jobs, NumberedJobs } from "./database/job";
 import RouteLinkedList from "./lib/routeLinkedList";
-import { NotiTitle, NotiMessage } from "./components/NotiMessage";
 import { SaveTitle, SaveContent } from "./components/Save";
 import Modal from "./components/Modal";
 import ElanBox from "./components/ElanBox";
@@ -90,12 +88,6 @@ function isOverFiftySeven(restString: string): boolean {
   return nextFiftySevenIndex % 2 === 0;
 }
 
-function save(rLL: RouteLinkedList) {
-  const queryToSave = getCustomQueryFromRLL(rLL);
-  if (queryToSave.length === 0) return;
-  location.replace(location.origin + "/?" + queryToSave);
-}
-
 const Title = () => (
   <div
     className={cn(
@@ -117,9 +109,6 @@ const Title = () => (
 export default function App() {
   const [rLL, setRLL] = useState(new RouteLinkedList());
   const [selectedNode, setSelectedNode] = useState(rLL.tail);
-  const [selectedNodeIdx, setSelectedNodeIdx] = useState(0);
-  const [job, setJob] = useState(selectedNode?.job);
-  const [jobPo, setJobPo] = useState(selectedNode?.jobPo);
   const [isModalActive, setIsModalActive] = useState(false);
   const [modalTitle, setModalTitle] = useState(<></>);
   const [modalContent, setModalContent] = useState(<></>);
@@ -131,24 +120,11 @@ export default function App() {
     rLL.add(jobName);
 
     setSelectedNode(rLL.tail);
-    setSelectedNodeIdx(rLL.length - 1);
   };
 
   const adjustJobPoint = (event: MouseEvent) => {
     const adjustPoint = getAdjustPoint(event);
     selectedNode?.adjustJobPoint(adjustPoint);
-    setJob(selectedNode?.job);
-    setJobPo(selectedNode?.jobPo);
-  };
-
-  const deleteNode = (selectedNodeIdx: string | undefined) => {
-    if (selectedNodeIdx === undefined) return;
-    if (rLL.length === 1) return;
-
-    const numberedIndex = +selectedNodeIdx;
-    rLL.removeAt(numberedIndex);
-    setSelectedNode(rLL.get(numberedIndex - 1));
-    setSelectedNodeIdx(numberedIndex - 1);
   };
 
   const reset = () => {
@@ -156,7 +132,6 @@ export default function App() {
       const newRLL = new RouteLinkedList();
 
       setSelectedNode(newRLL.tail);
-      setSelectedNodeIdx(0);
 
       return newRLL;
     });
@@ -186,11 +161,6 @@ export default function App() {
       setIsModalActive(!isModalActive);
     }
   }, []);
-
-  useEffect(() => {
-    setJob(selectedNode?.job);
-    setJobPo(selectedNode?.jobPo);
-  }, [rLL, selectedNode]);
 
   return (
     <ElanBox className="pretendard">
@@ -238,7 +208,6 @@ export default function App() {
                           onClick={(event: MouseEvent) => {
                             if (routeNode) {
                               setSelectedNode(rLL.get(+event.currentTarget.id));
-                              setSelectedNodeIdx(+event.currentTarget.id);
                             }
                           }}
                         >
