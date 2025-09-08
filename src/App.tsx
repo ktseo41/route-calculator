@@ -3,8 +3,6 @@ import { v4 as uuidv4 } from "uuid";
 import { CustomSystem } from "./database/customsystem";
 import { Jobs, NumberedJobs } from "./database/job";
 import RouteLinkedList from "./lib/routeLinkedList";
-import { SaveTitle, SaveContent } from "./components/Save";
-import Modal from "./components/Modal";
 import ElanBox from "./components/ElanBox";
 import { cn } from "./lib/utils";
 import ElanButton from "./components/ElanButton";
@@ -109,9 +107,6 @@ const Title = () => (
 export default function App() {
   const [rLL, setRLL] = useState(new RouteLinkedList());
   const [selectedNode, setSelectedNode] = useState(rLL.tail);
-  const [isModalActive, setIsModalActive] = useState(false);
-  const [modalTitle, setModalTitle] = useState(<></>);
-  const [modalContent, setModalContent] = useState(<></>);
 
   const addNewJob = (event: MouseEvent) => {
     const jobName = getJobNameFromSelect(event);
@@ -142,24 +137,6 @@ export default function App() {
   useEffect(() => {
     if (location.search.length === 0) return;
     setRLL(getCurrentJobsFromQuery(location));
-  }, []);
-
-  useEffect(() => {
-    interface Document {
-      documentMode?: any;
-    }
-
-    var isIE11 = /*@cc_on!@*/ false || !!(document as Document).documentMode;
-    if (isIE11) {
-      setModalTitle(
-        <div>
-          Internet Explorer 11이하는 지원하지 않습니다. 엣지브라우저,
-          크롬브라우저, 네이버웨일, 파이어폭스, 오페라브라우저 등을
-          사용해주세요!
-        </div>
-      );
-      setIsModalActive(!isModalActive);
-    }
   }, []);
 
   return (
@@ -247,10 +224,6 @@ export default function App() {
               const urlToSave = `${location.origin}${location.pathname}${
                 queryToSave.length === 0 ? "" : `?${queryToSave}`
               }`;
-
-              setModalTitle(<SaveTitle />);
-              setModalContent(<SaveContent urlToSave={urlToSave} />);
-              setIsModalActive(true);
             }}
           >
             save
@@ -389,13 +362,6 @@ export default function App() {
             </div>
           </div>
         </section>
-
-        <Modal
-          isActive={isModalActive}
-          setIsActive={setIsModalActive}
-          title={modalTitle}
-          content={modalContent}
-        />
       </div>
     </ElanBox>
   );
