@@ -141,59 +141,57 @@ export default function App() {
       <div className="max-w-4xl mx-auto min-h-screen">
         {/* Results Table Section */}
         <section>
-          <div className="bg-stone-900 rounded-sm shadow-sm overflow-hidden border border-stone-700">
-            <div className="overflow-x-auto">
-              <Table className="dark w-full text-sm">
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>직업</TableHead>
-                    <TableHead>STR</TableHead>
-                    <TableHead>INT</TableHead>
-                    <TableHead>AGI</TableHead>
-                    <TableHead>VIT</TableHead>
-                    <TableHead>잡포</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody className="divide-y divide-stone-700 [&_tr:nth-child(even)]:bg-stone-800">
-                  {Array.from(
-                    { length: Math.max(10, rLL.getAllNodes().length) },
-                    (_, index) => {
-                      const routeNode = rLL.get(index);
-                      return (
-                        <TableRow
-                          key={uuidv4()}
-                          id={`${index}`}
-                          onClick={(event: MouseEvent) => {
-                            if (routeNode) {
-                              setSelectedNode(rLL.get(+event.currentTarget.id));
-                            }
-                          }}
-                        >
-                          <TableCell className="font-medium cursor-pointer">
-                            {routeNode?.job || ""}
-                          </TableCell>
-                          <TableCell className="text-center cursor-pointer">
-                            {routeNode?.stats.STR || ""}
-                          </TableCell>
-                          <TableCell className="text-center cursor-pointer">
-                            {routeNode?.stats.INT || ""}
-                          </TableCell>
-                          <TableCell className="text-center cursor-pointer">
-                            {routeNode?.stats.AGI || ""}
-                          </TableCell>
-                          <TableCell className="text-center cursor-pointer">
-                            {routeNode?.stats.VIT || ""}
-                          </TableCell>
-                          <TableCell className="text-center cursor-pointer">
-                            {routeNode?.jobPo || ""}
-                          </TableCell>
-                        </TableRow>
-                      );
-                    }
-                  )}
-                </TableBody>
-              </Table>
-              {/* <table className="w-full text-xs sm:text-sm">
+          <Table className="dark rounded-xs text-sm border-neutral-600 border">
+            <TableHeader className="bg-neutral-600">
+              <TableRow>
+                <TableHead>직업</TableHead>
+                <TableHead>STR</TableHead>
+                <TableHead>INT</TableHead>
+                <TableHead>AGI</TableHead>
+                <TableHead>VIT</TableHead>
+                <TableHead>잡포</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody className="divide-y divide-stone-700 [&_tr:nth-child(even)]:bg-stone-800">
+              {Array.from(
+                { length: Math.max(10, rLL.getAllNodes().length) },
+                (_, index) => {
+                  const routeNode = rLL.get(index);
+                  return (
+                    <TableRow
+                      key={uuidv4()}
+                      id={`${index}`}
+                      onClick={(event: MouseEvent) => {
+                        if (routeNode) {
+                          setSelectedNode(rLL.get(+event.currentTarget.id));
+                        }
+                      }}
+                    >
+                      <TableCell className="font-medium cursor-pointer">
+                        {routeNode?.job || ""}
+                      </TableCell>
+                      <TableCell className="text-center cursor-pointer">
+                        {routeNode?.stats.STR || ""}
+                      </TableCell>
+                      <TableCell className="text-center cursor-pointer">
+                        {routeNode?.stats.INT || ""}
+                      </TableCell>
+                      <TableCell className="text-center cursor-pointer">
+                        {routeNode?.stats.AGI || ""}
+                      </TableCell>
+                      <TableCell className="text-center cursor-pointer">
+                        {routeNode?.stats.VIT || ""}
+                      </TableCell>
+                      <TableCell className="text-center cursor-pointer">
+                        {routeNode?.jobPo || ""}
+                      </TableCell>
+                    </TableRow>
+                  );
+                }
+              )}
+            </TableBody>
+          </Table>
+          {/* <table className="w-full text-xs sm:text-sm">
                 <thead className="bg-stone-800">
                   <tr>
                     <th className="px-2 sm:px-3 py-2 text-left font-medium text-stone-300 border-b border-stone-600 text-sm">
@@ -258,8 +256,6 @@ export default function App() {
                   )}
                 </tbody>
               </table> */}
-            </div>
-          </div>
         </section>
 
         {/* Utility Bar */}
