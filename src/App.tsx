@@ -4,7 +4,6 @@ import { CustomSystem } from "./database/customsystem";
 import { Jobs, NumberedJobs } from "./database/job";
 import RouteLinkedList from "./lib/routeLinkedList";
 import ElanBox from "./components/ElanBox";
-import { cn } from "./lib/utils";
 import ElanButton from "./components/ElanButton";
 import {
   Table,
@@ -94,24 +93,6 @@ function isOverFiftySeven(restString: string): boolean {
   return nextFiftySevenIndex % 2 === 0;
 }
 
-const Title = () => (
-  <div
-    className={cn(
-      "absolute top-[3px] left-3 pl-2 pr-3 py-0.5 flex items-center z-10",
-      "text-white text-lg leading-none font-normal font-[jaro] not-italic [font-optical-sizing:auto] text-shadow-[1px_1px_2px_rgba(0,0,0,0.8),_-1px_-1px_1px_rgba(0,0,0,0.5)]",
-      "bg-[#4a4a4a] border-2 border-t-[#6a6a6a] border-l-[#6a6a6a] border-b-[#2a2a2a] border-r-[#2a2a2a]",
-      "rounded-[3px] shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.5)]"
-    )}
-  >
-    <img
-      src="/src/img/faviconV2.png"
-      alt="Elan Logo"
-      className="inline-block w-4 h-4 mr-1 align-middle"
-    />
-    ROUTE CALCULATOR
-  </div>
-);
-
 export default function App() {
   const [rLL, setRLL] = useState(new RouteLinkedList());
   const [selectedNode, setSelectedNode] = useState(rLL.tail);
@@ -149,7 +130,14 @@ export default function App() {
 
   return (
     <ElanBox className="pretendard">
-      <Title />
+      <ElanButton className="absolute top-[3px] left-3 pl-2 pr-3 py-0.5 flex items-center text-lg leading-none z-10">
+        <img
+          src="/src/img/faviconV2.png"
+          alt="Elan Logo"
+          className="inline-block w-4 h-4 mr-1 align-middle"
+        />
+        ROUTE CALCULATOR
+      </ElanButton>
       <div className="max-w-4xl mx-auto min-h-screen">
         {/* Results Table Section */}
         <section>
