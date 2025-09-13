@@ -185,23 +185,30 @@ function isOverFiftySeven(restString: string): boolean {
 export default function App() {
   const [rLL, setRLL] = useState(new RouteLinkedList());
   const [tableLength, setTableLength] = useState(1); // 테이블 표시 길이
+  // Currently selected row index for point adjustment
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   // Drawer open state
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   // Drawer mode: 'job-select' | 'point-adjust'
-  const [drawerMode, setDrawerMode] = useState<'job-select' | 'point-adjust'>('job-select');
+  const [drawerMode, setDrawerMode] = useState<"job-select" | "point-adjust">(
+    "job-select"
+  );
   const openDrawer = () => {
     setIsDrawerOpen(true);
-    setDrawerMode('job-select');
+    setDrawerMode("job-select");
   };
   const closeDrawer = () => setIsDrawerOpen(false);
 
   const adjustJobPoint = (event: MouseEvent) => {
     const buttonValue = (event.target as HTMLButtonElement).textContent;
     if (!buttonValue) return;
-    
+
     const adjustment = parseInt(buttonValue);
-    if (rLL.tail) {
-      rLL.tail.adjustJobPoint(adjustment); // delta 값 직접 전달
+    if (selectedIndex !== null) {
+      const targetNode = rLL.get(selectedIndex);
+      if (targetNode) {
+        targetNode.adjustJobPoint(adjustment);
+      }
       setRLL(Object.assign(Object.create(Object.getPrototypeOf(rLL)), rLL)); // force re-render
     }
   };
@@ -220,7 +227,8 @@ export default function App() {
     rLL.add(jobName);
 
     // 직업 선택 후 포인트 조정 모드로 전환
-    setDrawerMode('point-adjust');
+    setDrawerMode("point-adjust");
+    setSelectedIndex(rLL.length - 1);
   };
 
   const addEmptyRow = () => {
@@ -270,14 +278,24 @@ export default function App() {
               { length: Math.max(tableLength, rLL.getAllNodes().length) },
               (_, index) => {
                 const routeNode = rLL.get(index);
+                const isSelected = selectedIndex === index && !!routeNode;
                 return (
                   <TableRow
                     key={uuidv4()}
                     id={`${index}`}
+                    className={
+                      isSelected
+                        ? `relative bg-neutral-800/40 hover:bg-neutral-800/50 after:content-[''] after:absolute after:inset-y-0 after:left-0 after:w-[2px] after:bg-gradient-to-b after:from-blue-400 after:via-cyan-400 after:to-violet-500 after:[transition:opacity_.2s] ${isDrawerOpen ? 'after:opacity-100' : 'after:opacity-90'}`
+                        : ''
+                    }
                     onClick={() => {
                       if (routeNode) {
-                        // 기존 행 클릭 시 동작 (현재는 빈 로직)
+                        setSelectedIndex(index);
+                        setDrawerMode("point-adjust");
+                        setIsDrawerOpen(true);
                       } else {
+                        // 빈 행 클릭: 새 직업 추가 모드
+                        setSelectedIndex(null);
                         openDrawer();
                       }
                     }}
@@ -381,12 +399,12 @@ export default function App() {
           className="overflow-y-auto"
           style={{ height: "calc(45vh - 24px)" }}
         >
-          {drawerMode === 'job-select' ? (
+          {drawerMode === "job-select" ? (
             <JobSelector onJobSelect={addNewJob} />
           ) : (
-            <PointAdjuster 
-              onPointAdjust={adjustJobPoint} 
-              onComplete={completePointAdjustment} 
+            <PointAdjuster
+              onPointAdjust={adjustJobPoint}
+              onComplete={completePointAdjustment}
             />
           )}
         </div>

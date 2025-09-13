@@ -5,7 +5,10 @@ interface PointAdjusterProps {
   onComplete: () => void;
 }
 
-const PointAdjuster: React.FC<PointAdjusterProps> = ({ onPointAdjust, onComplete }) => {
+const PointAdjuster: React.FC<PointAdjusterProps> = ({
+  onPointAdjust,
+  onComplete,
+}) => {
   const buttonsValues = ["+1", "+5", "+10", "+100", "-1", "-5", "-10", "-100"];
 
   return (
@@ -31,7 +34,7 @@ const PointAdjuster: React.FC<PointAdjusterProps> = ({ onPointAdjust, onComplete
           })}
         </div>
       </div>
-      
+
       <div className="flex justify-center pt-4 border-t border-gray-600">
         <button
           onClick={onComplete}
