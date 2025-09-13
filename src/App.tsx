@@ -1,4 +1,4 @@
-import React, { useState, useEffect, MouseEvent } from "react";
+import { useState, useEffect, MouseEvent } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { CustomSystem } from "./database/customsystem";
 import { Jobs, NumberedJobs } from "./database/job";
@@ -6,6 +6,7 @@ import RouteLinkedList from "./lib/routeLinkedList";
 import ElanBox from "./components/ElanBox";
 import ElanButton from "./components/ElanButton";
 import JobSelector from "./components/JobSelector";
+import PointAdjuster from "./components/PointAdjuster";
 import {
   Table,
   TableBody,
@@ -186,8 +187,28 @@ export default function App() {
   const [tableLength, setTableLength] = useState(1); // 테이블 표시 길이
   // Drawer open state
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const openDrawer = () => setIsDrawerOpen(true);
+  // Drawer mode: 'job-select' | 'point-adjust'
+  const [drawerMode, setDrawerMode] = useState<'job-select' | 'point-adjust'>('job-select');
+  const openDrawer = () => {
+    setIsDrawerOpen(true);
+    setDrawerMode('job-select');
+  };
   const closeDrawer = () => setIsDrawerOpen(false);
+
+  const adjustJobPoint = (event: MouseEvent) => {
+    const buttonValue = (event.target as HTMLButtonElement).textContent;
+    if (!buttonValue) return;
+    
+    const adjustment = parseInt(buttonValue);
+    if (rLL.tail) {
+      rLL.tail.adjustJobPoint(adjustment); // delta 값 직접 전달
+      setRLL(Object.assign(Object.create(Object.getPrototypeOf(rLL)), rLL)); // force re-render
+    }
+  };
+
+  const completePointAdjustment = () => {
+    closeDrawer();
+  };
 
   const addNewJob = (event: MouseEvent) => {
     const jobName = getJobNameFromSelect(event);
@@ -198,7 +219,8 @@ export default function App() {
     }
     rLL.add(jobName);
 
-    closeDrawer();
+    // 직업 선택 후 포인트 조정 모드로 전환
+    setDrawerMode('point-adjust');
   };
 
   const addEmptyRow = () => {
@@ -359,7 +381,14 @@ export default function App() {
           className="overflow-y-auto"
           style={{ height: "calc(45vh - 24px)" }}
         >
-          <JobSelector onJobSelect={addNewJob} />
+          {drawerMode === 'job-select' ? (
+            <JobSelector onJobSelect={addNewJob} />
+          ) : (
+            <PointAdjuster 
+              onPointAdjust={adjustJobPoint} 
+              onComplete={completePointAdjustment} 
+            />
+          )}
         </div>
       </div>
     </ElanBox>
