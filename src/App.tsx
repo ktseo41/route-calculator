@@ -5,6 +5,7 @@ import { Jobs, NumberedJobs } from "./database/job";
 import RouteLinkedList from "./lib/routeLinkedList";
 import ElanBox from "./components/ElanBox";
 import ElanButton from "./components/ElanButton";
+import JobSelector from "./components/JobSelector";
 import {
   Table,
   TableBody,
@@ -14,25 +15,8 @@ import {
   TableRow,
 } from "./components/ui/table";
 
-type ButtonState = "1" | "-1" | "5" | "-5" | "10" | "-10" | "100" | "-100";
-
-const buttonsValues: ButtonState[] = [
-  "1",
-  "-1",
-  "5",
-  "-5",
-  "10",
-  "-10",
-  "100",
-  "-100",
-];
-
 function getJobNameFromSelect(event: MouseEvent) {
   return (event.target as HTMLButtonElement).textContent as Jobs;
-}
-
-function getAdjustPoint(event: MouseEvent): number {
-  return +((event.target as HTMLButtonElement).textContent as ButtonState);
 }
 
 function getCustomQueryFromRLL(rLL: RouteLinkedList): string {
@@ -199,7 +183,6 @@ function isOverFiftySeven(restString: string): boolean {
 
 export default function App() {
   const [rLL, setRLL] = useState(new RouteLinkedList());
-  const [selectedNode, setSelectedNode] = useState(rLL.tail);
   const [tableLength, setTableLength] = useState(1); // 테이블 표시 길이
   // Drawer open state
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -209,26 +192,22 @@ export default function App() {
   const addNewJob = (event: MouseEvent) => {
     const jobName = getJobNameFromSelect(event);
 
-    if (rLL.tail?.job === jobName) return;
+    if (rLL.tail?.job === jobName) {
+      closeDrawer();
+      return;
+    }
     rLL.add(jobName);
 
-    setSelectedNode(rLL.tail);
+    closeDrawer();
   };
 
   const addEmptyRow = () => {
     setTableLength((prev) => prev + 1);
   };
 
-  const adjustJobPoint = (event: MouseEvent) => {
-    const adjustPoint = getAdjustPoint(event);
-    selectedNode?.adjustJobPoint(adjustPoint);
-  };
-
   const reset = () => {
     setRLL(() => {
       const newRLL = new RouteLinkedList();
-
-      setSelectedNode(newRLL.tail);
 
       return newRLL;
     });
@@ -273,9 +252,9 @@ export default function App() {
                   <TableRow
                     key={uuidv4()}
                     id={`${index}`}
-                    onClick={(event: MouseEvent) => {
+                    onClick={() => {
                       if (routeNode) {
-                        setSelectedNode(rLL.get(+event.currentTarget.id));
+                        // 기존 행 클릭 시 동작 (현재는 빈 로직)
                       } else {
                         openDrawer();
                       }
@@ -376,9 +355,11 @@ export default function App() {
         >
           <div className="w-10 h-1.5 rounded-full bg-neutral-600" />
         </div>
-        <div className="px-4 py-2 text-neutral-300 text-sm">
-          {/* 빈 행 클릭시 표시되는 임시 컨텐츠 */}
-          <p className="opacity-70">빈 행 추가 설정 영역 (추후 내용 예정)</p>
+        <div
+          className="overflow-y-auto"
+          style={{ height: "calc(45vh - 24px)" }}
+        >
+          <JobSelector onJobSelect={addNewJob} />
         </div>
       </div>
     </ElanBox>
