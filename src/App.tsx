@@ -285,7 +285,7 @@ export default function App() {
                     id={`${index}`}
                     className={
                       isSelected
-                        ? `relative bg-neutral-800/40 hover:bg-neutral-800/50 after:content-[''] after:absolute after:inset-y-0 after:left-0 after:w-[2px] after:bg-gradient-to-b after:from-blue-400 after:via-cyan-400 after:to-violet-500 after:[transition:opacity_.2s] ${isDrawerOpen ? 'after:opacity-100' : 'after:opacity-90'}`
+                        ? `relative bg-neutral-800/40 hover:bg-neutral-800/50 after:content-[''] after:absolute after:inset-y-0 after:left-0 after:w-[2px] after:bg-gradient-to-b after:from-[#B1C51A] after:via-[#839E3D] after:to-[#91671F] after:[transition:opacity_.2s] ${isDrawerOpen ? 'after:opacity-100' : 'after:opacity-90'}`
                         : ''
                     }
                     onClick={() => {
