@@ -201,6 +201,10 @@ export default function App() {
   const [rLL, setRLL] = useState(new RouteLinkedList());
   const [selectedNode, setSelectedNode] = useState(rLL.tail);
   const [tableLength, setTableLength] = useState(1); // 테이블 표시 길이
+  // Drawer open state
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const openDrawer = () => setIsDrawerOpen(true);
+  const closeDrawer = () => setIsDrawerOpen(false);
 
   const addNewJob = (event: MouseEvent) => {
     const jobName = getJobNameFromSelect(event);
@@ -272,6 +276,8 @@ export default function App() {
                     onClick={(event: MouseEvent) => {
                       if (routeNode) {
                         setSelectedNode(rLL.get(+event.currentTarget.id));
+                      } else {
+                        openDrawer();
                       }
                     }}
                   >
@@ -349,6 +355,32 @@ export default function App() {
           })}
         </div>
       </section> */}
+
+      {/* Drawer Overlay */}
+      {isDrawerOpen && (
+        <div
+          className="fixed inset-0 bg-black/30 backdrop-blur-[0.5px] z-40"
+          onClick={closeDrawer}
+        />
+      )}
+      {/* Bottom Drawer */}
+      <div
+        className={`fixed left-0 right-0 bottom-0 z-50 bg-neutral-900 border-t border-neutral-700 rounded-t-xl transition-transform duration-200 ease-out will-change-transform ${
+          isDrawerOpen ? "translate-y-0" : "translate-y-full"
+        }`}
+        style={{ height: "45vh" }}
+      >
+        <div
+          className="h-6 flex items-center justify-center cursor-pointer"
+          onClick={closeDrawer}
+        >
+          <div className="w-10 h-1.5 rounded-full bg-neutral-600" />
+        </div>
+        <div className="px-4 py-2 text-neutral-300 text-sm">
+          {/* 빈 행 클릭시 표시되는 임시 컨텐츠 */}
+          <p className="opacity-70">빈 행 추가 설정 영역 (추후 내용 예정)</p>
+        </div>
+      </div>
     </ElanBox>
   );
 }
