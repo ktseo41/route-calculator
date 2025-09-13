@@ -200,6 +200,7 @@ function isOverFiftySeven(restString: string): boolean {
 export default function App() {
   const [rLL, setRLL] = useState(new RouteLinkedList());
   const [selectedNode, setSelectedNode] = useState(rLL.tail);
+  const [tableLength, setTableLength] = useState(1); // 테이블 표시 길이
 
   const addNewJob = (event: MouseEvent) => {
     const jobName = getJobNameFromSelect(event);
@@ -208,6 +209,10 @@ export default function App() {
     rLL.add(jobName);
 
     setSelectedNode(rLL.tail);
+  };
+
+  const addEmptyRow = () => {
+    setTableLength((prev) => prev + 1);
   };
 
   const adjustJobPoint = (event: MouseEvent) => {
@@ -257,8 +262,7 @@ export default function App() {
           </TableHeader>
           <TableBody className="[&_tr:nth-child(even)]:bg-neutral-900">
             {Array.from(
-              // { length: Math.max(10, rLL.getAllNodes().length) },
-              { length: rLL.getAllNodes().length },
+              { length: Math.max(tableLength, rLL.getAllNodes().length) },
               (_, index) => {
                 const routeNode = rLL.get(index);
                 return (
@@ -295,6 +299,17 @@ export default function App() {
             )}
           </TableBody>
         </Table>
+
+        {/* Add Row Button */}
+        <div className="flex justify-center mt-2">
+          <button
+            onClick={addEmptyRow}
+            className="w-8 h-8 bg-white hover:bg-gray-100 border border-gray-300 rounded-md flex items-center justify-center transition-colors duration-200 shadow-sm hover:shadow-md"
+            title="새 행 추가"
+          >
+            <span className="text-black text-lg font-bold leading-none">+</span>
+          </button>
+        </div>
       </section>
 
       {/* Utility Bar */}
@@ -314,7 +329,7 @@ export default function App() {
       </div>
 
       {/* Point Adjustment Section */}
-      <section className="absolute bottom-2 left-2 right-2 px-1 pb-2 pt-3 border-t border-neutral-700 disable-double-tap">
+      {/* <section className="absolute bottom-2 left-2 right-2 px-1 pb-2 pt-3 border-t border-neutral-700 disable-double-tap">
         <div className="grid grid-cols-4 md:grid-cols-8 gap-4">
           {buttonsValues.map((buttonValue) => {
             const isPositive = !buttonValue.startsWith("-");
@@ -333,7 +348,7 @@ export default function App() {
             );
           })}
         </div>
-      </section>
+      </section> */}
     </ElanBox>
   );
 }
