@@ -193,6 +193,8 @@ export default function App() {
   const [panelMode, setPanelMode] = useState<"job-select" | "point-adjust">(
     "job-select"
   );
+  // Error message for invalid job selection
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const openPanel = () => {
     setIsPanelOpen(true);
     setPanelMode("job-select");
@@ -226,23 +228,34 @@ export default function App() {
     if (hasEmptyRow()) {
       // 마지막 노드와 동일 직업이면 무시 (연속 추가 방지)
       if (rLL.tail?.job === jobName) {
-        closePanel();
+        setErrorMessage("같은 직업을 연속으로 선택할 수 없습니다.");
+        return;
+      }
+      // 마지막 노드의 currentJobPos에서 해당 직업이 이미 100인지 확인
+      if (rLL.tail && rLL.tail.currentJobPos[jobName] === 100) {
+        setErrorMessage("해당 직업은 이미 잡포인트 100입니다. 더 추가할 수 없습니다.");
         return;
       }
       rLL.add(jobName);
       setPanelMode("point-adjust");
       setSelectedIndex(rLL.length - 1);
+      setErrorMessage("");
       return;
     }
     // 마지막 직업과 동일하면 추가하지 않음
     if (rLL.tail?.job === jobName) {
-      closePanel();
+      setErrorMessage("같은 직업을 연속으로 선택할 수 없습니다.");
+      return;
+    }
+    if (rLL.tail && rLL.tail.currentJobPos[jobName] === 100) {
+      setErrorMessage("해당 직업은 이미 잡포인트 100입니다. 더 추가할 수 없습니다.");
       return;
     }
     rLL.add(jobName);
     setTableLength((prev) => Math.max(prev, rLL.length));
     setPanelMode("point-adjust");
     setSelectedIndex(rLL.length - 1);
+    setErrorMessage("");
   };
 
   // 빈 row가 없을 때만 추가
@@ -283,6 +296,14 @@ export default function App() {
       scrollToRow(selectedIndex);
     }
   }, [selectedIndex]);
+
+  useEffect(() => {
+    if (!errorMessage) return;
+    const timeout = setTimeout(() => {
+      setErrorMessage("");
+    }, 2500);
+    return () => clearTimeout(timeout);
+  }, [errorMessage]);
 
   return (
     <ElanBox className="pretendard h-screen relative pt-2">
@@ -352,9 +373,10 @@ export default function App() {
                         setPanelMode("point-adjust");
                         setIsPanelOpen(true);
                       } else {
-                        // 빈 행 클릭: 새 직업 추가 모드
-                        setSelectedIndex(null);
-                        openPanel();
+                        // 빈 행 클릭: 새 직업 추가 모드 (선택 표시 유지)
+                        setSelectedIndex(index);
+                        setPanelMode("job-select");
+                        setIsPanelOpen(true);
                       }
                     }}
                   >
@@ -429,11 +451,16 @@ export default function App() {
           className="absolute left-1.5 right-1.5 bottom-2 z-50 bg-neutral-900 overflow-hidden"
           style={{ height: "45vh" }}
         >
-          <div className="h-8 flex items-center justify-end border-b border-neutral-800 px-1">
+          <div className="h-8 flex items-center border-b border-neutral-800 pl-2 pr-1 relative">
+            {errorMessage && (
+              <div className="flex-1 text-[11px] text-red-400 font-medium leading-tight break-keep pr-7">
+                {errorMessage}
+              </div>
+            )}
             <button
               aria-label="닫기"
               onClick={closePanel}
-              className="w-7 h-7 flex items-center justify-center rounded hover:bg-neutral-800 text-neutral-400 hover:text-neutral-200 transition-colors"
+              className="w-7 h-7 flex items-center justify-center rounded hover:bg-neutral-800 text-neutral-400 hover:text-neutral-200 transition-colors absolute right-1 top-1/2 -translate-y-1/2"
             >
               <svg
                 viewBox="0 0 24 24"

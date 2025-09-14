@@ -11,10 +11,13 @@ function Table({ className, containerClassName, style, ...props }: TableProps) {
   return (
     <div
       data-slot="table-container"
-      className={cn("relative w-full overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]", containerClassName)}
+      className={cn(
+        "relative w-full overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]",
+        containerClassName
+      )}
       style={{
         ...style,
-        WebkitOverflowScrolling: 'touch'
+        WebkitOverflowScrolling: "touch",
       }}
     >
       <table
@@ -93,7 +96,7 @@ function TableCell({ className, ...props }: React.ComponentProps<"td">) {
     <td
       data-slot="table-cell"
       className={cn(
-        "h-10 p-2 align-middle whitespace-nowrap overflow-hidden relative z-10 [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] [&:first-child]:w-32",
+        "h-10 p-2 align-middle whitespace-nowrap overflow-hidden relative [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] [&:first-child]:w-32",
         className
       )}
       {...props}
