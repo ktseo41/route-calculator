@@ -224,6 +224,11 @@ export default function App() {
     const jobName = getJobNameFromSelect(event);
     // 이미 마지막 row가 직업이 없는 빈 row라면, 그 자리에 직업을 할당
     if (hasEmptyRow()) {
+      // 마지막 노드와 동일 직업이면 무시 (연속 추가 방지)
+      if (rLL.tail?.job === jobName) {
+        closePanel();
+        return;
+      }
       rLL.add(jobName);
       setPanelMode("point-adjust");
       setSelectedIndex(rLL.length - 1);
