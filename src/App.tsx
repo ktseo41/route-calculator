@@ -229,6 +229,7 @@ export default function App() {
 
   const addEmptyRow = () => {
     setTableLength((prev) => prev + 1);
+    openPanel();
   };
 
   const reset = () => {
