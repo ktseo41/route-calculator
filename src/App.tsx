@@ -239,6 +239,7 @@ export default function App() {
         return;
       }
       rLL.add(jobName);
+      rLL.tail?.adjustJobPoint(1);
       setPanelMode("point-adjust");
       setSelectedIndex(rLL.length - 1);
       setErrorMessage("");
