@@ -213,10 +213,6 @@ export default function App() {
     }
   };
 
-  const completePointAdjustment = () => {
-    closeDrawer();
-  };
-
   const addNewJob = (event: MouseEvent) => {
     const jobName = getJobNameFromSelect(event);
 
@@ -285,8 +281,12 @@ export default function App() {
                     id={`${index}`}
                     className={
                       isSelected
-                        ? `relative bg-neutral-800/40 hover:bg-neutral-800/50 after:content-[''] after:absolute after:inset-y-0 after:left-0 after:w-[2px] after:bg-gradient-to-b after:from-[#B1C51A] after:via-[#839E3D] after:to-[#91671F] after:[transition:opacity_.2s] ${isDrawerOpen ? 'after:opacity-100' : 'after:opacity-90'}`
-                        : ''
+                        ? `relative bg-neutral-800/40 hover:bg-neutral-800/50 after:content-[''] after:absolute after:inset-y-0 after:left-0 after:w-[2px] after:bg-gradient-to-b after:from-[#B1C51A] after:via-[#839E3D] after:to-[#91671F] after:[transition:opacity_.2s] ${
+                            isDrawerOpen
+                              ? "after:opacity-100"
+                              : "after:opacity-90"
+                          }`
+                        : ""
                     }
                     onClick={() => {
                       if (routeNode) {
@@ -374,26 +374,34 @@ export default function App() {
           })}
         </div>
       </section> */}
-
-      {/* Drawer Overlay */}
-      {isDrawerOpen && (
-        <div
-          className="fixed inset-0 bg-black/30 backdrop-blur-[0.5px] z-40"
-          onClick={closeDrawer}
-        />
-      )}
       {/* Bottom Drawer */}
       <div
-        className={`fixed left-0 right-0 bottom-0 z-50 bg-neutral-900 border-t border-neutral-700 rounded-t-xl transition-transform duration-200 ease-out will-change-transform ${
+        className={`absolute left-2 right-2 bottom-2 z-50 bg-neutral-900 border-t border-neutral-700 overflow-y-hidden will-change-transform ${
           isDrawerOpen ? "translate-y-0" : "translate-y-full"
         }`}
         style={{ height: "45vh" }}
       >
-        <div
-          className="h-6 flex items-center justify-center cursor-pointer"
-          onClick={closeDrawer}
-        >
-          <div className="w-10 h-1.5 rounded-full bg-neutral-600" />
+        {/* Drawer header with close icon */}
+        <div className="h-8 flex items-center justify-end border-b border-neutral-800">
+          <button
+            aria-label="닫기"
+            onClick={closeDrawer}
+            className="w-8 h-8 flex items-center justify-center hover:bg-neutral-800 text-neutral-400 hover:text-neutral-200 transition-colors"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              stroke="currentColor"
+              strokeWidth="2"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
         </div>
         <div
           className="overflow-y-auto"
@@ -402,10 +410,7 @@ export default function App() {
           {drawerMode === "job-select" ? (
             <JobSelector onJobSelect={addNewJob} />
           ) : (
-            <PointAdjuster
-              onPointAdjust={adjustJobPoint}
-              onComplete={completePointAdjustment}
-            />
+            <PointAdjuster onPointAdjust={adjustJobPoint} />
           )}
         </div>
       </div>

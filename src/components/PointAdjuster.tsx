@@ -2,13 +2,9 @@ import React, { MouseEvent } from "react";
 
 interface PointAdjusterProps {
   onPointAdjust: (event: MouseEvent) => void;
-  onComplete: () => void;
 }
 
-const PointAdjuster: React.FC<PointAdjusterProps> = ({
-  onPointAdjust,
-  onComplete,
-}) => {
+const PointAdjuster: React.FC<PointAdjusterProps> = ({ onPointAdjust }) => {
   const buttonsValues = ["+1", "+5", "+10", "+100", "-1", "-5", "-10", "-100"];
 
   return (
@@ -35,14 +31,7 @@ const PointAdjuster: React.FC<PointAdjusterProps> = ({
         </div>
       </div>
 
-      <div className="flex justify-center pt-4 border-t border-gray-600">
-        <button
-          onClick={onComplete}
-          className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded font-medium transition-colors duration-200"
-        >
-          완료
-        </button>
-      </div>
+      {/* 완료 버튼 제거: drawer는 닫기 아이콘으로만 닫힘 */}
     </div>
   );
 };

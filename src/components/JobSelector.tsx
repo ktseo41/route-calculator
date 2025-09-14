@@ -44,7 +44,6 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onJobSelect }) => {
     <div className="p-4 disable-double-tap">
       {/* 전사 계열 직업 */}
       <div className="mb-4 pb-4 border-b border-gray-600">
-        <h3 className="text-sm font-medium text-gray-400 mb-3">전사 계열</h3>
         {/* 1차 직업 */}
         <div className="mb-3">
           <div className="flex flex-wrap gap-2">
@@ -82,7 +81,6 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onJobSelect }) => {
 
       {/* 모험가 계열 직업 */}
       <div className="mb-4 pb-4 border-b border-gray-600">
-        <h3 className="text-sm font-medium text-gray-400 mb-3">모험가 계열</h3>
         <div className="flex flex-wrap items-center gap-2">
           {/* 1차 직업 */}
           <button
@@ -127,7 +125,6 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onJobSelect }) => {
 
       {/* 기타 직업 */}
       <div>
-        <h3 className="text-sm font-medium text-gray-400 mb-3">기타</h3>
         <div className="flex flex-wrap gap-2">
           <button
             className={`text-sm px-3 py-2 rounded transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)] ${getColorClass(

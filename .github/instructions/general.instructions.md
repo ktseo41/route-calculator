@@ -23,3 +23,13 @@ These are the most important rules that must be followed in all implementations:
 
 UST = Use Sequential Thinking (MCP)
 UBS = Use Brave Search (MCP)
+
+## Commit Requests
+
+If requested to make a commit:
+
+- Check the diff using git commands.
+- Review the last 5 commit messages, including their bodies.
+- Check .github/instructions/commit.instructions.md to understand the commit message format.
+
+Then, propose two commit messages.
