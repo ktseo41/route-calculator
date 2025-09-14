@@ -229,6 +229,9 @@ export default function App() {
 
   const addEmptyRow = () => {
     setTableLength((prev) => prev + 1);
+    setTimeout(() => {
+      setSelectedIndex(tableLength); // 새로 추가된 row를 선택 (tableLength는 현재 마지막 인덱스)
+    }, 0);
     openPanel();
   };
 
@@ -275,7 +278,7 @@ export default function App() {
               { length: Math.max(tableLength, rLL.getAllNodes().length) },
               (_, index) => {
                 const routeNode = rLL.get(index);
-                const isSelected = selectedIndex === index && !!routeNode;
+                const isSelected = selectedIndex === index;
                 return (
                   <TableRow
                     key={uuidv4()}
