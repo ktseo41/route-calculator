@@ -337,14 +337,12 @@ export default function App() {
 
       <section>
         <Table
-          containerClassName={`border border-neutral-700 rounded-lg text-neutral-100 font-bold ${
-            isPanelOpen ? "overflow-y-auto" : ""
-          }`}
-          style={
-            isPanelOpen
-              ? { maxHeight: "calc(100vh - 120px - 45vh)" }
-              : undefined
-          }
+          containerClassName="border border-neutral-700 rounded-lg text-neutral-100 font-bold overflow-y-auto"
+          style={{
+            maxHeight: isPanelOpen
+              ? "calc(100vh - 100px - 45vh)"
+              : "calc(100vh - 100px)",
+          }}
         >
           <TableHeader className="relative z-20">
             <TableRow>
