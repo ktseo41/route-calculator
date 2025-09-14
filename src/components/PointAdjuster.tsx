@@ -15,8 +15,8 @@ const PointAdjuster: React.FC<PointAdjusterProps> = ({ onPointAdjust }) => {
           {buttonsValues.map((buttonValue) => {
             const isPositive = !buttonValue.startsWith("-");
             const buttonClass = isPositive
-              ? "bg-neutral-600 hover:bg-neutral-500 text-neutral-300 hover:text-white border border-neutral-500"
-              : "bg-neutral-700 hover:bg-neutral-600 text-neutral-300 hover:text-white border border-neutral-600";
+              ? "bg-neutral-600 hover:bg-neutral-500 active:bg-neutral-400 text-neutral-300 hover:text-white border border-neutral-500"
+              : "bg-neutral-700 hover:bg-neutral-600 active:bg-neutral-500 text-neutral-300 hover:text-white border border-neutral-600";
 
             return (
               <button

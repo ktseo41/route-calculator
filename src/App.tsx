@@ -259,7 +259,7 @@ export default function App() {
   const scrollToRow = (index: number) => {
     const element = document.getElementById(`${index}`);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      element.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   };
 

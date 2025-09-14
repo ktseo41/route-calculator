@@ -9,35 +9,35 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onJobSelect }) => {
   const getColorClass = (jobName: string): string => {
     // 1차 직업 (전사 계열)
     if (classifiedJobs[0].includes(jobName)) {
-      return "bg-gray-700 hover:bg-red-600 text-red-300 hover:text-white border border-red-500 hover:border-red-400";
+      return "bg-gray-700 hover:bg-red-600 active:bg-red-700 text-red-300 hover:text-white border border-red-500 hover:border-red-400";
     }
     // 2차 직업 (기사/마법사)
     if (classifiedJobs[1].includes(jobName)) {
-      return "bg-gray-700 hover:bg-orange-600 text-orange-300 hover:text-white border border-orange-500 hover:border-orange-400";
+      return "bg-gray-700 hover:bg-orange-600 active:bg-orange-700 text-orange-300 hover:text-white border border-orange-500 hover:border-orange-400";
     }
     // 모험가 계열
     if (jobName === "모험가") {
-      return "bg-gray-700 hover:bg-green-600 text-green-300 hover:text-white border border-green-500 hover:border-green-400";
+      return "bg-gray-700 hover:bg-green-600 active:bg-green-700 text-green-300 hover:text-white border border-green-500 hover:border-green-400";
     }
     // 탐색가, 자연인, 음유시인
     if (["탐색가", "자연인", "음유시인"].includes(jobName)) {
-      return "bg-gray-700 hover:bg-blue-600 text-blue-300 hover:text-white border border-blue-500 hover:border-blue-400";
+      return "bg-gray-700 hover:bg-blue-600 active:bg-blue-700 text-blue-300 hover:text-white border border-blue-500 hover:border-blue-400";
     }
     // 정령술사
     if (jobName === "정령술사") {
-      return "bg-gray-700 hover:bg-purple-600 text-purple-300 hover:text-white border border-purple-500 hover:border-purple-400";
+      return "bg-gray-700 hover:bg-purple-600 active:bg-purple-700 text-purple-300 hover:text-white border border-purple-500 hover:border-purple-400";
     }
     // 상인
     if (jobName === "상인") {
-      return "bg-gray-700 hover:bg-yellow-600 text-yellow-300 hover:text-white border border-yellow-500 hover:border-yellow-400";
+      return "bg-gray-700 hover:bg-yellow-600 active:bg-yellow-700 text-yellow-300 hover:text-white border border-yellow-500 hover:border-yellow-400";
     }
     // 네크로멘서
     if (jobName === "네크로멘서") {
-      return "bg-gray-700 hover:bg-indigo-600 text-indigo-300 hover:text-white border border-indigo-500 hover:border-indigo-400";
+      return "bg-gray-700 hover:bg-indigo-600 active:bg-indigo-700 text-indigo-300 hover:text-white border border-indigo-500 hover:border-indigo-400";
     }
 
     // 기본 스타일
-    return "bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white border border-gray-500 hover:border-gray-400";
+    return "bg-gray-700 hover:bg-gray-600 active:bg-gray-800 text-gray-300 hover:text-white border border-gray-500 hover:border-gray-400";
   };
 
   return (
