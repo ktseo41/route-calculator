@@ -17,22 +17,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Node.js 환경을 설정합니다. (React, Vue, Svelte 등 사용 시)
+      # 2. pnpm을 설치하고 Node.js 환경을 설정합니다.
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8 # pnpm 버전 지정
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20" # 사용하시는 Node.js 버전에 맞게 수정하세요.
+          node-version: "20"
           cache: "pnpm"
 
-      # 3. pnpm을 설치합니다.
-      - name: Install pnpm
-        run: npm install -g pnpm
-
-      # 4. 의존성을 설치하고 프로젝트를 빌드합니다.
+      # 3. 의존성을 설치하고 프로젝트를 빌드합니다.
       - name: Install dependencies and build
         run: |
           pnpm install
-          pnpm build # 사용하는 빌드 명령어로 수정하세요.
+          pnpm build
 
       # 5. 빌드 결과물을 'gh-pages' 브랜치의 'route-calculator-v2' 폴더로 배포합니다.
       - name: Deploy to gh-pages
