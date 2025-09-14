@@ -331,7 +331,7 @@ export default function App() {
               <TableHead>잡포</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody className="[&_tr:nth-child(even)]:bg-neutral-900">
+          <TableBody className="[&_tr:nth-child(even)]:bg-neutral-900 [&_tr:nth-child(odd)]:bg-neutral-800">
             {Array.from(
               { length: Math.max(tableLength, rLL.getAllNodes().length) },
               (_, index) => {
@@ -361,8 +361,10 @@ export default function App() {
                     <TableCell className="cursor-pointer relative">
                       {/* Selection indicator */}
                       {isSelected && (
-                        <div className="absolute inset-y-0 left-0 w-[2px] bg-gradient-to-b from-[#B1C51A] via-[#839E3D] to-[#91671F] transition-opacity duration-200 z-10" 
-                             style={{ opacity: isPanelOpen ? 1 : 0.9 }} />
+                        <div
+                          className="absolute inset-y-0 left-0 w-[2px] bg-gradient-to-b from-[#B1C51A] via-[#839E3D] to-[#91671F] transition-opacity duration-200 z-10"
+                          style={{ opacity: isPanelOpen ? 1 : 0.9 }}
+                        />
                       )}
                       {routeNode?.job || ""}
                     </TableCell>
