@@ -22,13 +22,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20" # 사용하시는 Node.js 버전에 맞게 수정하세요.
-          cache: "npm"
+          cache: "pnpm"
 
       # 3. 의존성을 설치하고 프로젝트를 빌드합니다.
       - name: Install dependencies and build
         run: |
-          npm install
-          npm run build # 사용하는 빌드 명령어로 수정하세요. (예: yarn build)
+          pnpm install
+          pnpm build # 사용하는 빌드 명령어로 수정하세요.
 
       # 4. 빌드 결과물을 'gh-pages' 브랜치의 'route-calculator-v2' 폴더로 배포합니다.
       - name: Deploy to gh-pages
