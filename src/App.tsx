@@ -213,21 +213,36 @@ export default function App() {
     }
   };
 
+  // 빈 row가 이미 있으면 추가하지 않음
+  const hasEmptyRow = () => {
+    const nodes = rLL.getAllNodes();
+    return nodes.length < tableLength;
+  };
+
+  // 직업을 선택해야만 row가 추가됨
   const addNewJob = (event: MouseEvent) => {
     const jobName = getJobNameFromSelect(event);
-
+    // 이미 마지막 row가 직업이 없는 빈 row라면, 그 자리에 직업을 할당
+    if (hasEmptyRow()) {
+      rLL.add(jobName);
+      setPanelMode("point-adjust");
+      setSelectedIndex(rLL.length - 1);
+      return;
+    }
+    // 마지막 직업과 동일하면 추가하지 않음
     if (rLL.tail?.job === jobName) {
       closePanel();
       return;
     }
     rLL.add(jobName);
-
-    // 직업 선택 후 포인트 조정 모드로 전환
+    setTableLength((prev) => Math.max(prev, rLL.length));
     setPanelMode("point-adjust");
     setSelectedIndex(rLL.length - 1);
   };
 
+  // 빈 row가 없을 때만 추가
   const addEmptyRow = () => {
+    if (hasEmptyRow()) return;
     setTableLength((prev) => prev + 1);
     setTimeout(() => {
       setSelectedIndex(tableLength); // 새로 추가된 row를 선택 (tableLength는 현재 마지막 인덱스)
@@ -251,8 +266,8 @@ export default function App() {
   }, []);
 
   return (
-    <ElanBox className="pretendard h-screen relative">
-      <ElanButton className="absolute top-[3px] left-3 pl-2 pr-3 py-0.5 flex items-center text-lg leading-none z-10">
+    <ElanBox className="pretendard h-screen relative pt-5">
+      <ElanButton className="absolute top-[16px] left-3 pl-2 pr-3 py-0.5 flex items-center text-lg leading-none z-10">
         <img
           src="/src/img/faviconV2.png"
           alt="Elan Logo"
@@ -261,16 +276,32 @@ export default function App() {
         ROUTE CALCULATOR
       </ElanButton>
       {/* Results Table Section */}
+      {/* Utility Bar */}
+      <div className="absolute right-2 top-[16px] flex">
+        <ElanButton
+          onClick={() => {
+            const queryToSave = getCustomQueryFromRLL(rLL);
+            const urlToSave = `${location.origin}${location.pathname}${
+              queryToSave.length === 0 ? "" : `?${queryToSave}`
+            }`;
+            console.log(urlToSave);
+          }}
+        >
+          save
+        </ElanButton>
+        <ElanButton onClick={reset}>reset</ElanButton>
+      </div>
+
       <section>
-        <Table containerClassName="border border-neutral-700 rounded-lg text-neutral-100">
+        <Table containerClassName="border border-neutral-700 rounded-lg text-neutral-100 font-bold">
           <TableHeader>
             <TableRow>
-              <TableHead className="font-normal">직업</TableHead>
-              <TableHead className="font-normal">STR</TableHead>
-              <TableHead className="font-normal">INT</TableHead>
-              <TableHead className="font-normal">AGI</TableHead>
-              <TableHead className="font-normal">VIT</TableHead>
-              <TableHead className="font-normal">잡포</TableHead>
+              <TableHead>직업</TableHead>
+              <TableHead>STR</TableHead>
+              <TableHead>INT</TableHead>
+              <TableHead>AGI</TableHead>
+              <TableHead>VIT</TableHead>
+              <TableHead>잡포</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className="[&_tr:nth-child(even)]:bg-neutral-900">
@@ -304,7 +335,7 @@ export default function App() {
                       }
                     }}
                   >
-                    <TableCell className="font-medium cursor-pointer">
+                    <TableCell className="cursor-pointer">
                       {routeNode?.job || ""}
                     </TableCell>
                     <TableCell className="text-center cursor-pointer">
@@ -340,22 +371,6 @@ export default function App() {
           </button>
         </div>
       </section>
-
-      {/* Utility Bar */}
-      <div className="absolute right-2 top-[3px] flex">
-        <ElanButton
-          onClick={() => {
-            const queryToSave = getCustomQueryFromRLL(rLL);
-            const urlToSave = `${location.origin}${location.pathname}${
-              queryToSave.length === 0 ? "" : `?${queryToSave}`
-            }`;
-            console.log(urlToSave);
-          }}
-        >
-          save
-        </ElanButton>
-        <ElanButton onClick={reset}>reset</ElanButton>
-      </div>
 
       {/* Point Adjustment Section */}
       {/* <section className="absolute bottom-2 left-2 right-2 px-1 pb-2 pt-3 border-t border-neutral-700 disable-double-tap">
