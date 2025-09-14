@@ -233,7 +233,9 @@ export default function App() {
       }
       // 마지막 노드의 currentJobPos에서 해당 직업이 이미 100인지 확인
       if (rLL.tail && rLL.tail.currentJobPos[jobName] === 100) {
-        setErrorMessage("해당 직업은 이미 잡포인트 100입니다. 더 추가할 수 없습니다.");
+        setErrorMessage(
+          "해당 직업은 이미 잡포인트 100입니다. 더 추가할 수 없습니다."
+        );
         return;
       }
       rLL.add(jobName);
@@ -248,7 +250,9 @@ export default function App() {
       return;
     }
     if (rLL.tail && rLL.tail.currentJobPos[jobName] === 100) {
-      setErrorMessage("해당 직업은 이미 잡포인트 100입니다. 더 추가할 수 없습니다.");
+      setErrorMessage(
+        "해당 직업은 이미 잡포인트 100입니다. 더 추가할 수 없습니다."
+      );
       return;
     }
     rLL.add(jobName);
@@ -342,7 +346,7 @@ export default function App() {
               : undefined
           }
         >
-          <TableHeader>
+          <TableHeader className="relative z-20">
             <TableRow>
               <TableHead>직업</TableHead>
               <TableHead>STR</TableHead>
