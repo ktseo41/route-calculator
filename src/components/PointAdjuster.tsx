@@ -31,7 +31,7 @@ const PointAdjuster: React.FC<PointAdjusterProps> = ({ onPointAdjust }) => {
         </div>
       </div>
 
-      {/* 완료 버튼 제거: drawer는 닫기 아이콘으로만 닫힘 */}
+      {/* 완료 버튼 제거: panel은 닫기 아이콘으로만 닫힘 */}
     </div>
   );
 };

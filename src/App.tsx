@@ -187,17 +187,17 @@ export default function App() {
   const [tableLength, setTableLength] = useState(1); // 테이블 표시 길이
   // Currently selected row index for point adjustment
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  // Drawer open state
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  // Drawer mode: 'job-select' | 'point-adjust'
-  const [drawerMode, setDrawerMode] = useState<"job-select" | "point-adjust">(
+  // Bottom panel open state (was drawer)
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
+  // Bottom panel mode: 'job-select' | 'point-adjust'
+  const [panelMode, setPanelMode] = useState<"job-select" | "point-adjust">(
     "job-select"
   );
-  const openDrawer = () => {
-    setIsDrawerOpen(true);
-    setDrawerMode("job-select");
+  const openPanel = () => {
+    setIsPanelOpen(true);
+    setPanelMode("job-select");
   };
-  const closeDrawer = () => setIsDrawerOpen(false);
+  const closePanel = () => setIsPanelOpen(false);
 
   const adjustJobPoint = (event: MouseEvent) => {
     const buttonValue = (event.target as HTMLButtonElement).textContent;
@@ -217,13 +217,13 @@ export default function App() {
     const jobName = getJobNameFromSelect(event);
 
     if (rLL.tail?.job === jobName) {
-      closeDrawer();
+      closePanel();
       return;
     }
     rLL.add(jobName);
 
     // 직업 선택 후 포인트 조정 모드로 전환
-    setDrawerMode("point-adjust");
+    setPanelMode("point-adjust");
     setSelectedIndex(rLL.length - 1);
   };
 
@@ -282,7 +282,7 @@ export default function App() {
                     className={
                       isSelected
                         ? `relative bg-neutral-800/40 hover:bg-neutral-800/50 after:content-[''] after:absolute after:inset-y-0 after:left-0 after:w-[2px] after:bg-gradient-to-b after:from-[#B1C51A] after:via-[#839E3D] after:to-[#91671F] after:[transition:opacity_.2s] ${
-                            isDrawerOpen
+                            isPanelOpen
                               ? "after:opacity-100"
                               : "after:opacity-90"
                           }`
@@ -291,12 +291,12 @@ export default function App() {
                     onClick={() => {
                       if (routeNode) {
                         setSelectedIndex(index);
-                        setDrawerMode("point-adjust");
-                        setIsDrawerOpen(true);
+                        setPanelMode("point-adjust");
+                        setIsPanelOpen(true);
                       } else {
                         // 빈 행 클릭: 새 직업 추가 모드
                         setSelectedIndex(null);
-                        openDrawer();
+                        openPanel();
                       }
                     }}
                   >
@@ -374,46 +374,45 @@ export default function App() {
           })}
         </div>
       </section> */}
-      {/* Bottom Drawer */}
-      <div
-        className={`absolute left-2 right-2 bottom-2 z-50 bg-neutral-900 border-t border-neutral-700 overflow-y-hidden will-change-transform ${
-          isDrawerOpen ? "translate-y-0" : "translate-y-full"
-        }`}
-        style={{ height: "45vh" }}
-      >
-        {/* Drawer header with close icon */}
-        <div className="h-8 flex items-center justify-end border-b border-neutral-800">
-          <button
-            aria-label="닫기"
-            onClick={closeDrawer}
-            className="w-8 h-8 flex items-center justify-center hover:bg-neutral-800 text-neutral-400 hover:text-neutral-200 transition-colors"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              width="24"
-              height="24"
-              stroke="currentColor"
-              strokeWidth="2"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          </button>
-        </div>
+      {/* Bottom Panel (was drawer) */}
+      {isPanelOpen && (
         <div
-          className="overflow-y-auto"
-          style={{ height: "calc(45vh - 24px)" }}
+          className="absolute left-2 right-2 bottom-2 z-50 bg-neutral-900 border border-neutral-700 rounded-lg overflow-hidden"
+          style={{ height: "45vh" }}
         >
-          {drawerMode === "job-select" ? (
-            <JobSelector onJobSelect={addNewJob} />
-          ) : (
-            <PointAdjuster onPointAdjust={adjustJobPoint} />
-          )}
+          <div className="h-8 flex items-center justify-end border-b border-neutral-800 px-1">
+            <button
+              aria-label="닫기"
+              onClick={closePanel}
+              className="w-7 h-7 flex items-center justify-center rounded hover:bg-neutral-800 text-neutral-400 hover:text-neutral-200 transition-colors"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="18"
+                height="18"
+                stroke="currentColor"
+                strokeWidth="2"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+          </div>
+          <div
+            className="overflow-y-auto"
+            style={{ height: "calc(45vh - 32px)" }}
+          >
+            {panelMode === "job-select" ? (
+              <JobSelector onJobSelect={addNewJob} />
+            ) : (
+              <PointAdjuster onPointAdjust={adjustJobPoint} />
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </ElanBox>
   );
 }
