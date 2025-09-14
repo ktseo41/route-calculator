@@ -248,11 +248,19 @@ export default function App() {
   // 빈 row가 없을 때만 추가
   const addEmptyRow = () => {
     if (hasEmptyRow()) return;
-    setTableLength((prev) => prev + 1);
+    const newLength = tableLength + 1;
+    setTableLength(newLength);
     setTimeout(() => {
-      setSelectedIndex(tableLength); // 새로 추가된 row를 선택 (tableLength는 현재 마지막 인덱스)
+      setSelectedIndex(newLength - 1); // 새로 추가된 row의 인덱스
     }, 0);
     openPanel();
+  };
+
+  const scrollToRow = (index: number) => {
+    const element = document.getElementById(`${index}`);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   };
 
   const reset = () => {
@@ -269,6 +277,12 @@ export default function App() {
     if (location.search.length === 0) return;
     setRLL(getCurrentJobsFromQuery(location));
   }, []);
+
+  useEffect(() => {
+    if (selectedIndex !== null) {
+      scrollToRow(selectedIndex);
+    }
+  }, [selectedIndex]);
 
   return (
     <ElanBox className="pretendard h-screen relative pt-2">
