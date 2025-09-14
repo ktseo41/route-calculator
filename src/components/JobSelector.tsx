@@ -43,7 +43,7 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onJobSelect }) => {
   return (
     <div className="p-4 disable-double-tap">
       {/* 전사 계열 직업 */}
-      <div className="mb-4 pb-4 border-b border-gray-600">
+      <div className="mb-3 pb-2 border-b border-gray-600">
         {/* 1차 직업 */}
         <div className="mb-3">
           <div className="flex flex-wrap gap-2">
@@ -80,7 +80,7 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onJobSelect }) => {
       </div>
 
       {/* 모험가 계열 직업 */}
-      <div className="mb-4 pb-4 border-b border-gray-600">
+      <div className="mb-3 pb-3 border-b border-gray-600">
         <div className="flex flex-wrap items-center gap-2">
           {/* 1차 직업 */}
           <button
@@ -91,9 +91,6 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onJobSelect }) => {
           >
             모험가
           </button>
-
-          {/* 세로 구분선 */}
-          <div className="h-8 w-px bg-gray-600"></div>
 
           {/* 2차 직업 */}
           {["탐색가", "자연인", "음유시인"].map((jobName) => (
@@ -107,9 +104,6 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onJobSelect }) => {
               {jobName}
             </button>
           ))}
-
-          {/* 세로 구분선 */}
-          <div className="h-8 w-px bg-gray-600"></div>
 
           {/* 3차 직업 */}
           <button

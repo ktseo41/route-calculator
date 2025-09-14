@@ -266,8 +266,8 @@ export default function App() {
   }, []);
 
   return (
-    <ElanBox className="pretendard h-screen relative pt-5">
-      <ElanButton className="absolute top-[16px] left-3 pl-2 pr-3 py-0.5 flex items-center text-lg leading-none z-10">
+    <ElanBox className="pretendard h-screen relative pt-2">
+      <ElanButton className="absolute top-[8px] left-3 pl-2 pr-3 py-0.5 flex items-center text-lg leading-none z-10">
         <img
           src="/src/img/faviconV2.png"
           alt="Elan Logo"
@@ -275,9 +275,8 @@ export default function App() {
         />
         ROUTE CALCULATOR
       </ElanButton>
-      {/* Results Table Section */}
       {/* Utility Bar */}
-      <div className="absolute right-2 top-[16px] flex">
+      <div className="absolute right-2 top-[8px] flex">
         <ElanButton
           onClick={() => {
             const queryToSave = getCustomQueryFromRLL(rLL);
@@ -293,7 +292,16 @@ export default function App() {
       </div>
 
       <section>
-        <Table containerClassName="border border-neutral-700 rounded-lg text-neutral-100 font-bold">
+        <Table
+          containerClassName={`border border-neutral-700 rounded-lg text-neutral-100 font-bold ${
+            isPanelOpen ? "overflow-y-auto" : ""
+          }`}
+          style={
+            isPanelOpen
+              ? { maxHeight: "calc(100vh - 120px - 45vh)" }
+              : undefined
+          }
+        >
           <TableHeader>
             <TableRow>
               <TableHead>직업</TableHead>
@@ -396,7 +404,7 @@ export default function App() {
       {/* Bottom Panel (was drawer) */}
       {isPanelOpen && (
         <div
-          className="absolute left-2 right-2 bottom-2 z-50 bg-neutral-900 border border-neutral-700 rounded-lg overflow-hidden"
+          className="absolute left-1.5 right-1.5 bottom-2 z-50 bg-neutral-900 overflow-hidden"
           style={{ height: "45vh" }}
         >
           <div className="h-8 flex items-center justify-end border-b border-neutral-800 px-1">
