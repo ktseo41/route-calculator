@@ -343,12 +343,8 @@ export default function App() {
                     id={`${index}`}
                     className={
                       isSelected
-                        ? `bg-neutral-800/40 hover:bg-neutral-800/50 after:content-[''] after:absolute after:inset-y-0 after:left-0 after:w-[2px] after:bg-gradient-to-b after:from-[#B1C51A] after:via-[#839E3D] after:to-[#91671F] after:[transition:opacity_.2s] ${
-                            isPanelOpen
-                              ? "after:opacity-100"
-                              : "after:opacity-90"
-                          }`
-                        : ""
+                        ? "bg-neutral-800/40 hover:bg-neutral-800/50 relative"
+                        : "relative"
                     }
                     onClick={() => {
                       if (routeNode) {
@@ -362,7 +358,12 @@ export default function App() {
                       }
                     }}
                   >
-                    <TableCell className="cursor-pointer">
+                    <TableCell className="cursor-pointer relative">
+                      {/* Selection indicator */}
+                      {isSelected && (
+                        <div className="absolute inset-y-0 left-0 w-[2px] bg-gradient-to-b from-[#B1C51A] via-[#839E3D] to-[#91671F] transition-opacity duration-200 z-10" 
+                             style={{ opacity: isPanelOpen ? 1 : 0.9 }} />
+                      )}
                       {routeNode?.job || ""}
                     </TableCell>
                     <TableCell className="text-center cursor-pointer">
