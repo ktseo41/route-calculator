@@ -15,6 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "./components/ui/table";
+import favicon from "./img/faviconV2.png";
 
 function getJobNameFromSelect(event: MouseEvent) {
   return (event.target as HTMLButtonElement).textContent as Jobs;
@@ -314,7 +315,7 @@ export default function App() {
     <ElanBox className="pretendard h-screen relative pt-2">
       <ElanButton className="absolute top-[8px] left-3 pl-2 pr-3 py-0.5 flex items-center text-lg leading-none z-10">
         <img
-          src="/src/img/faviconV2.png"
+          src={favicon}
           alt="Elan Logo"
           className="inline-block w-4 h-4 mr-1 align-middle"
         />

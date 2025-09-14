@@ -1,0 +1,56 @@
+# .github/workflows/deploy-v2.yml
+
+name: Deploy v2 to GitHub Pages
+
+# 'renewal' 브랜치에 push가 발생했을 때만 이 워크플로우를 실행합니다.
+on:
+  push:
+    branches:
+      - renewal
+
+# 작업(job) 설정
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. 'renewal' 브랜치의 코드를 체크아웃합니다.
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Node.js 환경을 설정합니다. (React, Vue, Svelte 등 사용 시)
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20" # 사용하시는 Node.js 버전에 맞게 수정하세요.
+          cache: "npm"
+
+      # 3. 의존성을 설치하고 프로젝트를 빌드합니다.
+      - name: Install dependencies and build
+        run: |
+          npm install
+          npm run build # 사용하는 빌드 명령어로 수정하세요. (예: yarn build)
+
+      # 4. 빌드 결과물을 'gh-pages' 브랜치의 'route-calculator-v2' 폴더로 배포합니다.
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          # GitHub Actions가 제공하는 기본 토큰을 사용합니다.
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+          # 빌드 결과물이 생성되는 디렉토리입니다. (Vite, CRA 기본값: 'dist')
+          # 프로젝트 설정에 따라 'build' 등으로 변경해야 할 수 있습니다.
+          publish_dir: ./dist
+
+          # 배포될 브랜치 이름입니다.
+          publish_branch: gh-pages
+
+          # ❗️ 가장 중요한 부분: 배포될 목적지 폴더를 지정합니다.
+          destination_dir: ./route-calculator-v2
+
+          # ❗️ 기존 'gh-pages' 브랜치의 다른 파일들을 삭제하지 않도록 설정합니다.
+          # 이 옵션이 없으면 기존에 배포된 루트 경로의 사이트가 사라집니다.
+          keep_files: true
+
+          # 커밋할 유저 정보를 설정합니다.
+          user_name: "github-actions[bot]"
+          user_email: "github-actions[bot]@users.noreply.github.com"

@@ -6,7 +6,7 @@ import path from "path";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: "./",
+  base: "/route-calculator-v2/",
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
