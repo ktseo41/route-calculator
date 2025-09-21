@@ -1,4 +1,5 @@
 import React from "react";
+import { cn } from "@/lib/utils";
 
 // 사용법:
 //
@@ -23,24 +24,36 @@ import React from "react";
 //
 // --------------------------------------------------------------------------
 
-type Props = {
-  children: React.ReactNode;
-  width?: string; // Optional fixed width (e.g. '280px')
-  height?: string; // Optional fixed height (e.g. '450px')
-  className?: string; // Additional Tailwind classes for flexibility
-  // Optional title displayed at top-left corner. Accepts plain text or any React node
-  title?: React.ReactNode;
+type ElanBoxComposition = {
+  OuterFrame: React.FC<OuterFrameProps>;
+  Border: React.FC<FrameProps>;
+  ContentArea: React.FC<FrameProps>;
 };
 
-const GameWindowFrameTW: React.FC<Props> = ({
+type OuterFrameProps = {
+  children: React.ReactNode;
+  width?: string;
+  height?: string;
+  className?: string;
+};
+
+type FrameProps = {
+  children: React.ReactNode;
+  className?: string;
+};
+
+const ElanBox: ElanBoxComposition = (() => {
+  throw new Error(
+    "ElanBox is a namespace and should not be rendered directly."
+  );
+}) as any;
+
+const OuterFrame: React.FC<OuterFrameProps> = ({
   children,
   width,
   height,
   className = "",
-  title,
 }) => {
-  // Use inline styles only if width/height are explicitly provided
-  // Otherwise, let Tailwind classes handle sizing for flexibility
   const sizeStyle: React.CSSProperties = {
     ...(width && { width }),
     ...(height && { height }),
@@ -48,22 +61,40 @@ const GameWindowFrameTW: React.FC<Props> = ({
 
   return (
     <div
-      className={`bg-black p-[3px] box-border ${className} shadow-[0_0_15px_rgba(0,0,0,0.7)]`}
-      style={{ ...sizeStyle }}
+      className={cn(
+        "bg-black text-white p-[3px] box-border shadow-[0_0_15px_rgba(0,0,0,0.7)]",
+        className
+      )}
+      style={sizeStyle}
     >
-      <div
-        className="w-full h-full border rounded-sm p-2 pt-8 box-border border-[#f7f7f7]"
-        style={{
-          boxShadow:
-            "inset 0 0 1px 1px #ffffff, inset 0 0 1px 2px rgb(74, 74, 74), 0 0 1px 0px #ffffff, 0 0 1px 2px rgb(74, 74, 74)",
-        }}
-      >
-        <div className="h-full box-border text-white rounded-[2px]">
-          {children}
-        </div>
-      </div>
+      {children}
     </div>
   );
 };
 
-export default GameWindowFrameTW;
+const Border: React.FC<FrameProps> = ({ children, className = "" }) => (
+  <div
+    className={cn(
+      "w-full h-full border rounded-sm box-border border-[#f7f7f7]",
+      className
+    )}
+    style={{
+      boxShadow:
+        "inset 0 0 1px 1px #ffffff, inset 0 0 1px 2px rgb(74, 74, 74), 0 0 1px 0px #ffffff, 0 0 1px 2px rgb(74, 74, 74)",
+    }}
+  >
+    {children}
+  </div>
+);
+
+const ContentArea: React.FC<FrameProps> = ({ children, className = "" }) => (
+  <div className={cn("h-full box-border rounded-[2px]", className)}>
+    {children}
+  </div>
+);
+
+ElanBox.OuterFrame = OuterFrame;
+ElanBox.Border = Border;
+ElanBox.ContentArea = ContentArea;
+
+export default ElanBox;

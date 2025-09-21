@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Noto+Sans+KR:wght@100..900&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -54,7 +55,7 @@
 
 /* Pretendard font utility class */
 .pretendard {
-  font-family: "Pretendard", sans-serif;
+  font-family: "Nanum Gothic", "Pretendard", sans-serif;
 }
 
 @theme inline {

@@ -2,38 +2,38 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-type TableProps = React.ComponentProps<"table"> & {
-  containerClassName?: string;
-  style?: React.CSSProperties;
-};
+const TableContainer = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "relative w-full overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]",
+      className
+    )}
+    {...props}
+  />
+));
+TableContainer.displayName = "TableContainer";
 
-function Table({ className, containerClassName, style, ...props }: TableProps) {
-  return (
-    <div
-      data-slot="table-container"
-      className={cn(
-        "relative w-full overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]",
-        containerClassName
-      )}
-      style={{
-        ...style,
-        WebkitOverflowScrolling: "touch",
-      }}
-    >
-      <table
-        data-slot="table"
-        className={cn("w-full caption-bottom text-sm", className)}
-        {...props}
-      />
-    </div>
-  );
-}
+const TableRoot = React.forwardRef<
+  HTMLTableElement,
+  React.HTMLAttributes<HTMLTableElement>
+>(({ className, ...props }, ref) => (
+  <table
+    ref={ref}
+    className={cn("w-full caption-bottom", className)}
+    {...props}
+  />
+));
+TableRoot.displayName = "Table";
 
 function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
   return (
     <thead
       data-slot="table-header"
-      className={cn("[&_tr]:border-b", className)}
+      className={cn("[&_tr]:border-0", className)}
       {...props}
     />
   );
@@ -43,10 +43,7 @@ function TableBody({ className, ...props }: React.ComponentProps<"tbody">) {
   return (
     <tbody
       data-slot="table-body"
-      className={cn(
-        "[&_tr:last-child]:border-0 [&_tr:nth-child(even)]:bg-neutral-900",
-        className
-      )}
+      className={cn("[&_tr:last-child]:border-0 ", className)}
       {...props}
     />
   );
@@ -70,7 +67,7 @@ function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
     <tr
       data-slot="table-row"
       className={cn(
-        "hover:bg-neutral-600 data-[state=selected]:bg-muted border-b border-neutral-700 transition-colors duration-200 transform translate-0 clip-path-[inset(0)]",
+        "data-[state=selected]:bg-muted transition-colors duration-200 transform translate-0 clip-path-[inset(0)]",
         className
       )}
       {...props}
@@ -83,7 +80,7 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
     <th
       data-slot="table-head"
       className={cn(
-        "h-10 px-2 text-left align-middle whitespace-nowrap sticky top-0 z-20 bg-neutral-800 [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] [&:first-child]:w-32",
+        "h-10 px-2 text-left align-middle whitespace-nowrap sticky top-0 z-20 [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] [&:first-child]:w-32",
         className
       )}
       {...props}
@@ -116,6 +113,10 @@ function TableCaption({
     />
   );
 }
+
+const Table = Object.assign(TableRoot, {
+  Container: TableContainer,
+});
 
 export {
   Table,
