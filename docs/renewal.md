@@ -8,6 +8,9 @@
 - [x] jest -> vitest
 - [x] 개발시 hmr 적용
 - [ ] ui 개선
-- [ ] 배포시 github actions 사용 (v2 페이지로 별도 배포)
+- [x] 배포시 github actions 사용 (v2 페이지로 별도 배포)
 - [ ] 로고 추가
-- [ ] 다크 모드
+- [x] 다크 모드
+- [ ] session storage 저장
+- [ ] 이미지로 저장 기능
+- [ ] web share 기능
