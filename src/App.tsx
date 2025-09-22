@@ -236,16 +236,16 @@ export default function App() {
 
           <section className="px-2 pt-10">
             <Table.Container
-              className="rounded-md border border-[#444746] overflow-y-auto"
+              className="rounded-xs border border-[#444746] overflow-y-auto"
               style={{
                 maxHeight: isPanelOpen
-                  ? "calc(100vh - 100px - 45vh)"
-                  : "calc(100vh - 100px)",
+                  ? "calc(100dvh - 100px - 45dvh)"
+                  : "calc(100dvh - 100px)",
                 WebkitOverflowScrolling: "touch",
               }}
             >
               <Table className="text-md">
-                <TableHeader className="relative z-20 border-b border-b-[#444746] [&_th]:font-normal">
+                <TableHeader className="bg-[#131314] shadow-[0_1px_0_#444746] [&_th]:font-bold">
                   <TableRow>
                     <TableHead>직업</TableHead>
                     <TableHead>STR</TableHead>
@@ -255,7 +255,7 @@ export default function App() {
                     <TableHead>잡포</TableHead>
                   </TableRow>
                 </TableHeader>
-                <TableBody className="[&_tr:nth-child(even)]:bg-sidebar-primary [&_tr:nth-child(odd)]:bg-priamry">
+                <TableBody>
                   {Array.from(
                     {
                       length: Math.max(tableLength, rLL.getAllNodes().length),
@@ -267,11 +267,7 @@ export default function App() {
                         <TableRow
                           key={uuidv4()}
                           id={`${index}`}
-                          className={
-                            isSelected
-                              ? "bg-neutral-800/40 hover:bg-neutral-800/50 relative"
-                              : "relative"
-                          }
+                          className="relative odd:bg-[#131314] even:bg-[#232321]"
                           onClick={() => {
                             if (routeNode) {
                               setSelectedIndex(index);
@@ -336,7 +332,7 @@ export default function App() {
           {isPanelOpen && (
             <div
               className="absolute left-1.5 right-1.5 bottom-2 z-50 bg-neutral-900 overflow-hidden"
-              style={{ height: "45vh" }}
+              style={{ height: "45dvh" }}
             >
               <div className="h-8 flex items-center border-b border-neutral-800 pl-2 pr-1 relative">
                 {errorMessage && (
