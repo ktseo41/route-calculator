@@ -12,5 +12,7 @@
 - [ ] 로고 추가
 - [x] 다크 모드
 - [x] session storage 저장
+- [ ] about 등 추가 정보 영역
 - [ ] 이미지로 저장 기능
 - [ ] web share 기능
+- [ ] save load 문자 base64로 변경
