@@ -188,8 +188,16 @@ export default function App() {
   };
 
   useEffect(() => {
-    if (location.search.length === 0) return;
-    setRLL(getCurrentJobsFromQuery(location));
+    if (location.search.length > 0) {
+      setRLL(getCurrentJobsFromQuery(location));
+      return;
+    }
+
+    const savedData = sessionStorage.getItem("elan-route-save");
+    if (savedData) {
+      const fakeLocation = { search: `?${savedData}` };
+      setRLL(getCurrentJobsFromQuery(fakeLocation as Location));
+    }
   }, []);
 
   useEffect(() => {
@@ -205,6 +213,15 @@ export default function App() {
     }, 2500);
     return () => clearTimeout(timeout);
   }, [errorMessage]);
+
+  useEffect(() => {
+    const queryToSave = getCustomQueryFromRLL(rLL);
+    if (rLL.length > 0) {
+      sessionStorage.setItem("elan-route-save", queryToSave);
+    } else {
+      sessionStorage.removeItem("elan-route-save");
+    }
+  }, [rLL]);
 
   return (
     <ElanBox.OuterFrame className="pretendard h-dvh relative pt-2 bg-[#131314] text-[#e3e3e3]">
@@ -226,10 +243,10 @@ export default function App() {
                 const urlToSave = `${location.origin}${location.pathname}${
                   queryToSave.length === 0 ? "" : `?${queryToSave}`
                 }`;
-                console.log(urlToSave);
+                console.log(`temp output: ${urlToSave}`);
               }}
             >
-              save
+              share
             </ElanButton>
             <ElanButton onClick={reset}>reset</ElanButton>
           </div>
