@@ -1,5 +1,6 @@
 import { useState, useEffect, MouseEvent } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { toPng } from "html-to-image";
 import { CustomSystem } from "./database/customsystem";
 import { Jobs, NumberedJobs } from "./database/job";
 import RouteLinkedList from "./lib/routeLinkedList";
@@ -187,6 +188,82 @@ export default function App() {
     location.replace(`${location.origin}${location.pathname}`);
   };
 
+  const shareTableAsImage = async () => {
+    try {
+      // 테이블 요소 찾기
+      const tableContainer = document.querySelector('.table-container') as HTMLElement;
+      if (!tableContainer) {
+        console.error('테이블을 찾을 수 없습니다.');
+        return;
+      }
+
+      // 테이블을 이미지로 변환
+      const dataUrl = await toPng(tableContainer, {
+        quality: 0.95,
+        backgroundColor: '#131314',
+        pixelRatio: 2, // 고해상도 이미지
+      });
+
+      // Data URL을 Blob으로 변환
+      const response = await fetch(dataUrl);
+      const blob = await response.blob();
+      
+      // File 객체 생성
+      const file = new File([blob], 'route-table.png', { type: 'image/png' });
+
+      // Web Share API 지원 확인
+      if (navigator.share && navigator.canShare) {
+        const shareData = {
+          title: 'Elan Route Calculator',
+          text: '일랜시아 루트 계산 결과',
+          files: [file]
+        };
+
+        // 파일 공유 지원 확인
+        if (navigator.canShare(shareData)) {
+          await navigator.share(shareData);
+        } else {
+          // 파일 공유를 지원하지 않는 경우 URL만 공유
+          const queryToSave = getCustomQueryFromRLL(rLL);
+          const urlToSave = `${location.origin}${location.pathname}${
+            queryToSave.length === 0 ? "" : `?${queryToSave}`
+          }`;
+          
+          await navigator.share({
+            title: 'Elan Route Calculator',
+            text: '일랜시아 루트 계산 결과',
+            url: urlToSave
+          });
+        }
+      } else {
+        // Web Share API를 지원하지 않는 경우 클립보드에 복사
+        const queryToSave = getCustomQueryFromRLL(rLL);
+        const urlToSave = `${location.origin}${location.pathname}${
+          queryToSave.length === 0 ? "" : `?${queryToSave}`
+        }`;
+        
+        await navigator.clipboard.writeText(urlToSave);
+        alert('링크가 클립보드에 복사되었습니다!');
+      }
+    } catch (error) {
+      console.error('공유 중 오류가 발생했습니다:', error);
+      
+      // 폴백: URL만 클립보드에 복사
+      try {
+        const queryToSave = getCustomQueryFromRLL(rLL);
+        const urlToSave = `${location.origin}${location.pathname}${
+          queryToSave.length === 0 ? "" : `?${queryToSave}`
+        }`;
+        
+        await navigator.clipboard.writeText(urlToSave);
+        alert('링크가 클립보드에 복사되었습니다!');
+      } catch (clipboardError) {
+        console.error('클립보드 복사 실패:', clipboardError);
+        alert('공유에 실패했습니다. 브라우저가 해당 기능을 지원하지 않습니다.');
+      }
+    }
+  };
+
   useEffect(() => {
     if (location.search.length > 0) {
       setRLL(getCurrentJobsFromQuery(location));
@@ -237,15 +314,7 @@ export default function App() {
           </ElanButton>
           {/* Utility Bar */}
           <div className="absolute right-2 top-[8px] flex">
-            <ElanButton
-              onClick={() => {
-                const queryToSave = getCustomQueryFromRLL(rLL);
-                const urlToSave = `${location.origin}${location.pathname}${
-                  queryToSave.length === 0 ? "" : `?${queryToSave}`
-                }`;
-                console.log(`temp output: ${urlToSave}`);
-              }}
-            >
+            <ElanButton onClick={shareTableAsImage}>
               share
             </ElanButton>
             <ElanButton onClick={reset}>reset</ElanButton>
@@ -253,7 +322,7 @@ export default function App() {
 
           <section className="px-2 pt-10">
             <Table.Container
-              className="rounded-xs border border-[#444746] overflow-y-auto"
+              className="table-container rounded-xs border border-[#444746] overflow-y-auto"
               style={{
                 maxHeight: isPanelOpen
                   ? "calc(100dvh - 100px - 45dvh)"
