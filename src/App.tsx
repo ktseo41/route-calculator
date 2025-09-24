@@ -389,6 +389,9 @@ export default function App() {
               </div>
             </div>
           )}
+          <div className="absolute left-1.5 right-2 bottom-1 pr-1 flex gap-x-2 justify-end">
+            <span className="text-xs text-neutral-400 font-bold">donate</span>
+          </div>
         </ElanBox.ContentArea>
       </ElanBox.Border>
     </ElanBox.OuterFrame>
