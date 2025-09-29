@@ -192,36 +192,38 @@ export default function App() {
 
   const shareTableAsImage = async () => {
     if (isSharing) return; // 이미 공유 중이면 중복 실행 방지
-    
+
     setIsSharing(true);
     try {
       // 테이블 요소 찾기
-      const tableContainer = document.querySelector('.table-container') as HTMLElement;
+      const tableContainer = document.querySelector(
+        ".table-container"
+      ) as HTMLElement;
       if (!tableContainer) {
-        console.error('테이블을 찾을 수 없습니다.');
+        console.error("테이블을 찾을 수 없습니다.");
         return;
       }
 
       // 테이블을 이미지로 변환
       const dataUrl = await toPng(tableContainer, {
         quality: 0.95,
-        backgroundColor: '#131314',
+        backgroundColor: "#131314",
         pixelRatio: 2, // 고해상도 이미지
       });
 
       // Data URL을 Blob으로 변환
       const response = await fetch(dataUrl);
       const blob = await response.blob();
-      
+
       // File 객체 생성
-      const file = new File([blob], 'route-table.png', { type: 'image/png' });
+      const file = new File([blob], "route-table.png", { type: "image/png" });
 
       // Web Share API 지원 확인
       if (navigator.share && navigator.canShare) {
         const shareData = {
-          title: 'Elan Route Calculator',
-          text: '일랜시아 루트 계산 결과',
-          files: [file]
+          title: "Elan Route Calculator",
+          text: "일랜시아 루트 계산 결과",
+          files: [file],
         };
 
         // 파일 공유 지원 확인
@@ -233,11 +235,11 @@ export default function App() {
           const urlToSave = `${location.origin}${location.pathname}${
             queryToSave.length === 0 ? "" : `?${queryToSave}`
           }`;
-          
+
           await navigator.share({
-            title: 'Elan Route Calculator',
-            text: '일랜시아 루트 계산 결과',
-            url: urlToSave
+            title: "Elan Route Calculator",
+            text: "일랜시아 루트 계산 결과",
+            url: urlToSave,
           });
         }
       } else {
@@ -246,25 +248,38 @@ export default function App() {
         const urlToSave = `${location.origin}${location.pathname}${
           queryToSave.length === 0 ? "" : `?${queryToSave}`
         }`;
-        
+
         await navigator.clipboard.writeText(urlToSave);
-        alert('링크가 클립보드에 복사되었습니다!');
+        alert("링크가 클립보드에 복사되었습니다!");
       }
-    } catch (error) {
-      console.error('공유 중 오류가 발생했습니다:', error);
-      
-      // 폴백: URL만 클립보드에 복사
+    } catch (error: any) {
+      // 사용자가 공유 다이얼로그를 취소한 경우 (Web Share API는 AbortError 를 던짐)
+      const message = String(error?.message || "").toLowerCase();
+      if (
+        error?.name === "AbortError" ||
+        message.includes("abort") ||
+        message.includes("cancell") ||
+        message.includes("cancel")
+      ) {
+        // 취소는 정상 사용자 행동이므로 아무 메시지도 표시하지 않음
+        console.debug("사용자가 공유를 취소했습니다.");
+        return; // fallback 동작(클립보드 복사) 수행하지 않음
+      }
+
+      console.error("공유 중 오류가 발생했습니다:", error);
+
+      // 실제 오류인 경우에만 폴백: URL만 클립보드에 복사
       try {
         const queryToSave = getCustomQueryFromRLL(rLL);
         const urlToSave = `${location.origin}${location.pathname}${
           queryToSave.length === 0 ? "" : `?${queryToSave}`
         }`;
-        
+
         await navigator.clipboard.writeText(urlToSave);
-        alert('링크가 클립보드에 복사되었습니다!');
+        alert("링크가 클립보드에 복사되었습니다!");
       } catch (clipboardError) {
-        console.error('클립보드 복사 실패:', clipboardError);
-        alert('공유에 실패했습니다. 브라우저가 해당 기능을 지원하지 않습니다.');
+        console.error("클립보드 복사 실패:", clipboardError);
+        alert("공유에 실패했습니다. 브라우저가 해당 기능을 지원하지 않습니다.");
       }
     } finally {
       setIsSharing(false);
@@ -321,14 +336,18 @@ export default function App() {
           </ElanButton>
           {/* Utility Bar */}
           <div className="absolute right-2 top-[8px] flex">
-            <ElanButton 
+            <ElanButton
               onClick={shareTableAsImage}
               disabled={isSharing}
               className={isSharing ? "opacity-75 cursor-not-allowed" : ""}
             >
               {isSharing ? (
                 <span className="flex items-center gap-1">
-                  <svg className="animate-spin w-3 h-3" viewBox="0 0 24 24" fill="none">
+                  <svg
+                    className="animate-spin w-3 h-3"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                  >
                     <circle
                       cx="12"
                       cy="12"
