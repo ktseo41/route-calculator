@@ -93,6 +93,8 @@ export default function App() {
   );
   // Error message for invalid job selection
   const [errorMessage, setErrorMessage] = useState<string>("");
+  // Loading state for share functionality
+  const [isSharing, setIsSharing] = useState(false);
   const openPanel = () => {
     setIsPanelOpen(true);
     setPanelMode("job-select");
@@ -189,6 +191,9 @@ export default function App() {
   };
 
   const shareTableAsImage = async () => {
+    if (isSharing) return; // 이미 공유 중이면 중복 실행 방지
+    
+    setIsSharing(true);
     try {
       // 테이블 요소 찾기
       const tableContainer = document.querySelector('.table-container') as HTMLElement;
@@ -261,6 +266,8 @@ export default function App() {
         console.error('클립보드 복사 실패:', clipboardError);
         alert('공유에 실패했습니다. 브라우저가 해당 기능을 지원하지 않습니다.');
       }
+    } finally {
+      setIsSharing(false);
     }
   };
 
@@ -314,8 +321,33 @@ export default function App() {
           </ElanButton>
           {/* Utility Bar */}
           <div className="absolute right-2 top-[8px] flex">
-            <ElanButton onClick={shareTableAsImage}>
-              share
+            <ElanButton 
+              onClick={shareTableAsImage}
+              disabled={isSharing}
+              className={isSharing ? "opacity-75 cursor-not-allowed" : ""}
+            >
+              {isSharing ? (
+                <span className="flex items-center gap-1">
+                  <svg className="animate-spin w-3 h-3" viewBox="0 0 24 24" fill="none">
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                      className="opacity-25"
+                    />
+                    <path
+                      fill="currentColor"
+                      d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      className="opacity-75"
+                    />
+                  </svg>
+                  share
+                </span>
+              ) : (
+                "share"
+              )}
             </ElanButton>
             <ElanButton onClick={reset}>reset</ElanButton>
           </div>
