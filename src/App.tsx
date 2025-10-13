@@ -452,17 +452,33 @@ export default function App() {
             </Table.Container>
 
             {/* Add Row Button */}
-            <div className="flex justify-center mt-2">
-              <button
-                onClick={addEmptyRow}
-                className="w-8 h-8 bg-white hover:bg-gray-100 border border-gray-300 rounded-md flex items-center justify-center transition-colors duration-200 shadow-sm hover:shadow-md"
-                title="새 행 추가"
-              >
-                <span className="text-black text-lg font-bold leading-none">
-                  +
-                </span>
-              </button>
-            </div>
+            {(!isPanelOpen || panelMode === "point-adjust") && (
+              <div className="flex justify-center mt-2">
+                <button
+                  onClick={() => {
+                    if (hasEmptyRow()) {
+                      // 빈 row가 있으면 패널을 열어서 직업 선택 모드로 진입
+                      setPanelMode("job-select");
+                      setIsPanelOpen(true);
+                    } else {
+                      addEmptyRow();
+                    }
+                  }}
+                  className={`${
+                    hasEmptyRow() ? "px-3 py-1.5 text-sm" : "w-8 h-8"
+                  } bg-white hover:bg-gray-100 border border-gray-300 rounded-md flex items-center justify-center transition-colors duration-200 shadow-sm hover:shadow-md`}
+                  title={hasEmptyRow() ? "직업 선택 계속하기" : "새 행 추가"}
+                >
+                  <span
+                    className={`text-black leading-none ${
+                      hasEmptyRow() ? "font-medium" : "font-bold"
+                    }`}
+                  >
+                    {hasEmptyRow() ? "직업 선택 계속하기" : "+"}
+                  </span>
+                </button>
+              </div>
+            )}
           </section>
 
           {/* Bottom Panel (was drawer) */}
@@ -509,8 +525,8 @@ export default function App() {
               </div>
             </div>
           )}
-          <div className="absolute left-1.5 right-2 bottom-1 pr-1 flex gap-x-2 justify-end">
-            <span className="text-xs text-neutral-400 font-bold">donate</span>
+          <div className="absolute left-3 bottom-2 pl-1 flex gap-x-2 justify-end">
+            <a className="text-sm text-neutral-400 font-bold">about</a>
           </div>
         </ElanBox.ContentArea>
       </ElanBox.Border>
