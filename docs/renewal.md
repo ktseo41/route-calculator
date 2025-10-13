@@ -7,12 +7,18 @@
 - [x] parcel -> vite
 - [x] jest -> vitest
 - [x] 개발시 hmr 적용
-- [ ] ui 개선
 - [x] 배포시 github actions 사용 (v2 페이지로 별도 배포)
 - [ ] 로고 추가
 - [x] 다크 모드
 - [x] session storage 저장
 - [x] about 등 추가 정보 영역
 - [ ] 이미지로 저장 기능
-- [ ] web share 기능
+- [x] web share 기능
 - [ ] save load 문자 base64로 변경
+- [ ] ui 개선
+  - [ ] job selector 버튼 색상 및 배치 개선
+- [ ] ux 개선
+  - [ ] - 할 수 없는 경우 버튼 숨기기
+  - [ ] - 할 수 없는 경우에다가, bottom panel이 닫힌 경우, 시각화해서 알려주기 -> + 대신, '직업 선택 계속하기'로 텍스트 변경
+  - [ ] - 하나씩 추가하고 설정하는게 아니라 직업 선택 창을 열어둔 상태로로 추가하는 방법 고민하기?
+- [ ] pc 대응
