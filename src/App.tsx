@@ -99,7 +99,14 @@ export default function App() {
     setIsPanelOpen(true);
     setPanelMode("job-select");
   };
-  const closePanel = () => setIsPanelOpen(false);
+  const closePanel = () => {
+    setIsPanelOpen(false);
+    // 패널을 닫을 때 빈 row가 있으면 삭제
+    if (hasEmptyRow()) {
+      setTableLength((prev) => Math.max(1, prev - 1));
+      setSelectedIndex(null);
+    }
+  };
 
   const adjustJobPoint = (event: MouseEvent) => {
     const buttonValue = (event.target as HTMLButtonElement).textContent;
