@@ -295,7 +295,10 @@ export default function App() {
     const savedData = sessionStorage.getItem("elan-route-save");
     if (savedData) {
       const fakeLocation = { search: `?${savedData}` };
-      setRLL(getCurrentJobsFromQuery(fakeLocation as Location));
+      const newRll = getCurrentJobsFromQuery(fakeLocation as Location);
+
+      setRLL(newRll);
+      setTableLength(Math.max(1, newRll.length));
     }
   }, []);
 
