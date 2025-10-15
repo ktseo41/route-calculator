@@ -1,9 +1,13 @@
 import { useState, useEffect, MouseEvent } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { toPng } from "html-to-image";
-import { CustomSystem } from "./database/customsystem";
-import { Jobs, NumberedJobs } from "./database/job";
-import RouteLinkedList from "./lib/routeLinkedList";
+import { useRouteLinkedList } from "./hooks/useRouteLinkedList";
+import {
+  getJobNameFromSelect,
+  validateJobAddition,
+  getCustomQueryFromRLL,
+  getCurrentJobsFromQuery,
+} from "./lib/routeUtils";
 import ElanBox from "./components/ElanBox";
 import ElanButton from "./components/ElanButton";
 import JobSelector from "./components/JobSelector";
@@ -18,70 +22,15 @@ import {
 } from "./components/ui/table";
 import favicon from "./img/faviconV2.png";
 
-function getJobNameFromSelect(event: MouseEvent) {
-  return (event.target as HTMLButtonElement).textContent as Jobs;
-}
-
-function getCustomQueryFromRLL(rLL: RouteLinkedList): string {
-  let result = "";
-  let point = rLL.head?.next;
-
-  while (point) {
-    result += CustomSystem[NumberedJobs[point.job]];
-    if (point.jobPo > 57 && point.jobPo !== 100) {
-      result += CustomSystem[57];
-      result += CustomSystem[point.jobPo - 57];
-    } else {
-      result += CustomSystem[point.jobPo];
-    }
-    point = point.next;
-  }
-
-  return result;
-}
-
-function getCurrentJobsFromQuery({ search }: Location): RouteLinkedList {
-  /*
-  _가 발견되면 다음 _가 있는지 탐색한다.
-   */
-  let isJob: boolean = true;
-  const newRLL = new RouteLinkedList();
-  for (let index = 1; index < search.length; index++) {
-    const charCustom = search[index] as keyof typeof CustomSystem;
-    let decimalNumber = CustomSystem[charCustom];
-
-    if (isJob) {
-      const job = NumberedJobs[decimalNumber];
-      newRLL.add(job as Jobs);
-      isJob = !isJob;
-    } else {
-      if (decimalNumber === 57) {
-        if (isOverFiftySeven(search.slice(index + 1))) {
-          const nextCharCustom = search[index + 1] as keyof typeof CustomSystem;
-          const nextDecimal = CustomSystem[nextCharCustom];
-
-          decimalNumber += nextDecimal;
-          index += 1;
-        }
-      }
-      newRLL.tail?.adjustJobPoint(decimalNumber);
-      isJob = !isJob;
-    }
-  }
-
-  return newRLL;
-}
-
-function isOverFiftySeven(restString: string): boolean {
-  const nextFiftySevenIndex = restString.indexOf("_");
-  if (nextFiftySevenIndex === -1) {
-    return restString.length % 2 === 1;
-  }
-  return nextFiftySevenIndex % 2 === 0;
-}
-
 export default function App() {
-  const [rLL, setRLL] = useState(new RouteLinkedList());
+  const {
+    rLL,
+    version,
+    addJob,
+    adjustPoint,
+    reset: resetRLL,
+    setRLL,
+  } = useRouteLinkedList();
   const [tableLength, setTableLength] = useState(1); // 테이블 표시 길이
   // Currently selected row index for point adjustment
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -114,11 +63,7 @@ export default function App() {
 
     const adjustment = parseInt(buttonValue);
     if (selectedIndex !== null) {
-      const targetNode = rLL.get(selectedIndex);
-      if (targetNode) {
-        targetNode.adjustJobPoint(adjustment);
-      }
-      setRLL(Object.assign(Object.create(Object.getPrototypeOf(rLL)), rLL)); // force re-render
+      adjustPoint(selectedIndex, adjustment);
     }
   };
 
@@ -131,39 +76,21 @@ export default function App() {
   // 직업을 선택해야만 row가 추가됨
   const addNewJob = (event: MouseEvent) => {
     const jobName = getJobNameFromSelect(event);
-    // 이미 마지막 row가 직업이 없는 빈 row라면, 그 자리에 직업을 할당
-    if (hasEmptyRow()) {
-      // 마지막 노드와 동일 직업이면 무시 (연속 추가 방지)
-      if (rLL.tail?.job === jobName) {
-        setErrorMessage("같은 직업을 연속으로 선택할 수 없습니다.");
-        return;
-      }
-      // 마지막 노드의 currentJobPos에서 해당 직업이 이미 100인지 확인
-      if (rLL.tail && rLL.tail.currentJobPos[jobName] === 100) {
-        setErrorMessage(
-          "해당 직업은 이미 잡포인트 100입니다. 더 추가할 수 없습니다."
-        );
-        return;
-      }
-      rLL.add(jobName);
-      setPanelMode("point-adjust");
-      setSelectedIndex(rLL.length - 1);
-      setErrorMessage("");
+
+    // 단일 검증 함수로 중복 제거
+    const error = validateJobAddition(jobName, rLL);
+    if (error) {
+      setErrorMessage(error);
       return;
     }
-    // 마지막 직업과 동일하면 추가하지 않음
-    if (rLL.tail?.job === jobName) {
-      setErrorMessage("같은 직업을 연속으로 선택할 수 없습니다.");
-      return;
+
+    addJob(jobName);
+
+    // 이미 마지막 row가 직업이 없는 빈 row라면 tableLength는 변경하지 않음
+    if (!hasEmptyRow()) {
+      setTableLength((prev) => Math.max(prev, rLL.length));
     }
-    if (rLL.tail && rLL.tail.currentJobPos[jobName] === 100) {
-      setErrorMessage(
-        "해당 직업은 이미 잡포인트 100입니다. 더 추가할 수 없습니다."
-      );
-      return;
-    }
-    rLL.add(jobName);
-    setTableLength((prev) => Math.max(prev, rLL.length));
+
     setPanelMode("point-adjust");
     setSelectedIndex(rLL.length - 1);
     setErrorMessage("");
@@ -188,12 +115,10 @@ export default function App() {
   };
 
   const reset = () => {
-    setRLL(() => {
-      const newRLL = new RouteLinkedList();
-
-      return newRLL;
-    });
-
+    resetRLL(); // 훅의 reset 메서드 사용
+    setTableLength(1); // 테이블 길이도 초기화
+    setSelectedIndex(null); // 선택 해제
+    setIsPanelOpen(false); // 패널 닫기
     location.replace(`${location.origin}${location.pathname}`);
   };
 
@@ -295,19 +220,20 @@ export default function App() {
 
   useEffect(() => {
     if (location.search.length > 0) {
-      setRLL(getCurrentJobsFromQuery(location));
+      const newRLL = getCurrentJobsFromQuery(location);
+      setRLL(newRLL);
+      setTableLength(Math.max(1, newRLL.length));
       return;
     }
 
     const savedData = sessionStorage.getItem("elan-route-save");
     if (savedData) {
       const fakeLocation = { search: `?${savedData}` };
-      const newRll = getCurrentJobsFromQuery(fakeLocation as Location);
-
-      setRLL(newRll);
-      setTableLength(Math.max(1, newRll.length));
+      const newRLL = getCurrentJobsFromQuery(fakeLocation as Location);
+      setRLL(newRLL);
+      setTableLength(Math.max(1, newRLL.length));
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (selectedIndex !== null) {
@@ -330,7 +256,7 @@ export default function App() {
     } else {
       sessionStorage.removeItem("elan-route-save");
     }
-  }, [rLL]);
+  }, [rLL, version]); // version 의존성 추가로 모든 변경사항 감지
 
   return (
     <ElanBox.OuterFrame className="pretendard h-dvh relative pt-2 bg-[#131314] text-[#e3e3e3]">
