@@ -30,6 +30,7 @@ export async function shareTableAsImage(
     quality: 0.95,
     backgroundColor: "#131314",
     pixelRatio: 2, // 고해상도 이미지
+    skipFonts: true, // CORS 문제 방지를 위해 외부 폰트 건너뛰기
   });
 
   // Data URL을 Blob으로 변환
