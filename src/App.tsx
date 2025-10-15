@@ -57,11 +57,7 @@ export default function App() {
     }
   };
 
-  const adjustJobPoint = (event: MouseEvent) => {
-    const buttonValue = (event.target as HTMLButtonElement).textContent;
-    if (!buttonValue) return;
-
-    const adjustment = parseInt(buttonValue);
+  const adjustJobPoint = (adjustment: number) => {
     if (selectedIndex !== null) {
       adjustPoint(selectedIndex, adjustment);
     }
