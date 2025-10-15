@@ -257,7 +257,11 @@ export default function App() {
                         <TableRow
                           key={uuidv4()}
                           id={`${index}`}
-                          className="relative odd:bg-[#131314] even:bg-[#232321]"
+                          className={`relative transition-all duration-200 odd:bg-[#131314] even:bg-[#232321] ${
+                            isSelected
+                              ? "outline-1 outline-[#cbcbcb] -outline-offset-1"
+                              : ""
+                          }`}
                           onClick={() => {
                             if (routeNode) {
                               setSelectedIndex(index);
@@ -271,14 +275,7 @@ export default function App() {
                             }
                           }}
                         >
-                          <TableCell className="cursor-pointer relative">
-                            {/* Selection indicator */}
-                            {isSelected && (
-                              <div
-                                className="absolute inset-y-0 left-0 w-[2px] bg-gradient-to-b from-[#B1C51A] via-[#839E3D] to-[#91671F] transition-opacity duration-200 z-10"
-                                style={{ opacity: isPanelOpen ? 1 : 0.9 }}
-                              />
-                            )}
+                          <TableCell className="cursor-pointer">
                             {routeNode?.job || ""}
                           </TableCell>
                           <TableCell className="text-center cursor-pointer">
