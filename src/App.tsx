@@ -222,7 +222,7 @@ export default function App() {
 
           <section className="px-2 pt-10">
             <Table.Container
-              className="table-container rounded-xs border border-[#444746] overflow-y-auto"
+              className="table-container rounded-md overflow-y-auto"
               style={{
                 maxHeight: isPanelOpen
                   ? "calc(100dvh - 100px - 45dvh)"
@@ -231,7 +231,7 @@ export default function App() {
               }}
             >
               <Table className="text-md">
-                <TableHeader className="bg-[#131314] shadow-[0_1px_0_#444746] [&_th]:font-bold">
+                <TableHeader>
                   <TableRow>
                     <TableHead>직업</TableHead>
                     <TableHead>STR</TableHead>
@@ -253,10 +253,10 @@ export default function App() {
                         <TableRow
                           key={uuidv4()}
                           id={`${index}`}
-                          className={`relative transition-all duration-200 odd:bg-[#131314] even:bg-[#232321] ${
+                          className={`relative cursor-pointer ${
                             isSelected
-                              ? "outline-1 outline-[#cbcbcb] -outline-offset-1"
-                              : ""
+                              ? "!bg-[#3a3a3f] scale-[1.002]"
+                              : "bg-[#2a2a2e]"
                           }`}
                           onClick={() => {
                             if (routeNode) {
