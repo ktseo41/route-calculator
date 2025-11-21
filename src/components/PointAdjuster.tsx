@@ -36,10 +36,10 @@ const PointAdjuster: React.FC<PointAdjusterProps> = ({ onPointAdjust }) => {
   };
 
   return (
-    <div className="p-4 disable-double-tap">
-      <div className="mb-4">
-        <h3 className="text-sm font-medium text-gray-400 mb-3">포인트 조정</h3>
-        <div className="grid grid-cols-4 gap-3">
+    <div className="p-3 disable-double-tap">
+      <div className="mb-3">
+        <h3 className="text-sm font-semibold text-neutral-300 mb-2">포인트 조정</h3>
+        <div className="grid grid-cols-4 gap-2">
           {buttonsValues.map((buttonValue) => {
             const isPositive = buttonValue > 0;
             const buttonClass = isPositive
@@ -48,7 +48,7 @@ const PointAdjuster: React.FC<PointAdjusterProps> = ({ onPointAdjust }) => {
 
             return (
               <button
-                className={`text-sm min-w-14 py-2 px-3 rounded border transition-all duration-200 font-medium ${buttonClass}`}
+                className={`text-sm w-full py-1.5 px-2.5 rounded border transition-all duration-200 font-medium ${buttonClass}`}
                 onClick={() => onPointAdjust(buttonValue)}
                 key={buttonValue}
               >
@@ -59,8 +59,8 @@ const PointAdjuster: React.FC<PointAdjusterProps> = ({ onPointAdjust }) => {
         </div>
       </div>
 
-      <div className="mb-4">
-        <h3 className="text-sm font-medium text-gray-400 mb-3">직접 입력</h3>
+      <div className="mb-3">
+        <h3 className="text-sm font-semibold text-neutral-300 mb-2">직접 입력</h3>
         <div className="flex flex-col gap-2">
           <div className="flex gap-2 items-center">
             <button
@@ -75,7 +75,7 @@ const PointAdjuster: React.FC<PointAdjusterProps> = ({ onPointAdjust }) => {
               onChange={handleCustomInputChange}
               onKeyPress={handleKeyPress}
               placeholder="0"
-              className="flex-1 min-w-0 bg-neutral-800 border border-neutral-600 rounded px-3 py-2 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-500"
+              className="flex-1 min-w-0 bg-neutral-800 border border-neutral-600 rounded px-3 py-2 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
             />
             <button
               className="bg-neutral-700 hover:bg-neutral-600 active:bg-neutral-500 text-neutral-300 hover:text-white border border-neutral-600 rounded px-3 py-2 text-sm font-medium transition-all duration-200 shrink-0"

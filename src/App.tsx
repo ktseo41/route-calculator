@@ -330,10 +330,10 @@ export default function App() {
           {/* Bottom Panel (was drawer) */}
           {isPanelOpen && (
             <div
-              className="absolute left-1.5 right-1.5 bottom-2 z-50 bg-neutral-900 overflow-hidden"
+              className="absolute left-1.5 right-1.5 bottom-2 z-50 bg-[#1e1e22] overflow-hidden rounded-t-xl border-t-2 border-neutral-600 shadow-[0_-4px_20px_rgba(0,0,0,0.4)]"
               style={{ height: "45dvh" }}
             >
-              <div className="h-8 flex items-center border-b border-neutral-800 pl-2 pr-1 relative">
+              <div className="h-10 flex items-center border-b border-neutral-700 pl-2 pr-1 relative bg-neutral-800/50">
                 {errorMessage && (
                   <div className="flex-1 text-[11px] text-red-400 font-medium leading-tight break-keep pr-7">
                     {errorMessage}
@@ -342,26 +342,25 @@ export default function App() {
                 <button
                   aria-label="닫기"
                   onClick={closePanel}
-                  className="w-7 h-7 flex items-center justify-center rounded hover:bg-neutral-800 text-neutral-400 hover:text-neutral-200 transition-colors absolute right-1 top-1/2 -translate-y-1/2"
+                  className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-neutral-700 text-neutral-400 hover:text-neutral-100 transition-all duration-200 absolute right-1 top-1/2 -translate-y-1/2"
                 >
                   <svg
                     viewBox="0 0 24 24"
-                    width="18"
-                    height="18"
+                    width="22"
+                    height="22"
                     stroke="currentColor"
-                    strokeWidth="2"
+                    strokeWidth="2.5"
                     fill="none"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   >
-                    <line x1="18" y1="6" x2="6" y2="18" />
-                    <line x1="6" y1="6" x2="18" y2="18" />
+                    <polyline points="6 9 12 15 18 9" />
                   </svg>
                 </button>
               </div>
               <div
                 className="overflow-y-auto"
-                style={{ height: "calc(45vh - 32px)" }}
+                style={{ height: "calc(45vh - 40px)" }}
               >
                 {panelMode === "job-select" ? (
                   <JobSelector onJobSelect={addNewJob} />

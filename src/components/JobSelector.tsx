@@ -7,50 +7,29 @@ interface JobSelectorProps {
 
 const JobSelector: React.FC<JobSelectorProps> = ({ onJobSelect }) => {
   const getColorClass = (jobName: string): string => {
-    // 1차 직업 (전사 계열)
-    if (classifiedJobs[0].includes(jobName)) {
-      return "bg-gray-700 hover:bg-red-600 active:bg-red-700 text-red-300 hover:text-white border border-red-500 hover:border-red-400";
-    }
-    // 2차 직업 (기사/마법사)
-    if (classifiedJobs[1].includes(jobName)) {
+    // 전사 계열 (1차 + 2차)
+    if (classifiedJobs[0].includes(jobName) || classifiedJobs[1].includes(jobName)) {
       return "bg-gray-700 hover:bg-orange-600 active:bg-orange-700 text-orange-300 hover:text-white border border-orange-500 hover:border-orange-400";
     }
     // 모험가 계열
-    if (jobName === "모험가") {
-      return "bg-gray-700 hover:bg-green-600 active:bg-green-700 text-green-300 hover:text-white border border-green-500 hover:border-green-400";
+    if (jobName === "모험가" || ["탐색가", "자연인", "음유시인"].includes(jobName) || jobName === "정령술사") {
+      return "bg-gray-700 hover:bg-teal-600 active:bg-teal-700 text-teal-300 hover:text-white border border-teal-500 hover:border-teal-400";
     }
-    // 탐색가, 자연인, 음유시인
-    if (["탐색가", "자연인", "음유시인"].includes(jobName)) {
-      return "bg-gray-700 hover:bg-blue-600 active:bg-blue-700 text-blue-300 hover:text-white border border-blue-500 hover:border-blue-400";
-    }
-    // 정령술사
-    if (jobName === "정령술사") {
-      return "bg-gray-700 hover:bg-purple-600 active:bg-purple-700 text-purple-300 hover:text-white border border-purple-500 hover:border-purple-400";
-    }
-    // 상인
-    if (jobName === "상인") {
-      return "bg-gray-700 hover:bg-yellow-600 active:bg-yellow-700 text-yellow-300 hover:text-white border border-yellow-500 hover:border-yellow-400";
-    }
-    // 네크로멘서
-    if (jobName === "네크로멘서") {
-      return "bg-gray-700 hover:bg-indigo-600 active:bg-indigo-700 text-indigo-300 hover:text-white border border-indigo-500 hover:border-indigo-400";
-    }
-
-    // 기본 스타일
+    // 기타 (상인, 네크로멘서)
     return "bg-gray-700 hover:bg-gray-600 active:bg-gray-800 text-gray-300 hover:text-white border border-gray-500 hover:border-gray-400";
   };
 
   return (
-    <div className="p-4 disable-double-tap">
+    <div className="p-3 disable-double-tap">
       {/* 전사 계열 직업 */}
-      <div className="mb-3 pb-2 border-b border-gray-600">
+      <div className="mb-3 pb-2 border-b border-neutral-700">
         {/* 1차 직업 */}
-        <div className="mb-3">
+        <div className="mb-2">
           <div className="flex flex-wrap gap-2">
             {classifiedJobs[0].map((jobName) => (
               <button
                 key={jobName}
-                className={`text-sm px-3 py-2 rounded transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)] ${getColorClass(
+                className={`text-[clamp(9px,2.5vw,12px)] px-2 py-2 rounded transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)] min-w-[70px] flex-1 whitespace-nowrap ${getColorClass(
                   jobName
                 )}`}
                 onClick={onJobSelect}
@@ -67,7 +46,7 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onJobSelect }) => {
             {classifiedJobs[1].map((jobName) => (
               <button
                 key={jobName}
-                className={`text-sm px-3 py-2 rounded transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)] ${getColorClass(
+                className={`text-[clamp(9px,2.5vw,12px)] px-2 py-2 rounded transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)] min-w-[70px] flex-1 whitespace-nowrap ${getColorClass(
                   jobName
                 )}`}
                 onClick={onJobSelect}
@@ -80,11 +59,11 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onJobSelect }) => {
       </div>
 
       {/* 모험가 계열 직업 */}
-      <div className="mb-3 pb-3 border-b border-gray-600">
-        <div className="flex flex-wrap items-center gap-2">
+      <div className="mb-3 pb-2 border-b border-neutral-700">
+        <div className="flex flex-wrap gap-2">
           {/* 1차 직업 */}
           <button
-            className={`text-sm px-3 py-2 rounded transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)] ${getColorClass(
+            className={`text-[clamp(9px,2.5vw,12px)] px-2 py-2 rounded transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)] min-w-[70px] flex-1 whitespace-nowrap ${getColorClass(
               "모험가"
             )}`}
             onClick={onJobSelect}
@@ -96,7 +75,7 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onJobSelect }) => {
           {["탐색가", "자연인", "음유시인"].map((jobName) => (
             <button
               key={jobName}
-              className={`text-sm px-3 py-2 rounded transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)] ${getColorClass(
+              className={`text-[clamp(9px,2.5vw,12px)] px-2 py-2 rounded transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)] min-w-[70px] flex-1 whitespace-nowrap ${getColorClass(
                 jobName
               )}`}
               onClick={onJobSelect}
@@ -107,7 +86,7 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onJobSelect }) => {
 
           {/* 3차 직업 */}
           <button
-            className={`text-sm px-3 py-2 rounded transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)] ${getColorClass(
+            className={`text-[clamp(9px,2.5vw,12px)] px-2 py-2 rounded transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)] min-w-[70px] flex-1 whitespace-nowrap ${getColorClass(
               "정령술사"
             )}`}
             onClick={onJobSelect}
@@ -121,7 +100,7 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onJobSelect }) => {
       <div>
         <div className="flex flex-wrap gap-2">
           <button
-            className={`text-sm px-3 py-2 rounded transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)] ${getColorClass(
+            className={`text-[clamp(9px,2.5vw,12px)] px-2 py-2 rounded transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)] min-w-[70px] flex-1 whitespace-nowrap ${getColorClass(
               "상인"
             )}`}
             onClick={onJobSelect}
@@ -129,7 +108,7 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onJobSelect }) => {
             상인
           </button>
           <button
-            className={`text-sm px-3 py-2 rounded transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)] ${getColorClass(
+            className={`text-[clamp(9px,2.5vw,12px)] px-2 py-2 rounded transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)] min-w-[70px] flex-1 whitespace-nowrap ${getColorClass(
               "네크로멘서"
             )}`}
             onClick={onJobSelect}
