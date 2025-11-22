@@ -259,6 +259,11 @@ export default function App() {
                               : "bg-[#2a2a2e]"
                           }`}
                           onClick={() => {
+                            // 다른 행을 클릭할 때 빈 행이 있으면 삭제
+                            if (hasEmptyRow() && selectedIndex !== index) {
+                              setTableLength((prev) => Math.max(1, prev - 1));
+                            }
+                            
                             if (routeNode) {
                               setSelectedIndex(index);
                               setPanelMode("point-adjust");
@@ -310,17 +315,11 @@ export default function App() {
                       addEmptyRow();
                     }
                   }}
-                  className={`${
-                    hasEmptyRow() ? "px-3 py-1.5 text-sm" : "w-8 h-8"
-                  } bg-white hover:bg-gray-100 border border-gray-300 rounded-md flex items-center justify-center transition-colors duration-200 shadow-sm hover:shadow-md`}
-                  title={hasEmptyRow() ? "직업 선택 계속하기" : "새 행 추가"}
+                  className="w-8 h-8 bg-white hover:bg-gray-100 border border-gray-300 rounded-md flex items-center justify-center transition-colors duration-200 shadow-sm hover:shadow-md"
+                  title={hasEmptyRow() ? "직업 선택" : "새 행 추가"}
                 >
-                  <span
-                    className={`text-black leading-none ${
-                      hasEmptyRow() ? "font-medium" : "font-bold"
-                    }`}
-                  >
-                    {hasEmptyRow() ? "직업 선택 계속하기" : "+"}
+                  <span className="text-black leading-none font-bold">
+                    +
                   </span>
                 </button>
               </div>
