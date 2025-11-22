@@ -7,16 +7,8 @@ interface JobSelectorProps {
 
 const JobSelector: React.FC<JobSelectorProps> = ({ onJobSelect }) => {
   const getColorClass = (jobName: string): string => {
-    // 전사 계열 (1차 + 2차)
-    if (classifiedJobs[0].includes(jobName) || classifiedJobs[1].includes(jobName)) {
-      return "bg-gray-700 hover:bg-orange-600 active:bg-orange-700 text-orange-300 hover:text-white border border-orange-500 hover:border-orange-400";
-    }
-    // 모험가 계열
-    if (jobName === "모험가" || ["탐색가", "자연인", "음유시인"].includes(jobName) || jobName === "정령술사") {
-      return "bg-gray-700 hover:bg-teal-600 active:bg-teal-700 text-teal-300 hover:text-white border border-teal-500 hover:border-teal-400";
-    }
-    // 기타 (상인, 네크로멘서)
-    return "bg-gray-700 hover:bg-gray-600 active:bg-gray-800 text-gray-300 hover:text-white border border-gray-500 hover:border-gray-400";
+    // 모든 직업에 대해 무채색 스타일 적용
+    return "bg-neutral-700 hover:bg-neutral-600 active:bg-neutral-500 text-neutral-300 hover:text-white border border-neutral-600 hover:border-neutral-500";
   };
 
   return (

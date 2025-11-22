@@ -331,7 +331,7 @@ export default function App() {
           {isPanelOpen && (
             <div
               className="absolute left-1.5 right-1.5 bottom-2 z-50 bg-[#1e1e22] overflow-hidden rounded-t-xl border-t-2 border-neutral-600 shadow-[0_-4px_20px_rgba(0,0,0,0.4)]"
-              style={{ height: "45dvh" }}
+              style={{ height: "auto", maxHeight: "45dvh" }}
             >
               <div className="h-10 flex items-center border-b border-neutral-700 pl-2 pr-1 relative bg-neutral-800/50">
                 {errorMessage && (
@@ -360,7 +360,7 @@ export default function App() {
               </div>
               <div
                 className="overflow-y-auto"
-                style={{ height: "calc(45vh - 40px)" }}
+                style={{ maxHeight: "calc(45dvh - 40px)" }}
               >
                 {panelMode === "job-select" ? (
                   <JobSelector onJobSelect={addNewJob} />
