@@ -21,7 +21,7 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onJobSelect }) => {
             {classifiedJobs[0].map((jobName) => (
               <button
                 key={jobName}
-                className={`text-[clamp(9px,2.5vw,12px)] px-2 py-2 rounded transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)] min-w-[70px] flex-1 whitespace-nowrap ${getColorClass(
+                className={`text-[clamp(11px,3vw,14px)] px-2 py-2 rounded transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)] min-w-[70px] flex-1 whitespace-nowrap ${getColorClass(
                   jobName
                 )}`}
                 onClick={onJobSelect}
@@ -38,7 +38,7 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onJobSelect }) => {
             {classifiedJobs[1].map((jobName) => (
               <button
                 key={jobName}
-                className={`text-[clamp(9px,2.5vw,12px)] px-2 py-2 rounded transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)] min-w-[70px] flex-1 whitespace-nowrap ${getColorClass(
+                className={`text-[clamp(11px,3vw,14px)] px-2 py-2 rounded transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)] min-w-[70px] flex-1 whitespace-nowrap ${getColorClass(
                   jobName
                 )}`}
                 onClick={onJobSelect}
@@ -55,7 +55,7 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onJobSelect }) => {
         <div className="flex flex-wrap gap-2">
           {/* 1차 직업 */}
           <button
-            className={`text-[clamp(9px,2.5vw,12px)] px-2 py-2 rounded transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)] min-w-[70px] flex-1 whitespace-nowrap ${getColorClass(
+            className={`text-[clamp(11px,3vw,14px)] px-2 py-2 rounded transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)] min-w-[70px] flex-1 whitespace-nowrap ${getColorClass(
               "모험가"
             )}`}
             onClick={onJobSelect}
@@ -67,7 +67,7 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onJobSelect }) => {
           {["탐색가", "자연인", "음유시인"].map((jobName) => (
             <button
               key={jobName}
-              className={`text-[clamp(9px,2.5vw,12px)] px-2 py-2 rounded transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)] min-w-[70px] flex-1 whitespace-nowrap ${getColorClass(
+              className={`text-[clamp(11px,3vw,14px)] px-2 py-2 rounded transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)] min-w-[70px] flex-1 whitespace-nowrap ${getColorClass(
                 jobName
               )}`}
               onClick={onJobSelect}
@@ -78,7 +78,7 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onJobSelect }) => {
 
           {/* 3차 직업 */}
           <button
-            className={`text-[clamp(9px,2.5vw,12px)] px-2 py-2 rounded transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)] min-w-[70px] flex-1 whitespace-nowrap ${getColorClass(
+            className={`text-[clamp(11px,3vw,14px)] px-2 py-2 rounded transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)] min-w-[70px] flex-1 whitespace-nowrap ${getColorClass(
               "정령술사"
             )}`}
             onClick={onJobSelect}
@@ -92,7 +92,7 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onJobSelect }) => {
       <div>
         <div className="flex flex-wrap gap-2">
           <button
-            className={`text-[clamp(9px,2.5vw,12px)] px-2 py-2 rounded transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)] min-w-[70px] flex-1 whitespace-nowrap ${getColorClass(
+            className={`text-[clamp(11px,3vw,14px)] px-2 py-2 rounded transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)] min-w-[70px] flex-1 whitespace-nowrap ${getColorClass(
               "상인"
             )}`}
             onClick={onJobSelect}
@@ -100,7 +100,7 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onJobSelect }) => {
             상인
           </button>
           <button
-            className={`text-[clamp(9px,2.5vw,12px)] px-2 py-2 rounded transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)] min-w-[70px] flex-1 whitespace-nowrap ${getColorClass(
+            className={`text-[clamp(11px,3vw,14px)] px-2 py-2 rounded transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)] min-w-[70px] flex-1 whitespace-nowrap ${getColorClass(
               "네크로멘서"
             )}`}
             onClick={onJobSelect}

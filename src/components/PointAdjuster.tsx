@@ -46,7 +46,7 @@ const PointAdjuster: React.FC<PointAdjusterProps> = ({ onPointAdjust }) => {
             <button
               key={val}
               onClick={() => onPointAdjust(val)}
-              className="h-10 flex items-center justify-center text-sm font-bold rounded bg-neutral-700 hover:bg-neutral-600 text-neutral-200 border border-neutral-600 hover:border-neutral-500 active:bg-neutral-500 active:scale-95 transition-all duration-200"
+              className="h-10 flex items-center justify-center text-sm font-bold rounded bg-neutral-700 hover:bg-neutral-600 text-neutral-300 hover:text-white border border-neutral-600 hover:border-neutral-500 active:bg-neutral-500 transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)]"
             >
               +{val}
             </button>
@@ -57,7 +57,7 @@ const PointAdjuster: React.FC<PointAdjusterProps> = ({ onPointAdjust }) => {
             <button
               key={val}
               onClick={() => onPointAdjust(val)}
-              className="h-10 flex items-center justify-center text-sm font-bold rounded bg-neutral-800 hover:bg-neutral-700 text-neutral-400 border border-neutral-700 hover:border-neutral-600 active:bg-neutral-600 active:scale-95 transition-all duration-200"
+              className="h-10 flex items-center justify-center text-sm font-bold rounded bg-neutral-800 hover:bg-neutral-700 text-neutral-400 hover:text-white border border-neutral-700 hover:border-neutral-600 active:bg-neutral-600 transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)]"
             >
               {val}
             </button>
