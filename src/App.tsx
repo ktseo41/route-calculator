@@ -172,9 +172,11 @@ export default function App() {
   }, [rLL, version]); // version 의존성 추가로 모든 변경사항 감지
 
   return (
-    <ElanBox.OuterFrame className="pretendard h-dvh relative pt-2 bg-[#131314] text-[#e3e3e3]">
-      <ElanBox.Border>
-        <ElanBox.ContentArea>
+    <div className="pretendard h-dvh w-full bg-[#131314] text-[#e3e3e3] overflow-hidden flex justify-center md:py-10">
+      <ElanBox.OuterFrame className="h-full w-full max-w-[1000px] relative pt-2 bg-transparent shadow-none">
+        <ElanBox.Border className="border-none shadow-none">
+          <ElanBox.ContentArea className="md:flex md:flex-row overflow-hidden">
+          <div className="flex-1 flex flex-col relative h-full overflow-hidden">
           <ElanButton className="absolute top-[8px] left-3 pl-2 pr-3 py-0.5 flex items-center text-lg leading-none z-10">
             <img
               src={favicon}
@@ -220,9 +222,9 @@ export default function App() {
             <ElanButton onClick={reset}>reset</ElanButton>
           </div>
 
-          <section className="px-2 pt-10">
+          <section className="px-2 pt-10 flex-1 flex flex-col min-h-0 overflow-y-auto">
             <Table.Container
-              className="table-container rounded-md overflow-y-auto"
+              className="table-container rounded-md md:!max-h-none md:overflow-visible"
               style={{
                 maxHeight: isPanelOpen
                   ? "calc(100dvh - 100px - 45dvh)"
@@ -300,36 +302,42 @@ export default function App() {
                   )}
                 </TableBody>
               </Table>
+              
+              {/* Add Row Button - Moved Inside Container */}
+              {(!isPanelOpen || panelMode === "point-adjust" || window.innerWidth >= 768) && (
+                <div className="flex justify-center mt-2 pb-4">
+                  <button
+                    onClick={() => {
+                      if (hasEmptyRow()) {
+                        setPanelMode("job-select");
+                        setIsPanelOpen(true);
+                      } else {
+                        addEmptyRow();
+                      }
+                    }}
+                    className="w-8 h-8 bg-white hover:bg-gray-100 border border-gray-300 rounded-md flex items-center justify-center transition-colors duration-200 shadow-sm hover:shadow-md"
+                    title={hasEmptyRow() ? "직업 선택" : "새 행 추가"}
+                  >
+                    <span className="text-black leading-none font-bold">
+                      +
+                    </span>
+                  </button>
+                </div>
+              )}
             </Table.Container>
 
-            {/* Add Row Button */}
-            {(!isPanelOpen || panelMode === "point-adjust") && (
-              <div className="flex justify-center mt-2">
-                <button
-                  onClick={() => {
-                    if (hasEmptyRow()) {
-                      // 빈 row가 있으면 패널을 열어서 직업 선택 모드로 진입
-                      setPanelMode("job-select");
-                      setIsPanelOpen(true);
-                    } else {
-                      addEmptyRow();
-                    }
-                  }}
-                  className="w-8 h-8 bg-white hover:bg-gray-100 border border-gray-300 rounded-md flex items-center justify-center transition-colors duration-200 shadow-sm hover:shadow-md"
-                  title={hasEmptyRow() ? "직업 선택" : "새 행 추가"}
-                >
-                  <span className="text-black leading-none font-bold">
-                    +
-                  </span>
-                </button>
-              </div>
-            )}
+
           </section>
 
-          {/* Bottom Panel (was drawer) */}
+          <div className="absolute left-3 bottom-2 pl-1 flex gap-x-2 justify-end">
+            <a className="text-sm text-neutral-400 font-bold">about</a>
+          </div>
+          </div>
+
+          {/* Bottom Panel (Mobile Drawer) */}
           {isPanelOpen && (
             <div
-              className="absolute left-1.5 right-1.5 bottom-2 z-50 bg-[#1e1e22] overflow-hidden rounded-t-xl border-t-2 border-neutral-600 shadow-[0_-4px_20px_rgba(0,0,0,0.4)]"
+              className="md:hidden absolute left-1.5 right-1.5 bottom-2 z-50 bg-[#1e1e22] overflow-hidden rounded-t-xl border-t-2 border-neutral-600 shadow-[0_-4px_20px_rgba(0,0,0,0.4)]"
               style={{ height: "auto", maxHeight: "45dvh" }}
             >
               <div className="h-10 flex items-center border-b border-neutral-700 pl-2 pr-1 relative bg-neutral-800/50">
@@ -369,11 +377,36 @@ export default function App() {
               </div>
             </div>
           )}
-          <div className="absolute left-3 bottom-2 pl-1 flex gap-x-2 justify-end">
-            <a className="text-sm text-neutral-400 font-bold">about</a>
+          {/* PC Right Panel */}
+          <div className="hidden md:flex w-80 flex-col relative z-20 pl-4 pt-10 gap-y-6">
+            {/* Job Selector Section */}
+            <div className="flex flex-col min-h-0 shrink-0">
+               <div className="h-8 flex items-center pl-1 shrink-0 mb-1">
+                  <span className="text-sm font-bold text-neutral-300">직업 선택</span>
+                  {errorMessage && (
+                    <div className="flex-1 text-[11px] text-red-400 font-medium leading-tight break-keep text-right">
+                      {errorMessage}
+                    </div>
+                  )}
+               </div>
+               <div className="overflow-y-auto">
+                  <JobSelector onJobSelect={addNewJob} />
+               </div>
+            </div>
+
+            {/* Point Adjuster Section */}
+            <div className="flex flex-col min-h-0 shrink-0">
+               <div className="h-8 flex items-center pl-1 shrink-0 mb-1">
+                  <span className="text-sm font-bold text-neutral-300">포인트 조절</span>
+               </div>
+               <div>
+                  <PointAdjuster onPointAdjust={adjustJobPoint} />
+               </div>
+            </div>
           </div>
         </ElanBox.ContentArea>
       </ElanBox.Border>
-    </ElanBox.OuterFrame>
+      </ElanBox.OuterFrame>
+    </div>
   );
 }
