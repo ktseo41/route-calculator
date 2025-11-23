@@ -37,6 +37,8 @@ export default function App() {
   const [errorMessage, setErrorMessage] = useState<string>("");
   // Loading state for share functionality
   const [isSharing, setIsSharing] = useState(false);
+  // Delete mode toggle state
+  const [deleteMode, setDeleteMode] = useState(false);
 
   const openPanel = (mode: "job-select" | "point-adjust") => {
     setPanelMode(mode);
@@ -108,6 +110,10 @@ export default function App() {
     }
   };
 
+  const toggleDeleteMode = () => {
+    setDeleteMode(!deleteMode);
+  };
+
   useEffect(() => {
     if (location.search.length > 0) {
       const newRLL = getCurrentJobsFromQuery(location);
@@ -160,6 +166,14 @@ export default function App() {
           <span>루트 계산기 v2</span>
         </div>
         <div className="header-actions">
+          <button 
+            className={`icon-btn ${deleteMode ? 'active' : ''}`} 
+            aria-label="Delete Mode" 
+            onClick={toggleDeleteMode}
+            style={deleteMode ? { backgroundColor: 'rgba(239, 68, 68, 0.1)', color: 'var(--error)' } : {}}
+          >
+            <i className="ph ph-trash"></i>
+          </button>
           <button className="icon-btn" aria-label="Reset" onClick={reset}>
             <i className="ph ph-arrow-counter-clockwise"></i>
           </button>
@@ -182,7 +196,7 @@ export default function App() {
               <span className="header-stat">VIT</span>
             </div>
             <span className="header-po">PO</span>
-            <span className="header-delete"></span>
+            {deleteMode && <span className="header-delete"></span>}
           </div>
 
           {rLL.getAllNodes().map((node, index) => {
@@ -201,13 +215,15 @@ export default function App() {
                   <span className="stat-value">{node.stats.VIT}</span>
                 </div>
                 <div className="job-po-badge">{node.jobPo}</div>
-                <button 
-                  className="delete-job-btn" 
-                  onClick={(e) => handleDeleteJob(index, e)}
-                  aria-label="삭제"
-                >
-                  <i className="ph ph-trash"></i>
-                </button>
+                {deleteMode && (
+                  <button 
+                    className="delete-job-btn" 
+                    onClick={(e) => handleDeleteJob(index, e)}
+                    aria-label="삭제"
+                  >
+                    <i className="ph ph-trash"></i>
+                  </button>
+                )}
               </div>
             );
           })}

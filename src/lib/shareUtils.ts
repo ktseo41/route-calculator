@@ -33,6 +33,21 @@ export async function shareTableAsImage(
     addButton.style.display = "none";
   }
 
+  // 삭제 버튼들과 삭제 헤더 컬럼 숨기기
+  const deleteButtons = tableContainer.querySelectorAll(".delete-job-btn") as NodeListOf<HTMLElement>;
+  const deleteHeader = tableContainer.querySelector(".header-delete") as HTMLElement;
+  const originalDeleteButtonDisplays: string[] = [];
+  const originalDeleteHeaderDisplay = deleteHeader ? deleteHeader.style.display : "";
+  
+  deleteButtons.forEach((btn) => {
+    originalDeleteButtonDisplays.push(btn.style.display);
+    btn.style.display = "none";
+  });
+  
+  if (deleteHeader) {
+    deleteHeader.style.display = "none";
+  }
+
   // 쿼리 문자열 생성
   const queryToSave = getCustomQueryFromRLL(rLL);
   
@@ -100,6 +115,16 @@ export async function shareTableAsImage(
     if (addButton) {
       addButton.style.display = originalDisplay;
     }
+    
+    // 삭제 버튼들과 헤더 복구
+    deleteButtons.forEach((btn, index) => {
+      btn.style.display = originalDeleteButtonDisplays[index];
+    });
+    
+    if (deleteHeader) {
+      deleteHeader.style.display = originalDeleteHeaderDisplay;
+    }
+    
     tableContainer.removeChild(footer);
   }
 
