@@ -20,6 +20,7 @@ export default function App() {
     version,
     addJob,
     adjustPoint,
+    removeAt,
     reset: resetRLL,
     setRLL,
   } = useRouteLinkedList();
@@ -71,6 +72,17 @@ export default function App() {
   const handleRowClick = (index: number) => {
     setSelectedIndex(index);
     openPanel("point-adjust");
+  };
+
+  const handleDeleteJob = (index: number, event: React.MouseEvent) => {
+    event.stopPropagation();
+    removeAt(index);
+    if (selectedIndex === index) {
+      setSelectedIndex(null);
+      setIsPanelOpen(false);
+    } else if (selectedIndex !== null && selectedIndex > index) {
+      setSelectedIndex(selectedIndex - 1);
+    }
   };
 
   const handleAddClick = () => {
@@ -160,6 +172,19 @@ export default function App() {
       {/* Main Content Area */}
       <main className="main-content">
         <div className="route-list" id="routeList">
+          {/* Table Header */}
+          <div className="route-header">
+            <span className="header-job">직업</span>
+            <div className="header-stats">
+              <span className="header-stat">STR</span>
+              <span className="header-stat">INT</span>
+              <span className="header-stat">AGI</span>
+              <span className="header-stat">VIT</span>
+            </div>
+            <span className="header-po">PO</span>
+            <span className="header-delete"></span>
+          </div>
+
           {rLL.getAllNodes().map((node, index) => {
             if (!node) return null;
             return (
@@ -170,12 +195,19 @@ export default function App() {
               >
                 <span className="job-name">{node.job}</span>
                 <div className="row-stats">
-                  <span className="stat-item"><span className="stat-label">STR</span><span className="stat-value">{node.stats.STR}</span></span>
-                  <span className="stat-item"><span className="stat-label">INT</span><span className="stat-value">{node.stats.INT}</span></span>
-                  <span className="stat-item"><span className="stat-label">AGI</span><span className="stat-value">{node.stats.AGI}</span></span>
-                  <span className="stat-item"><span className="stat-label">VIT</span><span className="stat-value">{node.stats.VIT}</span></span>
+                  <span className="stat-value">{node.stats.STR}</span>
+                  <span className="stat-value">{node.stats.INT}</span>
+                  <span className="stat-value">{node.stats.AGI}</span>
+                  <span className="stat-value">{node.stats.VIT}</span>
                 </div>
                 <div className="job-po-badge">{node.jobPo}</div>
+                <button 
+                  className="delete-job-btn" 
+                  onClick={(e) => handleDeleteJob(index, e)}
+                  aria-label="삭제"
+                >
+                  <i className="ph ph-trash"></i>
+                </button>
               </div>
             );
           })}

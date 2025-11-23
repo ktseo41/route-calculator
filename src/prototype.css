@@ -165,6 +165,64 @@ button {
   gap: 4px; /* Very tight spacing */
 }
 
+/* Table Header */
+.route-header {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 36px;
+  margin-bottom: 4px;
+}
+
+.header-job {
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  width: 90px;
+  flex-shrink: 0;
+}
+
+.header-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  flex: 1;
+  height: 100%;
+  align-items: center;
+  margin: 0 4px;
+}
+
+.header-stat {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+
+.header-po {
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  width: 32px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.header-delete {
+  width: 32px;
+  flex-shrink: 0;
+  margin-left: 4px;
+}
+
 .route-row {
   background-color: var(--bg-secondary);
   border: 1px solid var(--border-color);
@@ -210,29 +268,12 @@ button {
   margin: 0 4px;
 }
 
-.stat-item {
-  display: flex;
-  flex-direction: row;
-  align-items: baseline;
-  justify-content: center;
-  gap: 4px;
-}
-
-.stat-label {
-  font-size: 0.625rem; /* 10px */
-  font-weight: 700;
-  color: var(--text-tertiary);
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-}
-
 .stat-value {
   font-size: 0.9375rem; /* 15px */
   font-weight: 600;
   color: var(--text-secondary);
   font-variant-numeric: tabular-nums;
-  width: 24px; /* Fixed width for numbers to prevent jitter */
-  text-align: right;
+  text-align: center;
 }
 
 .active .stat-value {
@@ -251,6 +292,31 @@ button {
   font-weight: 700;
   color: var(--accent-primary);
   flex-shrink: 0;
+}
+
+/* Delete Job Button */
+.delete-job-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  color: var(--text-tertiary);
+  background-color: transparent;
+  transition: var(--transition-fast);
+  flex-shrink: 0;
+  margin-left: 4px;
+  font-size: 1.25rem;
+}
+
+.delete-job-btn:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: var(--error);
+}
+
+.delete-job-btn:active {
+  transform: scale(0.95);
 }
 
 /* Inline Add Button */
