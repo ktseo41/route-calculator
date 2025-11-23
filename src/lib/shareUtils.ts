@@ -36,34 +36,10 @@ export async function shareTableAsImage(
   // 쿼리 문자열 생성
   const queryToSave = getCustomQueryFromRLL(rLL);
   
-  // 헤더 요소 생성 (상단 왼쪽에 로고)
-  const header = document.createElement("div");
-  header.style.display = "flex";
-  header.style.alignItems = "center";
-  header.style.gap = "6px";
-  header.style.marginBottom = "8px";
-  header.style.paddingTop = "8px";
-  header.style.paddingLeft = "8px";
-  header.style.backgroundColor = "#131314";
-  
-  const headerFaviconImg = document.createElement("img");
-  headerFaviconImg.src = faviconV2;
-  headerFaviconImg.style.width = "20px";
-  headerFaviconImg.style.height = "20px";
-  headerFaviconImg.style.objectFit = "contain";
-  
-  const headerText = document.createElement("span");
-  headerText.innerText = "루트 계산기";
-  headerText.style.fontSize = "14px";
-  headerText.style.fontWeight = "bold";
-  headerText.style.color = "rgba(255, 255, 255, 0.7)";
-  
-  header.appendChild(headerFaviconImg);
-  header.appendChild(headerText);
-  
-  // 푸터 요소 생성 (하단에 URL만)
+  // 푸터 요소 생성 (하단에 URL + 로고)
   const footer = document.createElement("div");
   footer.style.display = "flex";
+  footer.style.justifyContent = "space-between";
   footer.style.alignItems = "center";
   footer.style.marginTop = "8px";
   footer.style.paddingTop = "8px";
@@ -72,7 +48,7 @@ export async function shareTableAsImage(
   footer.style.paddingRight = "8px";
   footer.style.backgroundColor = "#131314";
   
-  // URL 문자열
+  // 왼쪽: URL 문자열
   const urlEl = document.createElement("div");
   urlEl.innerText = queryToSave;
   urlEl.style.fontSize = "10px";
@@ -81,12 +57,33 @@ export async function shareTableAsImage(
   urlEl.style.overflow = "hidden";
   urlEl.style.whiteSpace = "nowrap";
   urlEl.style.textOverflow = "ellipsis";
-  urlEl.style.maxWidth = "100%";
+  urlEl.style.maxWidth = "60%";
+  
+  // 오른쪽: 로고 + 텍스트
+  const signatureContainer = document.createElement("div");
+  signatureContainer.style.display = "flex";
+  signatureContainer.style.alignItems = "center";
+  signatureContainer.style.gap = "6px";
+  
+  const faviconImg = document.createElement("img");
+  faviconImg.src = faviconV2;
+  faviconImg.style.width = "16px";
+  faviconImg.style.height = "16px";
+  faviconImg.style.objectFit = "contain";
+  
+  const signatureText = document.createElement("span");
+  signatureText.innerText = "루트 계산기";
+  signatureText.style.fontSize = "12px";
+  signatureText.style.fontWeight = "bold";
+  signatureText.style.color = "rgba(255, 255, 255, 0.5)";
+  
+  signatureContainer.appendChild(faviconImg);
+  signatureContainer.appendChild(signatureText);
   
   footer.appendChild(urlEl);
+  footer.appendChild(signatureContainer);
   
-  // 테이블 컨테이너에 헤더와 푸터 추가
-  tableContainer.insertBefore(header, tableContainer.firstChild);
+  // 테이블 컨테이너에 푸터 추가
   tableContainer.appendChild(footer);
 
   let dataUrl = "";
@@ -99,11 +96,10 @@ export async function shareTableAsImage(
       skipFonts: true, // CORS 문제 방지를 위해 외부 폰트 건너뛰기
     });
   } finally {
-    // 버튼 스타일, 헤더 및 푸터 복구
+    // 버튼 스타일 및 푸터 복구
     if (addButton) {
       addButton.style.display = originalDisplay;
     }
-    tableContainer.removeChild(header);
     tableContainer.removeChild(footer);
   }
 
