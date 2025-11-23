@@ -68,12 +68,19 @@ export default function App() {
 
     addJob(jobName);
     
-    setPanelMode("point-adjust");
-    setSelectedIndex(rLL.length - 1);
+    if (jobName !== '무직') {
+      setPanelMode("point-adjust");
+      // rLL is mutated synchronously, so length is already updated.
+      // The new item is at the last index.
+      setSelectedIndex(rLL.length - 1); 
+    }
     setErrorMessage("");
   };
 
   const handleRowClick = (index: number) => {
+    // Prevent point adjustment for "무직"
+    if (rLL.get(index)?.job === '무직') return;
+
     setSelectedIndex(index);
     openPanel("point-adjust");
   };
@@ -223,6 +230,7 @@ export default function App() {
               <div 
                 key={uuidv4()} 
                 className={`route-row ${selectedIndex === index ? 'active' : ''}`}
+                style={{ cursor: node.job === '무직' ? 'default' : 'pointer' }}
                 onClick={() => handleRowClick(index)}
               >
                 <span className="job-name">{node.job}</span>
