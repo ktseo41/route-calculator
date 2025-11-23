@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Elan Route Calculator - Modern Prototype</title>
+  <link rel="stylesheet" href="design_prototype.css">
+  <!-- Pretendard Font -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <!-- Icons (Phosphor Icons) -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo">
+        <div class="logo-icon">
+          <i class="ph-bold ph-calculator"></i>
+        </div>
+        <span>RouteCalc</span>
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" aria-label="Reset">
+          <i class="ph ph-arrow-counter-clockwise"></i>
+        </button>
+        <button class="icon-btn" aria-label="Share">
+          <i class="ph ph-share-network"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <div class="route-list" id="routeList">
+        <!-- Sample Data -->
+        <div class="route-row" onclick="openSheet('point')">
+          <span class="job-name">탐색가</span>
+          <div class="row-stats">
+            <span class="stat-item"><span class="stat-label">STR</span><span class="stat-value">10</span></span>
+            <span class="stat-item"><span class="stat-label">INT</span><span class="stat-value">5</span></span>
+            <span class="stat-item"><span class="stat-label">AGI</span><span class="stat-value">12</span></span>
+            <span class="stat-item"><span class="stat-label">VIT</span><span class="stat-value">8</span></span>
+          </div>
+          <div class="job-po-badge">10</div>
+        </div>
+
+        <div class="route-row active" onclick="openSheet('point')">
+          <span class="job-name">자연인</span>
+          <div class="row-stats">
+            <span class="stat-item"><span class="stat-label">STR</span><span class="stat-value">15</span></span>
+            <span class="stat-item"><span class="stat-label">INT</span><span class="stat-value">8</span></span>
+            <span class="stat-item"><span class="stat-label">AGI</span><span class="stat-value">20</span></span>
+            <span class="stat-item"><span class="stat-label">VIT</span><span class="stat-value">12</span></span>
+          </div>
+          <div class="job-po-badge">25</div>
+        </div>
+
+        <div class="route-row" onclick="openSheet('point')">
+          <span class="job-name">정령술사</span>
+          <div class="row-stats">
+            <span class="stat-item"><span class="stat-label">STR</span><span class="stat-value">18</span></span>
+            <span class="stat-item"><span class="stat-label">INT</span><span class="stat-value">30</span></span>
+            <span class="stat-item"><span class="stat-label">AGI</span><span class="stat-value">15</span></span>
+            <span class="stat-item"><span class="stat-label">VIT</span><span class="stat-value">10</span></span>
+          </div>
+          <div class="job-po-badge">40</div>
+        </div>
+
+        <!-- Inline Add Button -->
+        <button class="add-row-btn" onclick="openSheet('job')">
+          <i class="ph-bold ph-plus"></i>
+          <span>Add New Job</span>
+        </button>
+      </div>
+    </main>
+
+    <!-- Desktop Sidebar (Placeholder for responsive design) -->
+    <aside class="desktop-sidebar" style="display: none;">
+      <!-- Desktop content would go here -->
+      <div style="padding: 20px; color: var(--text-secondary);">
+        Desktop Sidebar Panel
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- Bottom Sheet Overlay -->
+  <div class="bottom-sheet-overlay" id="overlay" onclick="closeSheet()"></div>
+
+  <!-- Bottom Sheet -->
+  <div class="bottom-sheet" id="bottomSheet">
+    <div class="sheet-handle-area">
+      <div class="sheet-handle"></div>
+    </div>
+    
+    <div class="sheet-header">
+      <h3 class="sheet-title" id="sheetTitle">직업 선택</h3>
+      <button class="sheet-close" onclick="closeSheet()">
+        <i class="ph-bold ph-x"></i>
+      </button>
+    </div>
+
+    <div class="sheet-content" id="sheetContent">
+      <!-- Content injected via JS -->
+    </div>
+  </div>
+
+  <script>
+    // Mock Data & Templates
+    const jobs = ["모험가", "탐색가", "자연인", "음유시인", "정령술사", "상인", "네크로멘서", "전사", "검사", "기사"];
+    
+    const jobSelectorTemplate = `
+      <div class="job-grid">
+        ${jobs.map(job => `<button class="job-btn" onclick="selectJob('${job}')">${job}</button>`).join('')}
+      </div>
+    `;
+
+    const pointAdjusterTemplate = `
+      <div class="point-adjuster">
+        <div class="point-display">
+          <div class="point-value">25</div>
+          <div class="point-label">현재 잡포인트</div>
+        </div>
+        <div class="adjust-controls">
+          <button class="adjust-btn positive" onclick="adjust(1)">+1</button>
+          <button class="adjust-btn positive" onclick="adjust(5)">+5</button>
+          <button class="adjust-btn positive" onclick="adjust(10)">+10</button>
+          <button class="adjust-btn positive" onclick="adjust(100)">+100</button>
+          
+          <button class="adjust-btn negative" onclick="adjust(-1)">-1</button>
+          <button class="adjust-btn negative" onclick="adjust(-5)">-5</button>
+          <button class="adjust-btn negative" onclick="adjust(-10)">-10</button>
+          <button class="adjust-btn negative" onclick="adjust(-100)">-100</button>
+        </div>
+      </div>
+    `;
+
+    // Logic
+    const overlay = document.getElementById('overlay');
+    const bottomSheet = document.getElementById('bottomSheet');
+    const sheetTitle = document.getElementById('sheetTitle');
+    const sheetContent = document.getElementById('sheetContent');
+
+    function openSheet(type) {
+      overlay.classList.add('open');
+      bottomSheet.classList.add('open');
+
+      if (type === 'job') {
+        sheetTitle.textContent = '직업 선택';
+        sheetContent.innerHTML = jobSelectorTemplate;
+      } else {
+        sheetTitle.textContent = '포인트 조절';
+        sheetContent.innerHTML = pointAdjusterTemplate;
+      }
+    }
+
+    function closeSheet() {
+      overlay.classList.remove('open');
+      bottomSheet.classList.remove('open');
+    }
+
+    function selectJob(job) {
+      // Mock action
+      const routeList = document.getElementById('routeList');
+      const addBtn = document.querySelector('.add-row-btn');
+      
+      const newRow = document.createElement('div');
+      newRow.className = 'route-row';
+      newRow.onclick = () => openSheet('point');
+      newRow.innerHTML = `
+        <span class="job-name">${job}</span>
+        <div class="row-stats">
+            <span class="stat-item"><span class="stat-label">STR</span><span class="stat-value">0</span></span>
+            <span class="stat-item"><span class="stat-label">INT</span><span class="stat-value">0</span></span>
+            <span class="stat-item"><span class="stat-label">AGI</span><span class="stat-value">0</span></span>
+            <span class="stat-item"><span class="stat-label">VIT</span><span class="stat-value">0</span></span>
+        </div>
+        <div class="job-po-badge">0</div>
+      `;
+      
+      // Insert before the add button
+      routeList.insertBefore(newRow, addBtn);
+      closeSheet();
+      
+      // Scroll to bottom
+      setTimeout(() => {
+        newRow.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+
+    function adjust(amount) {
+      const display = document.querySelector('.point-value');
+      if (display) {
+        let current = parseInt(display.textContent);
+        display.textContent = current + amount;
+      }
+    }
+  </script>
+</body>
+</html>
