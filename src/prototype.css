@@ -450,7 +450,7 @@ button {
 /* Job Selector Grid */
 .job-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   gap: var(--space-sm);
 }
 
@@ -463,6 +463,7 @@ button {
   font-size: 0.875rem;
   text-align: center;
   transition: var(--transition-fast);
+  white-space: nowrap;
 }
 
 .job-btn:hover {
