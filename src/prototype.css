@@ -50,6 +50,11 @@
   padding: 0;
 }
 
+#root {
+  height: 100%;
+  width: 100%;
+}
+
 body {
   font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
   background-color: var(--bg-primary);
@@ -163,7 +168,7 @@ button {
   background-color: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 0 12px; /* Compact padding */
+  padding: 0 8px; /* Compact padding */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -188,7 +193,7 @@ button {
   font-weight: 600;
   font-size: 0.9375rem;
   color: var(--text-primary);
-  width: 70px; /* Fixed width for alignment */
+  width: 90px; /* Increased width for longer names */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -201,7 +206,7 @@ button {
   flex: 1;
   height: 100%;
   align-items: center;
-  margin: 0 8px;
+  margin: 0 4px;
 }
 
 .stat-item {
