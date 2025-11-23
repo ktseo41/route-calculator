@@ -308,15 +308,34 @@ button {
   flex-shrink: 0;
   margin-left: 4px;
   font-size: 1.25rem;
+  /* Prevent sticky hover on mobile */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
-.delete-job-btn:hover {
-  background-color: rgba(239, 68, 68, 0.1);
-  color: var(--error);
+/* Only apply hover on devices that support hover */
+@media (hover: hover) and (pointer: fine) {
+  .delete-job-btn:hover {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--error);
+  }
+  
+  .delete-job-btn.no-hover:hover {
+    background-color: transparent;
+    color: var(--text-tertiary);
+  }
 }
 
+/* Active state for touch devices */
 .delete-job-btn:active {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: var(--error);
   transform: scale(0.95);
+}
+
+.delete-job-btn.no-hover:active {
+  background-color: transparent;
+  color: var(--text-tertiary);
 }
 
 /* Inline Add Button */

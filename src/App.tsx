@@ -39,6 +39,8 @@ export default function App() {
   const [isSharing, setIsSharing] = useState(false);
   // Delete mode toggle state
   const [deleteMode, setDeleteMode] = useState(false);
+  // Temporarily disable hover effects after deletion
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const openPanel = (mode: "job-select" | "point-adjust") => {
     setPanelMode(mode);
@@ -78,6 +80,15 @@ export default function App() {
 
   const handleDeleteJob = (index: number, event: React.MouseEvent) => {
     event.stopPropagation();
+    event.preventDefault();
+    
+    // Remove focus from the button to prevent hover state on mobile
+    const target = event.currentTarget as HTMLButtonElement;
+    target.blur();
+    
+    // Temporarily disable hover effects
+    setIsDeleting(true);
+    
     removeAt(index);
     if (selectedIndex === index) {
       setSelectedIndex(null);
@@ -85,6 +96,11 @@ export default function App() {
     } else if (selectedIndex !== null && selectedIndex > index) {
       setSelectedIndex(selectedIndex - 1);
     }
+    
+    // Re-enable hover effects after a short delay
+    setTimeout(() => {
+      setIsDeleting(false);
+    }, 200);
   };
 
   const handleAddClick = () => {
@@ -217,7 +233,7 @@ export default function App() {
                 <div className="job-po-badge">{node.jobPo}</div>
                 {deleteMode && (
                   <button 
-                    className="delete-job-btn" 
+                    className={`delete-job-btn ${isDeleting ? 'no-hover' : ''}`}
                     onClick={(e) => handleDeleteJob(index, e)}
                     aria-label="삭제"
                   >
