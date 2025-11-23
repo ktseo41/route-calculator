@@ -291,10 +291,10 @@ button {
   align-items: center;
   justify-content: center;
   background-color: #5b526b; /* Muted Purple Grey - A touch of favicon color */
-  width: 32px;
-  height: 24px;
+  width: 33px;
+  height: 25px;
   border-radius: var(--radius-sm);
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   font-weight: 600;
   color: var(--text-primary);
   flex-shrink: 0;

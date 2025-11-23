@@ -2,31 +2,38 @@ import React, { useState } from "react";
 
 interface PointAdjusterProps {
   onPointAdjust: (adjustment: number) => void;
+  onPointSet?: (value: number) => void;
   currentPoint?: number;
 }
 
-const PointAdjuster: React.FC<PointAdjusterProps> = ({ onPointAdjust, currentPoint = 0 }) => {
+const PointAdjuster: React.FC<PointAdjusterProps> = ({ onPointAdjust, onPointSet, currentPoint = 0 }) => {
   const positiveButtons = [1, 5, 10, 100];
   const negativeButtons = [-1, -5, -10, -100];
   const [customValue, setCustomValue] = useState<string>("");
 
   const handleCustomAdjust = (delta: number) => {
     const value = parseInt(customValue) || 0;
-    const newValue = value + delta;
+    const newValue = Math.max(0, value + delta); // Prevent negative values
     setCustomValue(newValue.toString());
   };
 
   const handleCustomInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (value === "" || value === "-" || /^-?\d+$/.test(value)) {
+    // Allow only positive integers
+    if (value === "" || /^\d+$/.test(value)) {
       setCustomValue(value);
     }
   };
 
   const handleApplyCustomValue = () => {
     const value = parseInt(customValue);
-    if (!isNaN(value) && value !== 0) {
-      onPointAdjust(value);
+    if (!isNaN(value)) {
+      if (onPointSet) {
+        onPointSet(value);
+      } else {
+        // Fallback for backward compatibility if onPointSet is not provided
+        onPointAdjust(value);
+      }
       setCustomValue("");
     }
   };

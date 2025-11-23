@@ -298,6 +298,13 @@ export default function App() {
              {selectedIndex !== null ? (
                <PointAdjuster 
                  onPointAdjust={adjustJobPoint} 
+                 onPointSet={(value) => {
+                   if (selectedIndex !== null) {
+                     const currentPoint = rLL.get(selectedIndex)?.jobPo || 0;
+                     const delta = value - currentPoint;
+                     adjustJobPoint(delta);
+                   }
+                 }}
                  currentPoint={rLL.get(selectedIndex)?.jobPo} 
                />
              ) : (
@@ -352,6 +359,13 @@ export default function App() {
           ) : (
             <PointAdjuster 
               onPointAdjust={adjustJobPoint} 
+              onPointSet={(value) => {
+                if (selectedIndex !== null) {
+                  const currentPoint = rLL.get(selectedIndex)?.jobPo || 0;
+                  const delta = value - currentPoint;
+                  adjustJobPoint(delta);
+                }
+              }}
               currentPoint={selectedIndex !== null ? rLL.get(selectedIndex)?.jobPo : 0}
             />
           )}
