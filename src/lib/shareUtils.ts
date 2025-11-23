@@ -13,7 +13,7 @@ import { getCustomQueryFromRLL } from "@/lib/routeUtils";
  */
 export async function shareTableAsImage(
   rLL: RouteLinkedList,
-  tableContainerSelector: string = ".table-container"
+  tableContainerSelector: string = ".route-list"
 ): Promise<void> {
   // 테이블 요소 찾기
   const tableContainer = document.querySelector(
@@ -25,13 +25,28 @@ export async function shareTableAsImage(
     throw new Error("테이블을 찾을 수 없습니다.");
   }
 
-  // 테이블을 이미지로 변환
-  const dataUrl = await toPng(tableContainer, {
-    quality: 0.95,
-    backgroundColor: "#131314",
-    pixelRatio: 2, // 고해상도 이미지
-    skipFonts: true, // CORS 문제 방지를 위해 외부 폰트 건너뛰기
-  });
+  // '직업 추가' 버튼 숨기기 (캡처 시 높이 계산을 위해)
+  const addButton = tableContainer.querySelector(".add-row-btn") as HTMLElement;
+  const originalDisplay = addButton ? addButton.style.display : "";
+  if (addButton) {
+    addButton.style.display = "none";
+  }
+
+  let dataUrl = "";
+  try {
+    // 테이블을 이미지로 변환
+    dataUrl = await toPng(tableContainer, {
+      quality: 0.95,
+      backgroundColor: "#131314",
+      pixelRatio: 2, // 고해상도 이미지
+      skipFonts: true, // CORS 문제 방지를 위해 외부 폰트 건너뛰기
+    });
+  } finally {
+    // 버튼 스타일 복구
+    if (addButton) {
+      addButton.style.display = originalDisplay;
+    }
+  }
 
   // Data URL을 Blob으로 변환
   const response = await fetch(dataUrl);

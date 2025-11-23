@@ -12,6 +12,8 @@ import JobSelector from "./components/JobSelector";
 import PointAdjuster from "./components/PointAdjuster";
 import "./prototype.css";
 
+import faviconV2 from "./img/faviconV2.png";
+
 export default function App() {
   const {
     rLL,
@@ -140,10 +142,10 @@ export default function App() {
       {/* Header */}
       <header className="app-header">
         <div className="logo">
-          <div className="logo-icon">
-            <i className="ph-bold ph-calculator"></i>
+          <div className="logo-icon" style={{ background: 'none', padding: 0 }}>
+            <img src={faviconV2} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
           </div>
-          <span>RouteCalc</span>
+          <span>루트 계산기 v2</span>
         </div>
         <div className="header-actions">
           <button className="icon-btn" aria-label="Reset" onClick={reset}>
@@ -181,7 +183,7 @@ export default function App() {
           {/* Inline Add Button */}
           <button className="add-row-btn" onClick={handleAddClick}>
             <i className="ph-bold ph-plus"></i>
-            <span>Add New Job</span>
+            <span>직업 추가</span>
           </button>
         </div>
       </main>
