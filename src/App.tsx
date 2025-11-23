@@ -8,19 +8,9 @@ import {
   getCurrentJobsFromQuery,
 } from "./lib/routeUtils";
 import { shareTableAsImage, handleShareError } from "./lib/shareUtils";
-import ElanBox from "./components/ElanBox";
-import ElanButton from "./components/ElanButton";
 import JobSelector from "./components/JobSelector";
 import PointAdjuster from "./components/PointAdjuster";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "./components/ui/table";
-import favicon from "./img/faviconV2.png";
+import "./prototype.css";
 
 export default function App() {
   const {
@@ -31,10 +21,10 @@ export default function App() {
     reset: resetRLL,
     setRLL,
   } = useRouteLinkedList();
-  const [tableLength, setTableLength] = useState(1); // 테이블 표시 길이
+
   // Currently selected row index for point adjustment
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  // Bottom panel open state (was drawer)
+  // Bottom panel open state
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   // Bottom panel mode: 'job-select' | 'point-adjust'
   const [panelMode, setPanelMode] = useState<"job-select" | "point-adjust">(
@@ -44,17 +34,14 @@ export default function App() {
   const [errorMessage, setErrorMessage] = useState<string>("");
   // Loading state for share functionality
   const [isSharing, setIsSharing] = useState(false);
-  const openPanel = () => {
+
+  const openPanel = (mode: "job-select" | "point-adjust") => {
+    setPanelMode(mode);
     setIsPanelOpen(true);
-    setPanelMode("job-select");
   };
+
   const closePanel = () => {
     setIsPanelOpen(false);
-    // 패널을 닫을 때 빈 row가 있으면 삭제
-    if (hasEmptyRow()) {
-      setTableLength((prev) => Math.max(1, prev - 1));
-      setSelectedIndex(null);
-    }
   };
 
   const adjustJobPoint = (adjustment: number) => {
@@ -63,17 +50,9 @@ export default function App() {
     }
   };
 
-  // 빈 row가 이미 있으면 추가하지 않음
-  const hasEmptyRow = () => {
-    const nodes = rLL.getAllNodes();
-    return nodes.length < tableLength;
-  };
-
-  // 직업을 선택해야만 row가 추가됨
   const addNewJob = (event: MouseEvent) => {
     const jobName = getJobNameFromSelect(event);
 
-    // 단일 검증 함수로 중복 제거
     const error = validateJobAddition(jobName, rLL);
     if (error) {
       setErrorMessage(error);
@@ -81,46 +60,30 @@ export default function App() {
     }
 
     addJob(jobName);
-
-    // 이미 마지막 row가 직업이 없는 빈 row라면 tableLength는 변경하지 않음
-    if (!hasEmptyRow()) {
-      setTableLength((prev) => Math.max(prev, rLL.length));
-    }
-
+    
     setPanelMode("point-adjust");
     setSelectedIndex(rLL.length - 1);
     setErrorMessage("");
   };
 
-  // 빈 row가 없을 때만 추가
-  const addEmptyRow = () => {
-    if (hasEmptyRow()) return;
-    const newLength = tableLength + 1;
-    setTableLength(newLength);
-    setTimeout(() => {
-      setSelectedIndex(newLength - 1); // 새로 추가된 row의 인덱스
-    }, 0);
-    openPanel();
+  const handleRowClick = (index: number) => {
+    setSelectedIndex(index);
+    openPanel("point-adjust");
   };
 
-  const scrollToRow = (index: number) => {
-    const element = document.getElementById(`${index}`);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
+  const handleAddClick = () => {
+    openPanel("job-select");
   };
 
   const reset = () => {
-    resetRLL(); // 훅의 reset 메서드 사용
-    setTableLength(1); // 테이블 길이도 초기화
-    setSelectedIndex(null); // 선택 해제
-    setIsPanelOpen(false); // 패널 닫기
+    resetRLL();
+    setSelectedIndex(null);
+    setIsPanelOpen(false);
     location.replace(`${location.origin}${location.pathname}`);
   };
 
   const handleShare = async () => {
-    if (isSharing) return; // 이미 공유 중이면 중복 실행 방지
-
+    if (isSharing) return;
     setIsSharing(true);
     try {
       await shareTableAsImage(rLL);
@@ -135,7 +98,6 @@ export default function App() {
     if (location.search.length > 0) {
       const newRLL = getCurrentJobsFromQuery(location);
       setRLL(newRLL);
-      setTableLength(Math.max(1, newRLL.length));
       return;
     }
 
@@ -144,15 +106,8 @@ export default function App() {
       const fakeLocation = { search: `?${savedData}` };
       const newRLL = getCurrentJobsFromQuery(fakeLocation as Location);
       setRLL(newRLL);
-      setTableLength(Math.max(1, newRLL.length));
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    if (selectedIndex !== null) {
-      scrollToRow(selectedIndex);
-    }
-  }, [selectedIndex]);
+  }, []);
 
   useEffect(() => {
     if (!errorMessage) return;
@@ -169,244 +124,164 @@ export default function App() {
     } else {
       sessionStorage.removeItem("elan-route-save");
     }
-  }, [rLL, version]); // version 의존성 추가로 모든 변경사항 감지
+  }, [rLL, version]);
+
+  useEffect(() => {
+    if (!isPanelOpen) {
+      const timer = setTimeout(() => {
+        setSelectedIndex(null);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isPanelOpen]);
 
   return (
-    <div className="pretendard h-dvh w-full bg-[#131314] text-[#e3e3e3] overflow-hidden flex justify-center md:py-10">
-      <ElanBox.OuterFrame className="h-full w-full max-w-[1000px] relative pt-2 bg-transparent shadow-none">
-        <ElanBox.Border className="border-none shadow-none">
-          <ElanBox.ContentArea className="md:flex md:flex-row overflow-hidden">
-          <div className="flex-1 flex flex-col relative h-full overflow-hidden">
-          <ElanButton className="absolute top-[8px] left-3 pl-2 pr-3 py-0.5 flex items-center text-lg leading-none z-10">
-            <img
-              src={favicon}
-              alt="Elan Logo"
-              className="inline-block w-4 h-4 mr-1 align-middle"
-            />
-            ROUTE CALCULATOR
-          </ElanButton>
-          {/* Utility Bar */}
-          <div className="absolute right-2 top-[8px] flex">
-            <ElanButton
-              onClick={handleShare}
-              disabled={isSharing}
-              className={isSharing ? "opacity-75 cursor-not-allowed" : ""}
-            >
-              {isSharing ? (
-                <span className="flex items-center gap-1">
-                  <svg
-                    className="animate-spin w-3 h-3"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                  >
-                    <circle
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                      className="opacity-25"
-                    />
-                    <path
-                      fill="currentColor"
-                      d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      className="opacity-75"
-                    />
-                  </svg>
-                  share
-                </span>
-              ) : (
-                "share"
-              )}
-            </ElanButton>
-            <ElanButton onClick={reset}>reset</ElanButton>
+    <div className="app-container">
+      {/* Header */}
+      <header className="app-header">
+        <div className="logo">
+          <div className="logo-icon">
+            <i className="ph-bold ph-calculator"></i>
           </div>
+          <span>RouteCalc</span>
+        </div>
+        <div className="header-actions">
+          <button className="icon-btn" aria-label="Reset" onClick={reset}>
+            <i className="ph ph-arrow-counter-clockwise"></i>
+          </button>
+          <button className="icon-btn" aria-label="Share" onClick={handleShare}>
+            {isSharing ? <i className="ph ph-spinner animate-spin"></i> : <i className="ph ph-share-network"></i>}
+          </button>
+        </div>
+      </header>
 
-          <section className="px-2 pt-10 flex-1 flex flex-col min-h-0 overflow-y-auto">
-            <Table.Container
-              className="table-container rounded-md md:!max-h-none md:overflow-visible"
-              style={{
-                maxHeight: isPanelOpen
-                  ? "calc(100dvh - 100px - 45dvh)"
-                  : "calc(100dvh - 100px)",
-                WebkitOverflowScrolling: "touch",
-              }}
-            >
-              <Table className="text-md">
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>직업</TableHead>
-                    <TableHead>STR</TableHead>
-                    <TableHead>INT</TableHead>
-                    <TableHead>AGI</TableHead>
-                    <TableHead>VIT</TableHead>
-                    <TableHead>잡포</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {Array.from(
-                    {
-                      length: Math.max(tableLength, rLL.getAllNodes().length),
-                    },
-                    (_, index) => {
-                      const routeNode = rLL.get(index);
-                      const isSelected = selectedIndex === index;
-                      return (
-                        <TableRow
-                          key={uuidv4()}
-                          id={`${index}`}
-                          className={`relative cursor-pointer ${
-                            isSelected
-                              ? "!bg-[#3a3a3f] scale-[1.002]"
-                              : "bg-[#2a2a2e]"
-                          }`}
-                          onClick={() => {
-                            // 다른 행을 클릭할 때 빈 행이 있으면 삭제
-                            if (hasEmptyRow() && selectedIndex !== index) {
-                              setTableLength((prev) => Math.max(1, prev - 1));
-                            }
-                            
-                            if (routeNode) {
-                              setSelectedIndex(index);
-                              setPanelMode("point-adjust");
-                              setIsPanelOpen(true);
-                            } else {
-                              // 빈 행 클릭: 새 직업 추가 모드 (선택 표시 유지)
-                              setSelectedIndex(index);
-                              setPanelMode("job-select");
-                              setIsPanelOpen(true);
-                            }
-                          }}
-                        >
-                          <TableCell className="cursor-pointer">
-                            {routeNode?.job || ""}
-                          </TableCell>
-                          <TableCell className="text-center cursor-pointer">
-                            {routeNode?.stats.STR || ""}
-                          </TableCell>
-                          <TableCell className="text-center cursor-pointer">
-                            {routeNode?.stats.INT || ""}
-                          </TableCell>
-                          <TableCell className="text-center cursor-pointer">
-                            {routeNode?.stats.AGI || ""}
-                          </TableCell>
-                          <TableCell className="text-center cursor-pointer">
-                            {routeNode?.stats.VIT || ""}
-                          </TableCell>
-                          <TableCell className="text-center cursor-pointer">
-                            {routeNode?.jobPo || ""}
-                          </TableCell>
-                        </TableRow>
-                      );
-                    }
-                  )}
-                </TableBody>
-              </Table>
-              
-              {/* Add Row Button - Moved Inside Container */}
-              {(!isPanelOpen || panelMode === "point-adjust" || window.innerWidth >= 768) && (
-                <div className="flex justify-center mt-2 pb-4">
-                  <button
-                    onClick={() => {
-                      if (hasEmptyRow()) {
-                        setPanelMode("job-select");
-                        setIsPanelOpen(true);
-                      } else {
-                        addEmptyRow();
-                      }
-                    }}
-                    className="w-8 h-8 bg-white hover:bg-gray-100 border border-gray-300 rounded-md flex items-center justify-center transition-colors duration-200 shadow-sm hover:shadow-md"
-                    title={hasEmptyRow() ? "직업 선택" : "새 행 추가"}
-                  >
-                    <span className="text-black leading-none font-bold">
-                      +
-                    </span>
-                  </button>
-                </div>
-              )}
-            </Table.Container>
-
-
-          </section>
-
-          <div className="absolute left-3 bottom-2 pl-1 flex gap-x-2 justify-end">
-            <a className="text-sm text-neutral-400 font-bold">about</a>
-          </div>
-          </div>
-
-          {/* Bottom Panel (Mobile Drawer) */}
-          {isPanelOpen && (
-            <div
-              className="md:hidden absolute left-1.5 right-1.5 bottom-2 z-50 bg-[#1e1e22] overflow-hidden rounded-t-xl border-t-2 border-neutral-600 shadow-[0_-4px_20px_rgba(0,0,0,0.4)]"
-              style={{ height: "auto", maxHeight: "45dvh" }}
-            >
-              <div className="h-10 flex items-center border-b border-neutral-700 pl-2 pr-1 relative bg-neutral-800/50">
-                {errorMessage && (
-                  <div className="flex-1 text-[11px] text-red-400 font-medium leading-tight break-keep pr-7">
-                    {errorMessage}
-                  </div>
-                )}
-                <button
-                  aria-label="닫기"
-                  onClick={closePanel}
-                  className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-neutral-700 text-neutral-400 hover:text-neutral-100 transition-all duration-200 absolute right-1 top-1/2 -translate-y-1/2"
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    width="22"
-                    height="22"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    fill="none"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <polyline points="6 9 12 15 18 9" />
-                  </svg>
-                </button>
-              </div>
-              <div
-                className="overflow-y-auto"
-                style={{ maxHeight: "calc(45dvh - 40px)" }}
+      {/* Main Content Area */}
+      <main className="main-content">
+        <div className="route-list" id="routeList">
+          {rLL.getAllNodes().map((node, index) => {
+            if (!node) return null;
+            return (
+              <div 
+                key={uuidv4()} 
+                className={`route-row ${selectedIndex === index ? 'active' : ''}`}
+                onClick={() => handleRowClick(index)}
               >
-                {panelMode === "job-select" ? (
-                  <JobSelector onJobSelect={addNewJob} />
-                ) : (
-                  <PointAdjuster onPointAdjust={adjustJobPoint} />
-                )}
+                <span className="job-name">{node.job}</span>
+                <div className="row-stats">
+                  <span className="stat-item"><span className="stat-label">STR</span><span className="stat-value">{node.stats.STR}</span></span>
+                  <span className="stat-item"><span className="stat-label">INT</span><span className="stat-value">{node.stats.INT}</span></span>
+                  <span className="stat-item"><span className="stat-label">AGI</span><span className="stat-value">{node.stats.AGI}</span></span>
+                  <span className="stat-item"><span className="stat-label">VIT</span><span className="stat-value">{node.stats.VIT}</span></span>
+                </div>
+                <div className="job-po-badge">{node.jobPo}</div>
               </div>
-            </div>
-          )}
-          {/* PC Right Panel */}
-          <div className="hidden md:flex w-80 flex-col relative z-20 pl-4 pt-10 gap-y-6">
-            {/* Job Selector Section */}
-            <div className="flex flex-col min-h-0 shrink-0">
-               <div className="h-8 flex items-center pl-1 shrink-0 mb-1">
-                  <span className="text-sm font-bold text-neutral-300">직업 선택</span>
-                  {errorMessage && (
-                    <div className="flex-1 text-[11px] text-red-400 font-medium leading-tight break-keep text-right">
-                      {errorMessage}
-                    </div>
-                  )}
-               </div>
-               <div className="overflow-y-auto">
-                  <JobSelector onJobSelect={addNewJob} />
-               </div>
-            </div>
+            );
+          })}
 
-            {/* Point Adjuster Section */}
-            <div className="flex flex-col min-h-0 shrink-0">
-               <div className="h-8 flex items-center pl-1 shrink-0 mb-1">
-                  <span className="text-sm font-bold text-neutral-300">포인트 조절</span>
+          {/* Inline Add Button */}
+          <button className="add-row-btn" onClick={handleAddClick}>
+            <i className="ph-bold ph-plus"></i>
+            <span>Add New Job</span>
+          </button>
+        </div>
+      </main>
+
+      {/* Desktop Sidebar */}
+      <aside className="desktop-sidebar" style={{ display: 'none' }}> 
+        {/* Note: prototype.css handles display: flex on desktop via media query, but we need to remove inline style or handle it via class */}
+        {/* Actually prototype.css has .desktop-sidebar { display: none } for mobile and flex for desktop. 
+            But wait, the HTML had style="display: none;" inline. I should rely on CSS.
+            Let's check prototype.css again.
+            Mobile: not defined, so block? No, HTML had it hidden.
+            CSS: @media (min-width: 768px) { .desktop-sidebar { display: flex; ... } }
+            So I should NOT put inline style display: none if I want it to show on desktop.
+            But on mobile it should be hidden.
+            prototype.css doesn't hide it on mobile by default?
+            Let's check.
+            It seems prototype.css relies on the fact that on mobile the sidebar is not in the flow or hidden.
+            Actually, looking at prototype.css:
+            It doesn't explicitly hide .desktop-sidebar on mobile.
+            I should add `hidden md:flex` or similar if using Tailwind, but I am using prototype.css.
+            I will add a style to hide it on mobile.
+        */}
+        <div style={{ padding: 'var(--space-md)', color: 'var(--text-secondary)', height: '100%', display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)' }}>
+           
+           {/* Job Selector Section */}
+           <div>
+             <h3 style={{ marginBottom: 'var(--space-sm)', color: 'var(--text-primary)' }}>직업 선택</h3>
+             {errorMessage && <div style={{ color: 'var(--error)', fontSize: '0.75rem', marginBottom: 'var(--space-xs)' }}>{errorMessage}</div>}
+             <JobSelector onJobSelect={addNewJob} />
+           </div>
+
+           {/* Point Adjuster Section - Always visible or only when selected? */}
+           {/* Let's make it always visible but disabled if no selection, or just show it. 
+               If no selection, maybe show "Select a row to adjust points".
+           */}
+           <div>
+             <h3 style={{ marginBottom: 'var(--space-sm)', color: 'var(--text-primary)' }}>포인트 조절</h3>
+             {selectedIndex !== null ? (
+               <PointAdjuster 
+                 onPointAdjust={adjustJobPoint} 
+                 currentPoint={rLL.get(selectedIndex)?.jobPo} 
+               />
+             ) : (
+               <div style={{ padding: 'var(--space-md)', textAlign: 'center', border: '1px dashed var(--border-color)', borderRadius: 'var(--radius-md)' }}>
+                 직업을 선택해주세요
                </div>
-               <div>
-                  <PointAdjuster onPointAdjust={adjustJobPoint} />
-               </div>
-            </div>
-          </div>
-        </ElanBox.ContentArea>
-      </ElanBox.Border>
-      </ElanBox.OuterFrame>
+             )}
+           </div>
+
+        </div>
+      </aside>
+      
+      {/* We need to ensure sidebar is hidden on mobile. 
+          I will add a style block or use a class if prototype.css has one.
+          prototype.css has:
+          @media (min-width: 768px) { ... .desktop-sidebar { ... } }
+          But it doesn't say display: none for mobile.
+          I'll add a style tag or inline style to hide it on mobile.
+      */}
+      <style>{`
+        @media (max-width: 767px) {
+          .desktop-sidebar { display: none; }
+        }
+      `}</style>
+
+      {/* Bottom Sheet Overlay */}
+      <div 
+        className={`bottom-sheet-overlay ${isPanelOpen ? 'open' : ''}`} 
+        id="overlay" 
+        onClick={closePanel}
+      ></div>
+
+      {/* Bottom Sheet */}
+      <div className={`bottom-sheet ${isPanelOpen ? 'open' : ''}`} id="bottomSheet">
+        <div className="sheet-handle-area">
+          <div className="sheet-handle"></div>
+        </div>
+        
+        <div className="sheet-header">
+          <h3 className="sheet-title" id="sheetTitle">
+            {panelMode === 'job-select' ? '직업 선택' : '포인트 조절'}
+          </h3>
+          <button className="sheet-close" onClick={closePanel}>
+            <i className="ph-bold ph-x"></i>
+          </button>
+        </div>
+
+        <div className="sheet-content" id="sheetContent">
+          {errorMessage && <div style={{ color: 'var(--error)', marginBottom: '1rem' }}>{errorMessage}</div>}
+          {panelMode === 'job-select' ? (
+            <JobSelector onJobSelect={addNewJob} />
+          ) : (
+            <PointAdjuster 
+              onPointAdjust={adjustJobPoint} 
+              currentPoint={selectedIndex !== null ? rLL.get(selectedIndex)?.jobPo : 0}
+            />
+          )}
+        </div>
+      </div>
+
     </div>
   );
 }

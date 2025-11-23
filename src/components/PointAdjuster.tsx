@@ -2,9 +2,10 @@ import React, { useState } from "react";
 
 interface PointAdjusterProps {
   onPointAdjust: (adjustment: number) => void;
+  currentPoint?: number;
 }
 
-const PointAdjuster: React.FC<PointAdjusterProps> = ({ onPointAdjust }) => {
+const PointAdjuster: React.FC<PointAdjusterProps> = ({ onPointAdjust, currentPoint = 0 }) => {
   const positiveButtons = [1, 5, 10, 100];
   const negativeButtons = [-1, -5, -10, -100];
   const [customValue, setCustomValue] = useState<string>("");
@@ -17,7 +18,6 @@ const PointAdjuster: React.FC<PointAdjusterProps> = ({ onPointAdjust }) => {
 
   const handleCustomInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    // 빈 문자열이거나 음수를 포함한 숫자만 허용
     if (value === "" || value === "-" || /^-?\d+$/.test(value)) {
       setCustomValue(value);
     }
@@ -27,7 +27,7 @@ const PointAdjuster: React.FC<PointAdjusterProps> = ({ onPointAdjust }) => {
     const value = parseInt(customValue);
     if (!isNaN(value) && value !== 0) {
       onPointAdjust(value);
-      setCustomValue(""); // Optional: clear after apply
+      setCustomValue("");
     }
   };
 
@@ -38,46 +38,49 @@ const PointAdjuster: React.FC<PointAdjusterProps> = ({ onPointAdjust }) => {
   };
 
   return (
-    <div className="p-4 disable-double-tap flex flex-col gap-5">
-      {/* Preset Buttons Section */}
-      <div className="space-y-3">
-        <div className="grid grid-cols-4 gap-2">
-          {positiveButtons.map((val) => (
-            <button
-              key={val}
-              onClick={() => onPointAdjust(val)}
-              className="h-10 flex items-center justify-center text-sm font-bold rounded bg-neutral-700 hover:bg-neutral-600 text-neutral-300 hover:text-white border border-neutral-600 hover:border-neutral-500 active:bg-neutral-500 transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)]"
-            >
-              +{val}
-            </button>
-          ))}
-        </div>
-        <div className="grid grid-cols-4 gap-2">
-          {negativeButtons.map((val) => (
-            <button
-              key={val}
-              onClick={() => onPointAdjust(val)}
-              className="h-10 flex items-center justify-center text-sm font-bold rounded bg-neutral-800 hover:bg-neutral-700 text-neutral-400 hover:text-white border border-neutral-700 hover:border-neutral-600 active:bg-neutral-600 transition-all duration-200 shadow-[inset_1px_1px_1px_rgba(255,255,255,0.1),_inset_-1px_-1px_1px_rgba(0,0,0,0.3)]"
-            >
-              {val}
-            </button>
-          ))}
-        </div>
+    <div className="point-adjuster">
+      <div className="point-display">
+        <div className="point-value">{currentPoint}</div>
+        <div className="point-label">현재 잡포인트</div>
       </div>
 
-      {/* Divider */}
-      <div className="h-px bg-neutral-700/50 w-full" />
+      <div className="adjust-controls">
+        {positiveButtons.map((val) => (
+          <button
+            key={val}
+            onClick={() => onPointAdjust(val)}
+            className="adjust-btn positive"
+          >
+            +{val}
+          </button>
+        ))}
+        {negativeButtons.map((val) => (
+          <button
+            key={val}
+            onClick={() => onPointAdjust(val)}
+            className="adjust-btn negative"
+          >
+            {val}
+          </button>
+        ))}
+      </div>
 
-      {/* Custom Input Section */}
-      <div className="space-y-2">
-        <label className="text-xs font-medium text-neutral-400 ml-1">
-          직접 입력
-        </label>
-        <div className="flex gap-2">
-          <div className="flex-1 flex items-center bg-neutral-800 rounded border border-neutral-700 overflow-hidden focus-within:border-neutral-500 transition-colors">
+      {/* Custom Input Section - Styled to match theme */}
+      <div style={{ marginTop: 'var(--space-md)' }}>
+        <div className="point-label" style={{ marginBottom: 'var(--space-sm)', textAlign: 'left' }}>직접 입력</div>
+        <div style={{ display: 'flex', gap: 'var(--space-sm)' }}>
+          <div style={{ 
+            flex: 1, 
+            display: 'flex', 
+            backgroundColor: 'var(--bg-tertiary)', 
+            borderRadius: 'var(--radius-md)',
+            border: '1px solid var(--border-color)',
+            overflow: 'hidden'
+          }}>
             <button
               onClick={() => handleCustomAdjust(-1)}
-              className="w-10 h-full bg-neutral-700/50 hover:bg-neutral-600 text-neutral-300 active:bg-neutral-500 transition-colors flex items-center justify-center border-r border-neutral-700"
+              style={{ width: '40px', color: 'var(--text-secondary)' }}
+              className="adjust-btn"
             >
               -
             </button>
@@ -87,18 +90,32 @@ const PointAdjuster: React.FC<PointAdjusterProps> = ({ onPointAdjust }) => {
               onChange={handleCustomInputChange}
               onKeyPress={handleKeyPress}
               placeholder="0"
-              className="flex-1 bg-transparent text-center text-white text-sm font-medium focus:outline-none py-2.5 min-w-0"
+              style={{
+                flex: 1,
+                background: 'transparent',
+                border: 'none',
+                color: 'var(--text-primary)',
+                textAlign: 'center',
+                fontWeight: 600,
+                outline: 'none'
+              }}
             />
             <button
               onClick={() => handleCustomAdjust(1)}
-              className="w-10 h-full bg-neutral-700/50 hover:bg-neutral-600 text-neutral-300 active:bg-neutral-500 transition-colors flex items-center justify-center border-l border-neutral-700"
+              style={{ width: '40px', color: 'var(--text-secondary)' }}
+              className="adjust-btn"
             >
               +
             </button>
           </div>
           <button
             onClick={handleApplyCustomValue}
-            className="px-4 bg-neutral-200 hover:bg-white text-neutral-900 text-sm font-bold rounded shadow-lg active:scale-95 transition-all duration-200 whitespace-nowrap"
+            className="adjust-btn"
+            style={{ 
+              width: '80px', 
+              backgroundColor: 'var(--text-primary)', 
+              color: 'var(--bg-primary)'
+            }}
           >
             적용
           </button>
