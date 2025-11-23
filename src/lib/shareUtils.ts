@@ -1,6 +1,7 @@
 import { toPng } from "html-to-image";
 import RouteLinkedList from "@/lib/routeLinkedList";
 import { getCustomQueryFromRLL } from "@/lib/routeUtils";
+import faviconV2 from "@/img/faviconV2.png";
 
 /**
  * 테이블을 이미지로 변환하고 공유하는 함수
@@ -32,6 +33,62 @@ export async function shareTableAsImage(
     addButton.style.display = "none";
   }
 
+  // 쿼리 문자열 생성
+  const queryToSave = getCustomQueryFromRLL(rLL);
+  
+  // 헤더 요소 생성 (상단 왼쪽에 로고)
+  const header = document.createElement("div");
+  header.style.display = "flex";
+  header.style.alignItems = "center";
+  header.style.gap = "6px";
+  header.style.marginBottom = "8px";
+  header.style.paddingTop = "8px";
+  header.style.paddingLeft = "8px";
+  header.style.backgroundColor = "#131314";
+  
+  const headerFaviconImg = document.createElement("img");
+  headerFaviconImg.src = faviconV2;
+  headerFaviconImg.style.width = "20px";
+  headerFaviconImg.style.height = "20px";
+  headerFaviconImg.style.objectFit = "contain";
+  
+  const headerText = document.createElement("span");
+  headerText.innerText = "루트 계산기";
+  headerText.style.fontSize = "14px";
+  headerText.style.fontWeight = "bold";
+  headerText.style.color = "rgba(255, 255, 255, 0.7)";
+  
+  header.appendChild(headerFaviconImg);
+  header.appendChild(headerText);
+  
+  // 푸터 요소 생성 (하단에 URL만)
+  const footer = document.createElement("div");
+  footer.style.display = "flex";
+  footer.style.alignItems = "center";
+  footer.style.marginTop = "8px";
+  footer.style.paddingTop = "8px";
+  footer.style.paddingBottom = "4px";
+  footer.style.paddingLeft = "8px";
+  footer.style.paddingRight = "8px";
+  footer.style.backgroundColor = "#131314";
+  
+  // URL 문자열
+  const urlEl = document.createElement("div");
+  urlEl.innerText = queryToSave;
+  urlEl.style.fontSize = "10px";
+  urlEl.style.color = "rgba(255, 255, 255, 0.3)";
+  urlEl.style.fontFamily = "monospace";
+  urlEl.style.overflow = "hidden";
+  urlEl.style.whiteSpace = "nowrap";
+  urlEl.style.textOverflow = "ellipsis";
+  urlEl.style.maxWidth = "100%";
+  
+  footer.appendChild(urlEl);
+  
+  // 테이블 컨테이너에 헤더와 푸터 추가
+  tableContainer.insertBefore(header, tableContainer.firstChild);
+  tableContainer.appendChild(footer);
+
   let dataUrl = "";
   try {
     // 테이블을 이미지로 변환
@@ -42,10 +99,12 @@ export async function shareTableAsImage(
       skipFonts: true, // CORS 문제 방지를 위해 외부 폰트 건너뛰기
     });
   } finally {
-    // 버튼 스타일 복구
+    // 버튼 스타일, 헤더 및 푸터 복구
     if (addButton) {
       addButton.style.display = originalDisplay;
     }
+    tableContainer.removeChild(header);
+    tableContainer.removeChild(footer);
   }
 
   // Data URL을 Blob으로 변환
@@ -56,7 +115,6 @@ export async function shareTableAsImage(
   const file = new File([blob], "route-table.png", { type: "image/png" });
 
   // 공유 URL 생성
-  const queryToSave = getCustomQueryFromRLL(rLL);
   const urlToSave = `${location.origin}${location.pathname}${
     queryToSave.length === 0 ? "" : `?${queryToSave}`
   }`;
