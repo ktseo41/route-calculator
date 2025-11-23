@@ -7,7 +7,7 @@ interface JobSelectorProps {
 
 const JobSelector: React.FC<JobSelectorProps> = ({ onJobSelect }) => {
   return (
-    <div style={{ padding: 'var(--space-md)' }}>
+    <div>
       {/* 전사 계열 직업 */}
       <div style={{ marginBottom: 'var(--space-md)', paddingBottom: 'var(--space-sm)', borderBottom: '1px solid var(--border-color)' }}>
         <h4 style={{ marginBottom: 'var(--space-sm)', color: 'var(--text-tertiary)', fontSize: '0.75rem' }}>전사 계열</h4>
