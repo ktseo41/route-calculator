@@ -246,12 +246,12 @@ button {
 
 .route-row.active {
   border-color: var(--accent-primary);
-  background-color: rgba(99, 102, 241, 0.05);
+  background-color: rgba(129, 140, 248, 0.12);
   box-shadow: inset 2px 0 0 0 var(--accent-primary); /* Left indicator */
 }
 
 .route-row:active {
-  background-color: var(--bg-tertiary);
+  background-color: rgba(129, 140, 248, 0.15);
 }
 
 .job-name {
@@ -489,7 +489,7 @@ button {
 .point-adjuster {
   display: flex;
   flex-direction: column;
-  gap: var(--space-lg);
+  gap: var(--space-md);
 }
 
 .point-display {
@@ -497,7 +497,7 @@ button {
 }
 
 .point-value {
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: 700;
   color: var(--text-primary);
   line-height: 1;
@@ -516,12 +516,12 @@ button {
 }
 
 .adjust-btn {
-  height: 48px;
+  height: 40px;
   border-radius: var(--radius-md);
   background-color: var(--bg-tertiary);
   color: var(--text-primary);
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 0.9375rem;
   display: flex;
   align-items: center;
   justify-content: center;
