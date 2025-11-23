@@ -1,22 +1,22 @@
 :root {
-  /* Color Palette - Deep Dark Theme */
-  --bg-primary: #09090b; /* Zinc 950 */
-  --bg-secondary: #18181b; /* Zinc 900 */
-  --bg-tertiary: #27272a; /* Zinc 800 */
+  /* Color Palette - Lighter Dark Theme for Better Readability */
+  --bg-primary: #27272a; /* Zinc 800 - Much lighter than before */
+  --bg-secondary: #3f3f46; /* Zinc 700 - Lighter secondary */
+  --bg-tertiary: #52525b; /* Zinc 600 - Lighter tertiary */
   
-  --text-primary: #f4f4f5; /* Zinc 100 */
-  --text-secondary: #a1a1aa; /* Zinc 400 */
-  --text-tertiary: #52525b; /* Zinc 600 */
+  --text-primary: #fafafa; /* Zinc 50 - Brighter white */
+  --text-secondary: #d4d4d8; /* Zinc 300 - Much lighter gray */
+  --text-tertiary: #a1a1aa; /* Zinc 400 - Lighter muted text */
 
-  --accent-primary: #6366f1; /* Indigo 500 */
-  --accent-hover: #4f46e5; /* Indigo 600 */
-  --accent-light: rgba(99, 102, 241, 0.15);
+  --accent-primary: #818cf8; /* Indigo 400 - Brighter accent */
+  --accent-hover: #6366f1; /* Indigo 500 */
+  --accent-light: rgba(129, 140, 248, 0.2);
 
-  --border-color: #27272a; /* Zinc 800 */
-  --border-hover: #3f3f46; /* Zinc 700 */
+  --border-color: #52525b; /* Zinc 600 - More visible borders */
+  --border-hover: #71717a; /* Zinc 500 - Brighter on hover */
 
-  --success: #10b981;
-  --error: #ef4444;
+  --success: #34d399; /* Emerald 400 - Brighter green */
+  --error: #f87171; /* Red 400 - Brighter red */
 
   /* Spacing */
   --space-xs: 0.25rem;
@@ -102,7 +102,7 @@ button {
   justify-content: space-between;
   padding: 0 var(--space-md);
   border-bottom: 1px solid var(--border-color);
-  background-color: rgba(9, 9, 11, 0.8);
+  background-color: rgba(39, 39, 42, 0.95); /* Updated to match new bg-primary */
   backdrop-filter: blur(12px);
   position: sticky;
   top: 0;
@@ -143,11 +143,17 @@ button {
   color: var(--text-secondary);
   transition: var(--transition-fast);
   font-size: 1.5rem;
+  /* Prevent sticky hover on mobile */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
-.icon-btn:hover {
-  background-color: var(--bg-tertiary);
-  color: var(--text-primary);
+/* Only apply hover on devices that support hover */
+@media (hover: hover) and (pointer: fine) {
+  .icon-btn:hover {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+  }
 }
 
 /* Main Content */

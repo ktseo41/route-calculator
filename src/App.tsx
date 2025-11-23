@@ -126,7 +126,9 @@ export default function App() {
     }
   };
 
-  const toggleDeleteMode = () => {
+  const toggleDeleteMode = (event: React.MouseEvent<HTMLButtonElement>) => {
+    // Remove focus to prevent hover state on mobile
+    event.currentTarget.blur();
     setDeleteMode(!deleteMode);
   };
 
@@ -188,10 +190,10 @@ export default function App() {
             onClick={toggleDeleteMode}
             style={deleteMode ? { backgroundColor: 'rgba(239, 68, 68, 0.1)', color: 'var(--error)' } : {}}
           >
-            <i className="ph ph-trash"></i>
+            <i className="ph ph-minus-circle"></i>
           </button>
           <button className="icon-btn" aria-label="Reset" onClick={reset}>
-            <i className="ph ph-arrow-counter-clockwise"></i>
+            <i className="ph ph-broom"></i>
           </button>
           <button className="icon-btn" aria-label="Share" onClick={handleShare}>
             {isSharing ? <i className="ph ph-spinner animate-spin"></i> : <i className="ph ph-share-network"></i>}
