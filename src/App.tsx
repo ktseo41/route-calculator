@@ -242,13 +242,17 @@ export default function App() {
                 </div>
                 <div className="job-po-badge">{node.jobPo}</div>
                 {deleteMode && (
-                  <button 
-                    className={`delete-job-btn ${isDeleting ? 'no-hover' : ''}`}
-                    onClick={(e) => handleDeleteJob(index, e)}
-                    aria-label="삭제"
-                  >
-                    <i className="ph ph-trash"></i>
-                  </button>
+                  node.job === '무직' ? (
+                    <div style={{ width: '32px', marginLeft: '4px', flexShrink: 0 }}></div>
+                  ) : (
+                    <button 
+                      className={`delete-job-btn ${isDeleting ? 'no-hover' : ''}`}
+                      onClick={(e) => handleDeleteJob(index, e)}
+                      aria-label="삭제"
+                    >
+                      <i className="ph ph-trash"></i>
+                    </button>
+                  )
                 )}
               </div>
             );
