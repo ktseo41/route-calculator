@@ -3,7 +3,7 @@
   --bg-primary: #27272a; /* Zinc 800 - Much lighter than before */
   --bg-secondary: #3f3f46; /* Zinc 700 - Lighter secondary */
   --bg-tertiary: #52525b; /* Zinc 600 - Lighter tertiary */
-  
+
   --text-primary: #fafafa; /* Zinc 50 - Brighter white */
   --text-secondary: #d4d4d8; /* Zinc 300 - Much lighter gray */
   --text-tertiary: #a1a1aa; /* Zinc 400 - Lighter muted text */
@@ -35,7 +35,8 @@
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
   --shadow-glow: 0 0 15px rgba(99, 102, 241, 0.3);
   --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
 
@@ -56,7 +57,10 @@
 }
 
 body {
-  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui,
+    Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR",
+    "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+    sans-serif;
   background-color: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.5;
@@ -68,7 +72,12 @@ body {
 }
 
 /* Typography */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 600;
   letter-spacing: -0.025em;
 }
@@ -102,7 +111,12 @@ button {
   justify-content: space-between;
   padding: 0 var(--space-md);
   border-bottom: 1px solid var(--border-color);
-  background-color: rgba(39, 39, 42, 0.95); /* Updated to match new bg-primary */
+  background-color: rgba(
+    39,
+    39,
+    42,
+    0.95
+  ); /* Updated to match new bg-primary */
   backdrop-filter: blur(12px);
   position: sticky;
   top: 0;
@@ -325,7 +339,7 @@ button {
     background-color: rgba(239, 68, 68, 0.1);
     color: var(--error);
   }
-  
+
   .delete-job-btn.no-hover:hover {
     background-color: transparent;
     color: var(--text-tertiary);
@@ -384,7 +398,7 @@ button {
   z-index: 40;
   opacity: 0;
   pointer-events: none;
-  transition: opacity var(--transition-normal);
+  transition: opacity var(--transition-fast);
 }
 
 .bottom-sheet-overlay.open {
@@ -404,7 +418,7 @@ button {
   box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
   z-index: 50;
   transform: translateY(100%);
-  transition: transform var(--transition-normal);
+  transition: transform var(--transition-fast);
   max-width: 600px;
   margin: 0 auto;
   max-height: 80dvh;
@@ -581,7 +595,7 @@ button {
   .bottom-sheet {
     display: none; /* Use sidebar instead */
   }
-  
+
   .bottom-sheet-overlay {
     display: none;
   }
