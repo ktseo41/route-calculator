@@ -208,131 +208,95 @@ export default function App() {
         </div>
       </header>
 
-      {/* Main Content Area */}
-      <main className="main-content">
-        <div className="route-list" id="routeList">
-          {/* Table Header */}
-          <div className="route-header">
-            <span className="header-job">직업</span>
-            <div className="header-stats">
-              <span className="header-stat">STR</span>
-              <span className="header-stat">INT</span>
-              <span className="header-stat">AGI</span>
-              <span className="header-stat">VIT</span>
-            </div>
-            <span className="header-po">PO</span>
-            {deleteMode && <span className="header-delete"></span>}
-          </div>
-
-          {rLL.getAllNodes().map((node, index) => {
-            if (!node) return null;
-            return (
-              <div 
-                key={uuidv4()} 
-                className={`route-row ${selectedIndex === index ? 'active' : ''}`}
-                style={{ cursor: node.job === '무직' ? 'default' : 'pointer' }}
-                onClick={() => handleRowClick(index)}
-              >
-                <span className="job-name">{node.job}</span>
-                <div className="row-stats">
-                  <span className="stat-value">{node.stats.STR}</span>
-                  <span className="stat-value">{node.stats.INT}</span>
-                  <span className="stat-value">{node.stats.AGI}</span>
-                  <span className="stat-value">{node.stats.VIT}</span>
-                </div>
-                <div className="job-po-badge">{node.jobPo}</div>
-                {deleteMode && (
-                  node.job === '무직' ? (
-                    <div style={{ width: '32px', marginLeft: '4px', flexShrink: 0 }}></div>
-                  ) : (
-                    <button 
-                      className={`delete-job-btn ${isDeleting ? 'no-hover' : ''}`}
-                      onClick={(e) => handleDeleteJob(index, e)}
-                      aria-label="삭제"
-                    >
-                      <i className="ph ph-trash"></i>
-                    </button>
-                  )
-                )}
+      <div className="content-wrapper">
+        {/* Main Content Area */}
+        <main className="main-content">
+          <div className="route-list" id="routeList">
+            {/* Table Header */}
+            <div className="route-header">
+              <span className="header-job">직업</span>
+              <div className="header-stats">
+                <span className="header-stat">STR</span>
+                <span className="header-stat">INT</span>
+                <span className="header-stat">AGI</span>
+                <span className="header-stat">VIT</span>
               </div>
-            );
-          })}
+              <span className="header-po">PO</span>
+              {deleteMode && <span className="header-delete"></span>}
+            </div>
 
-          {/* Inline Add Button */}
-          <button className="add-row-btn" onClick={handleAddClick}>
-            <i className="ph-bold ph-plus"></i>
-            <span>직업 추가</span>
-          </button>
-        </div>
-      </main>
+            {rLL.getAllNodes().map((node, index) => {
+              if (!node) return null;
+              return (
+                <div 
+                  key={uuidv4()} 
+                  className={`route-row ${selectedIndex === index ? 'active' : ''}`}
+                  style={{ cursor: node.job === '무직' ? 'default' : 'pointer' }}
+                  onClick={() => handleRowClick(index)}
+                >
+                  <span className="job-name">{node.job}</span>
+                  <div className="row-stats">
+                    <span className="stat-value">{node.stats.STR}</span>
+                    <span className="stat-value">{node.stats.INT}</span>
+                    <span className="stat-value">{node.stats.AGI}</span>
+                    <span className="stat-value">{node.stats.VIT}</span>
+                  </div>
+                  <div className="job-po-badge">{node.jobPo}</div>
+                  {deleteMode && (
+                    node.job === '무직' ? (
+                      <div style={{ width: '32px', marginLeft: '4px', flexShrink: 0 }}></div>
+                    ) : (
+                      <button 
+                        className={`delete-job-btn ${isDeleting ? 'no-hover' : ''}`}
+                        onClick={(e) => handleDeleteJob(index, e)}
+                        aria-label="삭제"
+                      >
+                        <i className="ph ph-trash"></i>
+                      </button>
+                    )
+                  )}
+                </div>
+              );
+            })}
 
-      {/* Desktop Sidebar */}
-      <aside className="desktop-sidebar" style={{ display: 'none' }}> 
-        {/* Note: prototype.css handles display: flex on desktop via media query, but we need to remove inline style or handle it via class */}
-        {/* Actually prototype.css has .desktop-sidebar { display: none } for mobile and flex for desktop. 
-            But wait, the HTML had style="display: none;" inline. I should rely on CSS.
-            Let's check prototype.css again.
-            Mobile: not defined, so block? No, HTML had it hidden.
-            CSS: @media (min-width: 768px) { .desktop-sidebar { display: flex; ... } }
-            So I should NOT put inline style display: none if I want it to show on desktop.
-            But on mobile it should be hidden.
-            prototype.css doesn't hide it on mobile by default?
-            Let's check.
-            It seems prototype.css relies on the fact that on mobile the sidebar is not in the flow or hidden.
-            Actually, looking at prototype.css:
-            It doesn't explicitly hide .desktop-sidebar on mobile.
-            I should add `hidden md:flex` or similar if using Tailwind, but I am using prototype.css.
-            I will add a style to hide it on mobile.
-        */}
-        <div style={{ padding: 'var(--space-md)', color: 'var(--text-secondary)', height: '100%', display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)' }}>
-           
-           {/* Job Selector Section */}
-           <div>
-             <h3 style={{ marginBottom: 'var(--space-sm)', color: 'var(--text-primary)' }}>직업 선택</h3>
-             {errorMessage && <div style={{ color: 'var(--error)', fontSize: '0.75rem', marginBottom: 'var(--space-xs)' }}>{errorMessage}</div>}
-             <JobSelector onJobSelect={addNewJob} />
-           </div>
+            {/* Inline Add Button - Mobile Only */}
+            <button className="add-row-btn mobile-only" onClick={handleAddClick}>
+              <i className="ph-bold ph-plus"></i>
+              <span>직업 추가</span>
+            </button>
+          </div>
+        </main>
 
-           {/* Point Adjuster Section - Always visible or only when selected? */}
-           {/* Let's make it always visible but disabled if no selection, or just show it. 
-               If no selection, maybe show "Select a row to adjust points".
-           */}
-           <div>
-             <h3 style={{ marginBottom: 'var(--space-sm)', color: 'var(--text-primary)' }}>포인트 조절</h3>
-             {selectedIndex !== null ? (
-               <PointAdjuster 
-                 onPointAdjust={adjustJobPoint} 
-                 onPointSet={(value) => {
-                   if (selectedIndex !== null) {
-                     const currentPoint = rLL.get(selectedIndex)?.jobPo || 0;
-                     const delta = value - currentPoint;
-                     adjustJobPoint(delta);
-                   }
-                 }}
-                 currentPoint={rLL.get(selectedIndex)?.jobPo} 
-               />
-             ) : (
-               <div style={{ padding: 'var(--space-md)', textAlign: 'center', border: '1px dashed var(--border-color)', borderRadius: 'var(--radius-md)' }}>
-                 직업을 선택해주세요
+        {/* Desktop Sidebar */}
+        <aside className="desktop-sidebar"> 
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)' }}>
+             
+             {/* Job Selector Section */}
+             <div className="sidebar-section">
+               {errorMessage && <div style={{ color: 'var(--error)', fontSize: '0.75rem', marginBottom: 'var(--space-xs)' }}>{errorMessage}</div>}
+               <JobSelector onJobSelect={addNewJob} />
+             </div>
+
+             {/* Point Adjuster Section */}
+             <div className="sidebar-section">
+               <div className="point-adjuster-container" style={{ opacity: selectedIndex !== null ? 1 : 0.5, pointerEvents: selectedIndex !== null ? 'auto' : 'none' }}>
+                 <PointAdjuster 
+                   onPointAdjust={adjustJobPoint} 
+                   onPointSet={(value) => {
+                     if (selectedIndex !== null) {
+                       const currentPoint = rLL.get(selectedIndex)?.jobPo || 0;
+                       const delta = value - currentPoint;
+                       adjustJobPoint(delta);
+                     }
+                   }}
+                   currentPoint={selectedIndex !== null ? rLL.get(selectedIndex)?.jobPo : 0} 
+                 />
                </div>
-             )}
-           </div>
+             </div>
 
-        </div>
-      </aside>
-      
-      {/* We need to ensure sidebar is hidden on mobile. 
-          I will add a style block or use a class if prototype.css has one.
-          prototype.css has:
-          @media (min-width: 768px) { ... .desktop-sidebar { ... } }
-          But it doesn't say display: none for mobile.
-          I'll add a style tag or inline style to hide it on mobile.
-      */}
-      <style>{`
-        @media (max-width: 767px) {
-          .desktop-sidebar { display: none; }
-        }
-      `}</style>
+          </div>
+        </aside>
+      </div>
 
       {/* Bottom Sheet Overlay */}
       <div 

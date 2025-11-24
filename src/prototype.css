@@ -564,39 +564,96 @@ button {
 
 /* Desktop Enhancements */
 @media (min-width: 768px) {
+  body {
+    background-color: #18181b; /* Darker background for the body to make the app pop */
+  }
+
+  #root {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-md);
+  }
+
   .app-container {
-    max-width: 1000px;
-    flex-direction: row;
+    max-width: 900px;
+    width: 100%;
+    height: auto;
+    min-height: 600px;
+    max-height: 90vh;
+    margin: 0 auto; /* Ensure horizontal centering */
     border: 1px solid var(--border-color);
     border-radius: var(--radius-xl);
-    height: 90dvh;
-    margin-top: 5dvh;
     box-shadow: var(--shadow-2xl);
+    background-color: var(--bg-primary);
     overflow: hidden;
-  }
-
-  .app-header {
-    display: none; /* Or styled differently for desktop */
-  }
-
-  .main-content {
-    flex: 1;
-    border-right: 1px solid var(--border-color);
-    padding-bottom: var(--space-md);
-  }
-
-  .desktop-sidebar {
-    width: 360px;
-    background-color: var(--bg-secondary);
     display: flex;
     flex-direction: column;
   }
 
+  .app-header {
+    display: flex;
+    padding: 0 var(--space-lg);
+    height: 60px;
+  }
+
+  .content-wrapper {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .main-content {
+    flex: 0 0 420px; /* Fixed width for table section */
+    border-right: 1px solid var(--border-color);
+    padding: var(--space-md);
+    padding-bottom: var(--space-md); /* Reset padding */
+    overflow-y: auto;
+  }
+
+  .desktop-sidebar {
+    flex: 1;
+    background-color: var(--bg-secondary);
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-lg);
+    overflow-y: auto;
+  }
+
+  .sidebar-section {
+    margin-bottom: var(--space-xl);
+  }
+
+  .sidebar-section h3 {
+    margin-bottom: var(--space-md);
+    color: var(--text-primary);
+    font-size: 1rem;
+  }
+
+  /* Hide mobile elements */
+  .mobile-only {
+    display: none !important;
+  }
+
   .bottom-sheet {
-    display: none; /* Use sidebar instead */
+    display: none !important;
   }
 
   .bottom-sheet-overlay {
-    display: none;
+    display: none !important;
+  }
+
+  /* Adjust Job Selector for Sidebar */
+  .job-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 columns for jobs */
+  }
+
+  /* Adjust Point Adjuster for Sidebar */
+  .point-adjuster-container {
+    background-color: var(--bg-primary);
+    padding: var(--space-md);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    transition: opacity var(--transition-normal);
   }
 }
