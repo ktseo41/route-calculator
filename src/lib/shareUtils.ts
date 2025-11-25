@@ -186,16 +186,12 @@ export function downloadImage(blob: Blob, filename: string): void {
  */
 export async function shareImage(
   blob: Blob, 
-  filename: string, 
-  title: string, 
-  text: string
+  filename: string
 ): Promise<void> {
   const file = new File([blob], filename, { type: "image/png" });
   
   if (navigator.share && navigator.canShare) {
     const shareData = {
-      title: title,
-      text: text,
       files: [file],
     };
 
@@ -232,7 +228,7 @@ export async function shareTableAsImage(
   }`;
   
   try {
-    await shareImage(blob, "route-table.png", "Elan Route Calculator", "일랜시아 루트 계산 결과");
+    await shareImage(blob, "route-table.png");
   } catch (e) {
     // 이미지 공유 실패 시 URL 공유 시도
     await copyUrl(urlToSave);

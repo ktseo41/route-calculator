@@ -168,10 +168,8 @@ export default function App() {
     try {
       const blob = await generateTableImage(rLL);
       await shareImage(
-        blob, 
-        "route-table.png", 
-        "Elan Route Calculator", 
-        "일랜시아 루트 계산 결과"
+        blob,
+        "route-table.png"
       );
       setIsShareModalOpen(false);
     } catch (error: any) {
