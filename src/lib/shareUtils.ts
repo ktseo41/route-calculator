@@ -59,7 +59,9 @@ export async function generateTableImage(
   footer.style.paddingBottom = "4px";
   footer.style.paddingLeft = "8px";
   footer.style.paddingRight = "8px";
-  footer.style.backgroundColor = "#131314";
+  footer.style.backgroundColor = "#27272a"; // Match table background
+  footer.style.borderBottomLeftRadius = "8px";
+  footer.style.borderBottomRightRadius = "8px";
   
   // 왼쪽: URL 문자열
   const urlEl = document.createElement("div");
@@ -96,25 +98,59 @@ export async function generateTableImage(
   footer.appendChild(urlEl);
   footer.appendChild(signatureContainer);
   
-  // 테이블 컨테이너에 푸터 추가
-  tableContainer.appendChild(footer);
+  // 백드롭 컨테이너 생성
+  const backdrop = document.createElement("div");
+  backdrop.style.backgroundColor = "#3f3f46"; // Zinc 700 - Backdrop color
+  backdrop.style.padding = "40px";
+  backdrop.style.display = "flex";
+  backdrop.style.alignItems = "center";
+  backdrop.style.justifyContent = "center";
+  backdrop.style.width = "fit-content";
+  
+  // 테이블 복제 및 스타일링
+  const clonedTable = tableContainer.cloneNode(true) as HTMLElement;
+  clonedTable.style.backgroundColor = "#27272a"; // Zinc 800 - Table background
+  clonedTable.style.borderRadius = "12px";
+  clonedTable.style.boxShadow = "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)"; // Shadow XL
+  clonedTable.style.padding = "16px";
+  clonedTable.style.width = "400px"; // Fixed width for consistency
+  
+  // 복제된 테이블 내부의 불필요한 요소 제거 (이미 원본에서 숨겼지만, 복제본에서도 확실히 처리)
+  const clonedAddButton = clonedTable.querySelector(".add-row-btn") as HTMLElement;
+  if (clonedAddButton) clonedAddButton.remove();
+  
+  const clonedDeleteButtons = clonedTable.querySelectorAll(".delete-job-btn");
+  clonedDeleteButtons.forEach(btn => (btn as HTMLElement).remove());
+  
+  const clonedDeleteHeader = clonedTable.querySelector(".header-delete") as HTMLElement;
+  if (clonedDeleteHeader) clonedDeleteHeader.remove();
+
+  // 푸터 추가
+  clonedTable.appendChild(footer);
+  
+  // 백드롭에 테이블 추가
+  backdrop.appendChild(clonedTable);
+  
+  // 화면 밖으로 임시 추가
+  document.body.appendChild(backdrop);
 
   let dataUrl = "";
   try {
-    // 테이블을 이미지로 변환
-    dataUrl = await toPng(tableContainer, {
+    // 백드롭을 포함하여 이미지로 변환
+    dataUrl = await toPng(backdrop, {
       quality: 0.95,
-      backgroundColor: "#131314",
       pixelRatio: 2, // 고해상도 이미지
       skipFonts: true, // CORS 문제 방지를 위해 외부 폰트 건너뛰기
     });
   } finally {
-    // 버튼 스타일 및 푸터 복구
+    // 임시 요소 제거
+    document.body.removeChild(backdrop);
+
+    // 원본 테이블 복구
     if (addButton) {
       addButton.style.display = originalDisplay;
     }
     
-    // 삭제 버튼들과 헤더 복구
     deleteButtons.forEach((btn, index) => {
       btn.style.display = originalDeleteButtonDisplays[index];
     });
@@ -122,8 +158,6 @@ export async function generateTableImage(
     if (deleteHeader) {
       deleteHeader.style.display = originalDeleteHeaderDisplay;
     }
-    
-    tableContainer.removeChild(footer);
   }
 
   // Data URL을 Blob으로 변환
