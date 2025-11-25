@@ -100,8 +100,7 @@ export async function generateTableImage(
   
   // 백드롭 컨테이너 생성
   const backdrop = document.createElement("div");
-  backdrop.style.backgroundColor = "#3f3f46"; // Zinc 700 - Backdrop color
-  backdrop.style.padding = "40px";
+  backdrop.style.backgroundColor = "transparent"; // Zinc 700 - Backdrop color
   backdrop.style.display = "flex";
   backdrop.style.alignItems = "center";
   backdrop.style.justifyContent = "center";
@@ -111,7 +110,6 @@ export async function generateTableImage(
   const clonedTable = tableContainer.cloneNode(true) as HTMLElement;
   clonedTable.style.backgroundColor = "#27272a"; // Zinc 800 - Table background
   clonedTable.style.borderRadius = "12px";
-  clonedTable.style.boxShadow = "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)"; // Shadow XL
   clonedTable.style.padding = "16px";
   clonedTable.style.width = "400px"; // Fixed width for consistency
   
