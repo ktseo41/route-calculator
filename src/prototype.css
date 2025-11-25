@@ -178,6 +178,10 @@ button {
   padding-bottom: 100px; /* Space for bottom sheet */
 }
 
+.desktop-sidebar {
+  display: none;
+}
+
 /* Route Table */
 .route-list {
   display: flex;
@@ -504,9 +508,6 @@ button {
   font-size: 0.8rem; /* Smaller font */
   font-weight: 600;
   color: var(--error);
-  background-color: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.2);
-  border-radius: var(--radius-md);
   padding: 0 var(--space-sm); /* Reduced padding */
   display: flex;
   align-items: center;
@@ -704,8 +705,6 @@ button {
   .error-message-container {
     font-size: 0.9rem; /* Larger text for PC */
     min-height: 2.25rem; /* Compact height */
-    background-color: rgba(239, 68, 68, 0.15); /* More distinct background */
-    border-color: rgba(239, 68, 68, 0.3);
   }
 }
 
