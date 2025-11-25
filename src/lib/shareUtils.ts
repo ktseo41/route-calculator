@@ -4,18 +4,16 @@ import { getCustomQueryFromRLL } from "@/lib/routeUtils";
 import faviconV2 from "@/img/faviconV2.png";
 
 /**
- * 테이블을 이미지로 변환하고 공유하는 함수
+ * 테이블을 이미지 Blob으로 변환하는 함수
  *
  * @param rLL - RouteLinkedList 인스턴스
- * @param tableContainerSelector - 테이블 컨테이너 선택자 (기본값: ".table-container")
- * @returns Promise<void>
- *
- * @throws 테이블을 찾을 수 없거나 공유에 실패한 경우
+ * @param tableContainerSelector - 테이블 컨테이너 선택자 (기본값: ".route-list")
+ * @returns Promise<Blob>
  */
-export async function shareTableAsImage(
+export async function generateTableImage(
   rLL: RouteLinkedList,
   tableContainerSelector: string = ".route-list"
-): Promise<void> {
+): Promise<Blob> {
   // 테이블 요소 찾기
   const tableContainer = document.querySelector(
     tableContainerSelector
@@ -131,53 +129,90 @@ export async function shareTableAsImage(
   // Data URL을 Blob으로 변환
   const response = await fetch(dataUrl);
   const blob = await response.blob();
+  
+  return blob;
+}
 
-  // File 객체 생성
-  const file = new File([blob], "route-table.png", { type: "image/png" });
+/**
+ * 이미지를 다운로드하는 함수
+ */
+export function downloadImage(blob: Blob, filename: string): void {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
 
-  // 공유 URL 생성
-  const urlToSave = `${location.origin}${location.pathname}${
-    queryToSave.length === 0 ? "" : `?${queryToSave}`
-  }`;
-
-  // Web Share API 지원 확인
+/**
+ * 이미지를 공유하는 함수 (Web Share API)
+ */
+export async function shareImage(
+  blob: Blob, 
+  filename: string, 
+  title: string, 
+  text: string
+): Promise<void> {
+  const file = new File([blob], filename, { type: "image/png" });
+  
   if (navigator.share && navigator.canShare) {
     const shareData = {
-      title: "Elan Route Calculator",
-      text: "일랜시아 루트 계산 결과",
+      title: title,
+      text: text,
       files: [file],
     };
 
-    // 파일 공유 지원 확인
     if (navigator.canShare(shareData)) {
       await navigator.share(shareData);
     } else {
-      // 파일 공유를 지원하지 않는 경우 URL만 공유
-      await navigator.share({
-        title: "Elan Route Calculator",
-        text: "일랜시아 루트 계산 결과",
-        url: urlToSave,
-      });
+      throw new Error("이미지 공유를 지원하지 않는 환경입니다.");
     }
   } else {
-    // Web Share API를 지원하지 않는 경우 클립보드에 복사
-    await navigator.clipboard.writeText(urlToSave);
-    alert("링크가 클립보드에 복사되었습니다!");
+    throw new Error("Web Share API를 지원하지 않는 브라우저입니다.");
+  }
+}
+
+/**
+ * URL을 클립보드에 복사하는 함수
+ */
+export async function copyUrl(
+  url: string
+): Promise<void> {
+  await navigator.clipboard.writeText(url);
+}
+
+/**
+ * 이전 버전 호환성을 위한 함수 (Deprecated)
+ */
+export async function shareTableAsImage(
+  rLL: RouteLinkedList,
+  tableContainerSelector: string = ".route-list"
+): Promise<void> {
+  const blob = await generateTableImage(rLL, tableContainerSelector);
+  const queryToSave = getCustomQueryFromRLL(rLL);
+  const urlToSave = `${location.origin}${location.pathname}${
+    queryToSave.length === 0 ? "" : `?${queryToSave}`
+  }`;
+  
+  try {
+    await shareImage(blob, "route-table.png", "Elan Route Calculator", "일랜시아 루트 계산 결과");
+  } catch (e) {
+    // 이미지 공유 실패 시 URL 공유 시도
+    await copyUrl(urlToSave);
   }
 }
 
 /**
  * 공유 에러를 처리하는 함수
- *
- * @param error - 발생한 에러
- * @param rLL - RouteLinkedList 인스턴스 (폴백용)
- * @returns Promise<void>
  */
 export async function handleShareError(
   error: any,
   rLL: RouteLinkedList
 ): Promise<void> {
-  // 사용자가 공유 다이얼로그를 취소한 경우 (Web Share API는 AbortError 를 던짐)
+  // 사용자가 공유 다이얼로그를 취소한 경우
   const message = String(error?.message || "").toLowerCase();
   if (
     error?.name === "AbortError" ||
@@ -185,9 +220,8 @@ export async function handleShareError(
     message.includes("cancell") ||
     message.includes("cancel")
   ) {
-    // 취소는 정상 사용자 행동이므로 아무 메시지도 표시하지 않음
     console.debug("사용자가 공유를 취소했습니다.");
-    return; // fallback 동작(클립보드 복사) 수행하지 않음
+    return;
   }
 
   console.error("공유 중 오류가 발생했습니다:", error);

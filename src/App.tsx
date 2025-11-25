@@ -7,11 +7,18 @@ import {
   getCustomQueryFromRLL,
   getCurrentJobsFromQuery,
 } from "./lib/routeUtils";
-import { shareTableAsImage, handleShareError } from "./lib/shareUtils";
+import { 
+  generateTableImage, 
+  downloadImage, 
+  shareImage, 
+  copyUrl, 
+  handleShareError 
+} from "./lib/shareUtils";
 import JobSelector from "./components/JobSelector";
 import PointAdjuster from "./components/PointAdjuster";
 
 import ResetConfirmModal from "./components/ResetConfirmModal";
+import ShareModal from "./components/ShareModal";
 import "./prototype.css";
 
 import faviconV2 from "./img/faviconV2.png";
@@ -46,6 +53,10 @@ export default function App() {
   const [isDeleting, setIsDeleting] = useState(false);
   // Reset confirmation modal state
   const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
+  // Share modal state
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  // URL copied state
+  const [isUrlCopied, setIsUrlCopied] = useState(false);
 
   const openPanel = (mode: "job-select" | "point-adjust") => {
     setPanelMode(mode);
@@ -132,13 +143,59 @@ export default function App() {
     location.replace(`${location.origin}${location.pathname}`);
   };
 
-  const handleShare = async () => {
+  const handleShareClick = () => {
+    setIsShareModalOpen(true);
+  };
+
+  const handleDownloadImage = async () => {
     if (isSharing) return;
     setIsSharing(true);
     try {
-      await shareTableAsImage(rLL);
+      const blob = await generateTableImage(rLL);
+      downloadImage(blob, "route-table.png");
+      setIsShareModalOpen(false);
+    } catch (error: any) {
+      console.error("이미지 다운로드 실패:", error);
+      alert("이미지 저장에 실패했습니다.");
+    } finally {
+      setIsSharing(false);
+    }
+  };
+
+  const handleShareImage = async () => {
+    if (isSharing) return;
+    setIsSharing(true);
+    try {
+      const blob = await generateTableImage(rLL);
+      await shareImage(
+        blob, 
+        "route-table.png", 
+        "Elan Route Calculator", 
+        "일랜시아 루트 계산 결과"
+      );
+      setIsShareModalOpen(false);
     } catch (error: any) {
       await handleShareError(error, rLL);
+    } finally {
+      setIsSharing(false);
+    }
+  };
+
+  const handleShareUrl = async () => {
+    if (isSharing) return;
+    setIsSharing(true);
+    try {
+      const queryToSave = getCustomQueryFromRLL(rLL);
+      const urlToSave = `${location.origin}${location.pathname}${
+        queryToSave.length === 0 ? "" : `?${queryToSave}`
+      }`;
+      
+      await copyUrl(urlToSave);
+      setIsUrlCopied(true);
+      setTimeout(() => setIsUrlCopied(false), 2000);
+    } catch (error: any) {
+      console.error("URL 복사 실패:", error);
+      alert("URL 복사에 실패했습니다.");
     } finally {
       setIsSharing(false);
     }
@@ -218,7 +275,7 @@ export default function App() {
           >
             <i className="ph ph-broom"></i>
           </button>
-          <button className="icon-btn" aria-label="Share" onClick={handleShare}>
+          <button className="icon-btn" aria-label="Share" onClick={handleShareClick}>
             {isSharing ? <i className="ph ph-spinner animate-spin"></i> : <i className="ph ph-share-network"></i>}
           </button>
         </div>
@@ -373,6 +430,16 @@ export default function App() {
         isOpen={isResetConfirmOpen} 
         onClose={() => setIsResetConfirmOpen(false)} 
         onConfirm={performReset} 
+      />
+
+      <ShareModal 
+        isOpen={isShareModalOpen} 
+        onClose={() => setIsShareModalOpen(false)} 
+        onDownloadImage={handleDownloadImage}
+        onShareImage={handleShareImage}
+        onShareUrl={handleShareUrl}
+        isSharing={isSharing}
+        isUrlCopied={isUrlCopied}
       />
 
     </div>
