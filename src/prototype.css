@@ -499,11 +499,30 @@ button {
   font-weight: 600;
 }
 
+.error-message-container {
+  min-height: 1.5rem; /* Reduced reserved space */
+  font-size: 0.8rem; /* Smaller font */
+  font-weight: 600;
+  color: var(--error);
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: var(--radius-md);
+  padding: 0 var(--space-sm); /* Reduced padding */
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center text */
+  transition: opacity var(--transition-fast);
+}
+
+.error-message-container.hidden {
+  opacity: 0;
+}
+
 /* Point Adjuster */
 .point-adjuster {
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
+  gap: var(--space-sm);
 }
 
 .point-display {
@@ -518,7 +537,7 @@ button {
 }
 
 .point-label {
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   color: var(--text-secondary);
   margin-top: var(--space-xs);
 }
@@ -526,16 +545,16 @@ button {
 .adjust-controls {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-sm);
+  gap: 4px;
 }
 
 .adjust-btn {
-  height: 40px;
-  border-radius: var(--radius-md);
+  height: 32px; /* Increased from 28px (approx 1.1x) */
+  border-radius: var(--radius-sm);
   background-color: var(--bg-tertiary);
   color: var(--text-primary);
   font-weight: 600;
-  font-size: 0.9375rem;
+  font-size: 0.85rem; /* Slightly larger font */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -616,8 +635,22 @@ button {
     background-color: var(--bg-secondary);
     display: flex;
     flex-direction: column;
-    padding: var(--space-lg);
+    padding: 0; /* Remove padding to allow header to be full width */
+    overflow: hidden; /* Prevent main scroll */
+  }
+
+  .sidebar-header {
+    background-color: var(--bg-primary);
+    padding: 0; /* Remove padding to eliminate gap */
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0; /* Prevent shrinking */
+    z-index: 5;
+  }
+
+  .sidebar-content {
+    flex: 1;
     overflow-y: auto;
+    padding: var(--space-lg);
   }
 
   .sidebar-section {
@@ -650,10 +683,55 @@ button {
 
   /* Adjust Point Adjuster for Sidebar */
   .point-adjuster-container {
-    background-color: var(--bg-primary);
-    padding: var(--space-md);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--border-color);
+    background-color: transparent;
+    padding: var(--space-md); /* Add internal padding */
+    border-radius: 0;
+    border: none;
     transition: opacity var(--transition-normal);
   }
+
+  /* Hide label and adjust value on desktop */
+  .point-adjuster-container .point-label {
+    display: none;
+  }
+
+  .point-adjuster-container .point-value {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-xs);
+  }
+
+  /* Desktop-specific error message enhancements */
+  .error-message-container {
+    font-size: 0.9rem; /* Larger text for PC */
+    min-height: 2.25rem; /* Compact height */
+    background-color: rgba(239, 68, 68, 0.15); /* More distinct background */
+    border-color: rgba(239, 68, 68, 0.3);
+  }
+}
+
+/* Sidebar Divider */
+.sidebar-divider {
+  height: 2px;
+  background-color: #e4e4e7; /* Zinc 200 - Visible white/light gray line */
+  margin: 0;
+  flex-shrink: 0;
+}
+
+/* Error Section */
+.error-section {
+  background-color: var(--bg-secondary);
+  flex-shrink: 0;
+}
+
+/* Dark mode adjustment for divider */
+@media (prefers-color-scheme: dark) {
+  .sidebar-divider {
+    background-color: #52525b; /* Zinc 600 */
+  }
+}
+
+/* Ensure the divider is visible in the current dark theme */
+.sidebar-divider {
+  background-color: var(--text-primary); /* Use text color for high contrast white line as requested */
+  opacity: 0.2;
 }

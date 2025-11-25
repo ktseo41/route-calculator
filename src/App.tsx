@@ -269,16 +269,8 @@ export default function App() {
 
         {/* Desktop Sidebar */}
         <aside className="desktop-sidebar"> 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)' }}>
-             
-             {/* Job Selector Section */}
-             <div className="sidebar-section">
-               {errorMessage && <div style={{ color: 'var(--error)', fontSize: '0.75rem', marginBottom: 'var(--space-xs)' }}>{errorMessage}</div>}
-               <JobSelector onJobSelect={addNewJob} />
-             </div>
-
-             {/* Point Adjuster Section */}
-             <div className="sidebar-section">
+          {/* Point Adjuster Section - Fixed at Top */}
+             <div className="sidebar-header">
                <div className="point-adjuster-container" style={{ opacity: selectedIndex !== null ? 1 : 0.5, pointerEvents: selectedIndex !== null ? 'auto' : 'none' }}>
                  <PointAdjuster 
                    onPointAdjust={adjustJobPoint} 
@@ -294,7 +286,26 @@ export default function App() {
                </div>
              </div>
 
-          </div>
+             {/* Divider */}
+             <div className="sidebar-divider"></div>
+
+             {/* Error Message Section - Fixed between Header and Content */}
+             <div className="error-section">
+                <div className={`error-message-container ${!errorMessage ? 'hidden' : ''}`}>
+                  {errorMessage || " "}
+                </div>
+             </div>
+
+             {/* Divider */}
+             <div className="sidebar-divider"></div>
+
+             {/* Job Selector Section - Scrollable */}
+             <div className="sidebar-content">
+               <div className="sidebar-section">
+
+                 <JobSelector onJobSelect={addNewJob} />
+               </div>
+             </div>
         </aside>
       </div>
 

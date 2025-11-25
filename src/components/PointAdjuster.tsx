@@ -46,7 +46,7 @@ const PointAdjuster: React.FC<PointAdjusterProps> = ({ onPointAdjust, onPointSet
 
   return (
     <div className="point-adjuster">
-      <div className="point-display">
+      <div className="point-display mobile-only">
         <div className="point-value">{currentPoint}</div>
         <div className="point-label">현재 잡포인트</div>
       </div>
@@ -73,9 +73,9 @@ const PointAdjuster: React.FC<PointAdjusterProps> = ({ onPointAdjust, onPointSet
       </div>
 
       {/* Custom Input Section - Styled to match theme */}
-      <div style={{ marginTop: 'var(--space-md)' }}>
-        <div className="point-label" style={{ marginBottom: 'var(--space-sm)', textAlign: 'left' }}>직접 입력</div>
-        <div style={{ display: 'flex', gap: 'var(--space-sm)' }}>
+      <div style={{ marginTop: 'var(--space-sm)' }}>
+        <div className="point-label" style={{ marginBottom: 'var(--space-xs)', textAlign: 'left' }}>직접 입력</div>
+        <div style={{ display: 'flex', gap: 'var(--space-xs)' }}>
           <div style={{ 
             flex: 1, 
             display: 'flex', 
@@ -86,7 +86,7 @@ const PointAdjuster: React.FC<PointAdjusterProps> = ({ onPointAdjust, onPointSet
           }}>
             <button
               onClick={() => handleCustomAdjust(-1)}
-              style={{ width: '40px', color: 'var(--text-secondary)' }}
+              style={{ width: '32px', color: 'var(--text-secondary)' }}
               className="adjust-btn"
             >
               -
@@ -109,7 +109,7 @@ const PointAdjuster: React.FC<PointAdjusterProps> = ({ onPointAdjust, onPointSet
             />
             <button
               onClick={() => handleCustomAdjust(1)}
-              style={{ width: '40px', color: 'var(--text-secondary)' }}
+              style={{ width: '32px', color: 'var(--text-secondary)' }}
               className="adjust-btn"
             >
               +
@@ -119,7 +119,7 @@ const PointAdjuster: React.FC<PointAdjusterProps> = ({ onPointAdjust, onPointSet
             onClick={handleApplyCustomValue}
             className="adjust-btn"
             style={{ 
-              width: '80px', 
+              width: '64px', 
               backgroundColor: 'var(--text-primary)', 
               color: 'var(--bg-primary)'
             }}
