@@ -10,6 +10,8 @@ import {
 import { shareTableAsImage, handleShareError } from "./lib/shareUtils";
 import JobSelector from "./components/JobSelector";
 import PointAdjuster from "./components/PointAdjuster";
+
+import ResetConfirmModal from "./components/ResetConfirmModal";
 import "./prototype.css";
 
 import faviconV2 from "./img/faviconV2.png";
@@ -40,7 +42,10 @@ export default function App() {
   // Delete mode toggle state
   const [deleteMode, setDeleteMode] = useState(false);
   // Temporarily disable hover effects after deletion
+
   const [isDeleting, setIsDeleting] = useState(false);
+  // Reset confirmation modal state
+  const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
 
   const openPanel = (mode: "job-select" | "point-adjust") => {
     setPanelMode(mode);
@@ -114,10 +119,16 @@ export default function App() {
     openPanel("job-select");
   };
 
-  const reset = () => {
+  const handleResetClick = () => {
+    if (rLL.length <= 1) return;
+    setIsResetConfirmOpen(true);
+  };
+
+  const performReset = () => {
     resetRLL();
     setSelectedIndex(null);
     setIsPanelOpen(false);
+    setIsResetConfirmOpen(false);
     location.replace(`${location.origin}${location.pathname}`);
   };
 
@@ -199,7 +210,12 @@ export default function App() {
           >
             <i className="ph ph-minus-circle"></i>
           </button>
-          <button className="icon-btn" aria-label="Reset" onClick={reset}>
+          <button 
+            className="icon-btn" 
+            aria-label="Reset" 
+            onClick={handleResetClick}
+            style={rLL.length <= 1 ? { opacity: 0.3, cursor: 'not-allowed' } : {}}
+          >
             <i className="ph ph-broom"></i>
           </button>
           <button className="icon-btn" aria-label="Share" onClick={handleShare}>
@@ -350,6 +366,14 @@ export default function App() {
           )}
         </div>
       </div>
+
+
+
+      <ResetConfirmModal 
+        isOpen={isResetConfirmOpen} 
+        onClose={() => setIsResetConfirmOpen(false)} 
+        onConfirm={performReset} 
+      />
 
     </div>
   );
