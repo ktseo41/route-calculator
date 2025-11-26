@@ -170,6 +170,16 @@ button {
   }
 }
 
+/* Main Content Wrapper */
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
 /* Main Content */
 .main-content {
   flex: 1;
