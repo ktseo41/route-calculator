@@ -62,7 +62,7 @@ const OuterFrame: React.FC<OuterFrameProps> = ({
   return (
     <div
       className={cn(
-        "bg-black text-white p-[3px] box-border shadow-[0_0_15px_rgba(0,0,0,0.7)]",
+        "elan-box-outer",
         className
       )}
       style={sizeStyle}
@@ -75,7 +75,7 @@ const OuterFrame: React.FC<OuterFrameProps> = ({
 const Border: React.FC<FrameProps> = ({ children, className = "" }) => (
   <div
     className={cn(
-      "w-full h-full border rounded-sm box-border border-[#f7f7f7]",
+      "elan-box-border",
       className
     )}
     style={{
@@ -88,7 +88,7 @@ const Border: React.FC<FrameProps> = ({ children, className = "" }) => (
 );
 
 const ContentArea: React.FC<FrameProps> = ({ children, className = "" }) => (
-  <div className={cn("h-full box-border rounded-[2px]", className)}>
+  <div className={cn("elan-box-content", className)}>
     {children}
   </div>
 );
