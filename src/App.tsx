@@ -381,7 +381,6 @@ export default function App() {
         <BottomSheet
           isOpen={isPanelOpen}
           onClose={closePanel}
-          title={panelMode === 'job-select' ? '직업 선택' : '포인트 조절'}
         >
           {errorMessage && <div style={{ color: 'var(--error)', marginBottom: '1rem' }}>{errorMessage}</div>}
           {panelMode === 'job-select' ? (

@@ -444,7 +444,7 @@ button {
 }
 
 .sheet-handle-area {
-  padding: var(--space-sm) 0;
+  padding: var(--space-md) 0;
   display: flex;
   justify-content: center;
   cursor: grab;
@@ -458,18 +458,7 @@ button {
   border-radius: var(--radius-full);
 }
 
-.sheet-header {
-  padding: 0 var(--space-lg) var(--space-md);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid var(--border-color);
-}
 
-.sheet-title {
-  font-size: 1.125rem;
-  font-weight: 600;
-}
 
 .sheet-close {
   color: var(--text-secondary);

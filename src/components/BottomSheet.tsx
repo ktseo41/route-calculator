@@ -4,11 +4,10 @@ import '../prototype.css';
 interface BottomSheetProps {
   isOpen: boolean;
   onClose: () => void;
-  title: string;
   children: React.ReactNode;
 }
 
-const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen, onClose, title, children }) => {
+const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen, onClose, children }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [translateY, setTranslateY] = useState(0);
   const sheetRef = useRef<HTMLDivElement>(null);
@@ -84,9 +83,7 @@ const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen, onClose, title, child
           <div className="sheet-handle"></div>
         </div>
         
-        <div className="sheet-header">
-          <h3 className="sheet-title">{title}</h3>
-        </div>
+
 
         <div className="sheet-content">
           {children}
