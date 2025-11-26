@@ -123,6 +123,12 @@ export async function generateTableImage(
   const clonedDeleteHeader = clonedTable.querySelector(".header-delete") as HTMLElement;
   if (clonedDeleteHeader) clonedDeleteHeader.remove();
 
+  // 하이라이트(active 클래스) 제거
+  const activeRows = clonedTable.querySelectorAll(".route-row.active");
+  activeRows.forEach((row) => {
+    row.classList.remove("active");
+  });
+
   // 푸터 추가
   clonedTable.appendChild(footer);
   
