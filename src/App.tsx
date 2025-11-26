@@ -59,6 +59,9 @@ export default function App() {
   // URL copied state
   const [isUrlCopied, setIsUrlCopied] = useState(false);
 
+  // Custom share text
+  const [customShareText, setCustomShareText] = useState("");
+
   const openPanel = (mode: "job-select" | "point-adjust") => {
     setPanelMode(mode);
     setIsPanelOpen(true);
@@ -152,7 +155,7 @@ export default function App() {
     if (isSharing) return;
     setIsSharing(true);
     try {
-      const blob = await generateTableImage(rLL);
+      const blob = await generateTableImage(rLL, ".route-list", customShareText);
       downloadImage(blob, "route-table.png");
       setIsShareModalOpen(false);
     } catch (error: any) {
@@ -167,7 +170,7 @@ export default function App() {
     if (isSharing) return;
     setIsSharing(true);
     try {
-      const blob = await generateTableImage(rLL);
+      const blob = await generateTableImage(rLL, ".route-list", customShareText);
       await shareImage(
         blob,
         "route-table.png"
@@ -419,6 +422,8 @@ export default function App() {
         onShareUrl={handleShareUrl}
         isSharing={isSharing}
         isUrlCopied={isUrlCopied}
+        customText={customShareText}
+        onCustomTextChange={setCustomShareText}
       />
 
     </div>

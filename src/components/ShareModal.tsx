@@ -8,6 +8,8 @@ interface ShareModalProps {
   onShareUrl: () => void;
   isSharing: boolean;
   isUrlCopied: boolean;
+  customText: string;
+  onCustomTextChange: (text: string) => void;
 }
 
 const ShareModal: React.FC<ShareModalProps> = ({ 
@@ -17,7 +19,9 @@ const ShareModal: React.FC<ShareModalProps> = ({
   onShareImage, 
   onShareUrl,
   isSharing,
-  isUrlCopied
+  isUrlCopied,
+  customText,
+  onCustomTextChange
 }) => {
   return (
     <div className={`confirm-modal-overlay ${isOpen ? 'open' : ''}`} onClick={onClose}>
@@ -29,6 +33,19 @@ const ShareModal: React.FC<ShareModalProps> = ({
           </button>
         </div>
         
+        <div className="share-input-container" style={{ marginBottom: '16px', padding: '0 4px' }}>
+          <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '6px' }}>
+            이미지에 포함할 텍스트 (선택)
+          </label>
+          <input
+            type="text"
+            className="share-custom-input"
+            value={customText}
+            onChange={(e) => onCustomTextChange(e.target.value)}
+            placeholder="예: 내 루트 1, 엘서버 XXX"
+          />
+        </div>
+
         <div className="share-options">
           <button 
             className="share-option-btn" 

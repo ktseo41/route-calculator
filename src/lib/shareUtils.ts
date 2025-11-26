@@ -12,7 +12,8 @@ import logo from "@/img/logo.png";
  */
 export async function generateTableImage(
   rLL: RouteLinkedList,
-  tableContainerSelector: string = ".route-list"
+  tableContainerSelector: string = ".route-list",
+  customText: string = ""
 ): Promise<Blob> {
   // 테이블 요소 찾기
   const tableContainer = document.querySelector(
@@ -87,7 +88,7 @@ export async function generateTableImage(
   faviconImg.style.objectFit = "contain";
   
   const signatureText = document.createElement("span");
-  signatureText.innerText = "루트 계산기";
+  signatureText.innerText = customText ? `${customText} · 루트 계산기` : "루트 계산기";
   signatureText.style.fontSize = "12px";
   signatureText.style.fontWeight = "bold";
   signatureText.style.color = "rgba(255, 255, 255, 0.5)";
