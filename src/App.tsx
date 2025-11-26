@@ -19,6 +19,7 @@ import PointAdjuster from "./components/PointAdjuster";
 
 import ResetConfirmModal from "./components/ResetConfirmModal";
 import ShareModal from "./components/ShareModal";
+import BottomSheet from "./components/BottomSheet";
 import "./prototype.css";
 
 import logo from "./img/logo.png";
@@ -376,26 +377,12 @@ export default function App() {
         </aside>
       </div>
 
-      {/* Bottom Sheet Overlay */}
-      <div 
-        className={`bottom-sheet-overlay ${isPanelOpen ? 'open' : ''}`} 
-        id="overlay" 
-        onClick={closePanel}
-      ></div>
-
-      {/* Bottom Sheet */}
-      <div className={`bottom-sheet ${isPanelOpen ? 'open' : ''}`} id="bottomSheet">
-        <div className="sheet-handle-area">
-          <div className="sheet-handle"></div>
-        </div>
-        
-        <div className="sheet-header">
-          <h3 className="sheet-title" id="sheetTitle">
-            {panelMode === 'job-select' ? '직업 선택' : '포인트 조절'}
-          </h3>
-        </div>
-
-        <div className="sheet-content" id="sheetContent">
+      <div className="mobile-only">
+        <BottomSheet
+          isOpen={isPanelOpen}
+          onClose={closePanel}
+          title={panelMode === 'job-select' ? '직업 선택' : '포인트 조절'}
+        >
           {errorMessage && <div style={{ color: 'var(--error)', marginBottom: '1rem' }}>{errorMessage}</div>}
           {panelMode === 'job-select' ? (
             <JobSelector onJobSelect={addNewJob} />
@@ -412,7 +399,7 @@ export default function App() {
               currentPoint={selectedIndex !== null ? rLL.get(selectedIndex)?.jobPo : 0}
             />
           )}
-        </div>
+        </BottomSheet>
       </div>
 
 

@@ -449,6 +449,7 @@ button {
   display: flex;
   justify-content: center;
   cursor: grab;
+  touch-action: none;
 }
 
 .sheet-handle {
