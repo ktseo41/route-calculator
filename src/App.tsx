@@ -350,6 +350,7 @@ export default function App() {
                      }
                    }}
                    currentPoint={selectedIndex !== null ? rLL.get(selectedIndex)?.jobPo : 0} 
+                   selectedIndex={selectedIndex}
                  />
                </div>
              </div>
@@ -396,6 +397,7 @@ export default function App() {
                 }
               }}
               currentPoint={selectedIndex !== null ? rLL.get(selectedIndex)?.jobPo : 0}
+              selectedIndex={selectedIndex}
             />
           )}
         </BottomSheet>
