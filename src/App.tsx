@@ -209,6 +209,8 @@ export default function App() {
     if (location.search.length > 0) {
       const newRLL = getCurrentJobsFromQuery(location);
       setRLL(newRLL);
+      // Clean the URL after reflecting the data
+      window.history.replaceState({}, document.title, window.location.pathname);
       return;
     }
 
