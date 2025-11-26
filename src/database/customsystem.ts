@@ -1,18 +1,4 @@
 // 57진법
-
-// enums reverse mapping
-/*
-
-enum Enum {
-    A
-}
-let a = Enum.A;
-let nameOfA = Enum[a]; // "A"
-
-https://www.typescriptlang.org/docs/handbook/enums.html
-
-*/
-
 export enum CustomSystem {
   "a" = 0,
   "b",
