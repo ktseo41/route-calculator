@@ -75,19 +75,11 @@ const PointAdjuster: React.FC<PointAdjusterProps> = ({ onPointAdjust, onPointSet
       {/* Custom Input Section - Styled to match theme */}
       <div style={{ marginTop: 'var(--space-sm)' }}>
         <div className="point-label" style={{ marginBottom: 'var(--space-xs)', textAlign: 'left' }}>직접 입력</div>
-        <div style={{ display: 'flex', gap: 'var(--space-xs)' }}>
-          <div style={{ 
-            flex: 1, 
-            display: 'flex', 
-            backgroundColor: 'var(--bg-tertiary)', 
-            borderRadius: 'var(--radius-md)',
-            border: '1px solid var(--border-color)',
-            overflow: 'hidden'
-          }}>
+        <div className="custom-input-container">
+          <div className="custom-input-group">
             <button
               onClick={() => handleCustomAdjust(-1)}
-              style={{ width: '32px', color: 'var(--text-secondary)' }}
-              className="adjust-btn"
+              className="adjust-btn custom-adjust-btn"
             >
               -
             </button>
@@ -97,32 +89,18 @@ const PointAdjuster: React.FC<PointAdjusterProps> = ({ onPointAdjust, onPointSet
               onChange={handleCustomInputChange}
               onKeyPress={handleKeyPress}
               placeholder="0"
-              style={{
-                flex: 1,
-                background: 'transparent',
-                border: 'none',
-                color: 'var(--text-primary)',
-                textAlign: 'center',
-                fontWeight: 600,
-                outline: 'none'
-              }}
+              className="custom-input-field"
             />
             <button
               onClick={() => handleCustomAdjust(1)}
-              style={{ width: '32px', color: 'var(--text-secondary)' }}
-              className="adjust-btn"
+              className="adjust-btn custom-adjust-btn"
             >
               +
             </button>
           </div>
           <button
             onClick={handleApplyCustomValue}
-            className="adjust-btn"
-            style={{ 
-              width: '64px', 
-              backgroundColor: 'var(--text-primary)', 
-              color: 'var(--bg-primary)'
-            }}
+            className="adjust-btn custom-apply-btn"
           >
             적용
           </button>

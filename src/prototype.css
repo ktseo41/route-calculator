@@ -581,6 +581,59 @@ button {
   background-color: rgba(239, 68, 68, 0.2);
 }
 
+/* Custom Input Section */
+.custom-input-container {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.custom-input-group {
+  flex: 1;
+  display: flex;
+  background-color: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  height: 48px; /* Increased height for mobile */
+}
+
+.custom-adjust-btn {
+  width: 40px;
+  height: 100%;
+  color: var(--text-secondary);
+  background-color: transparent;
+  border-radius: 0;
+  font-size: 1.25rem;
+}
+
+.custom-adjust-btn:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.custom-input-field {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  text-align: center;
+  font-weight: 600;
+  outline: none;
+  font-size: 1.1rem; /* Larger font size */
+  width: 100%;
+}
+
+.custom-apply-btn {
+  width: 72px; /* Slightly wider */
+  height: 48px; /* Match container height */
+  background-color: var(--text-primary);
+  color: var(--bg-primary);
+  font-size: 1rem;
+}
+
+.custom-apply-btn:hover {
+  background-color: var(--text-secondary);
+}
+
 /* Desktop Enhancements */
 @media (min-width: 768px) {
   body {
@@ -709,6 +762,26 @@ button {
   .error-message-container {
     font-size: 0.9rem; /* Larger text for PC */
     min-height: 2.25rem; /* Compact height */
+  }
+
+  /* Reset Custom Input for Desktop */
+  .custom-input-group {
+    height: 32px; /* Compact height */
+  }
+
+  .custom-adjust-btn {
+    width: 32px;
+    font-size: 0.875rem;
+  }
+
+  .custom-input-field {
+    font-size: 1rem;
+  }
+
+  .custom-apply-btn {
+    height: 32px;
+    width: 64px;
+    font-size: 0.875rem;
   }
 }
 
