@@ -180,8 +180,6 @@ export default function App() {
   };
 
   const handleShareUrl = async () => {
-    if (isSharing) return;
-    setIsSharing(true);
     try {
       const queryToSave = getCustomQueryFromRLL(rLL);
       const urlToSave = `${location.origin}${location.pathname}${
@@ -194,8 +192,6 @@ export default function App() {
     } catch (error: any) {
       console.error("URL 복사 실패:", error);
       alert("URL 복사에 실패했습니다.");
-    } finally {
-      setIsSharing(false);
     }
   };
 
