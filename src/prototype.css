@@ -624,11 +624,15 @@ button {
   }
 
   .main-content {
-    flex: 0 0 420px; /* Fixed width for table section */
+    flex: 0 0 480px; /* Fixed width for table section */
     border-right: 1px solid var(--border-color);
     padding: var(--space-md);
     padding-bottom: var(--space-md); /* Reset padding */
     overflow-y: auto;
+  }
+
+  .route-row {
+    height: 46px;
   }
 
   .desktop-sidebar {
