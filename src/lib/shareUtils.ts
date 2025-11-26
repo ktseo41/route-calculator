@@ -1,7 +1,7 @@
 import { toPng } from "html-to-image";
 import RouteLinkedList from "@/lib/routeLinkedList";
 import { getCustomQueryFromRLL } from "@/lib/routeUtils";
-import faviconV2 from "@/img/faviconV2.png";
+import logo from "@/img/logo.png";
 
 /**
  * 테이블을 이미지 Blob으로 변환하는 함수
@@ -81,7 +81,7 @@ export async function generateTableImage(
   signatureContainer.style.gap = "6px";
   
   const faviconImg = document.createElement("img");
-  faviconImg.src = faviconV2;
+  faviconImg.src = logo;
   faviconImg.style.width = "16px";
   faviconImg.style.height = "16px";
   faviconImg.style.objectFit = "contain";
