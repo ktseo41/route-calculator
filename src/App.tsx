@@ -24,6 +24,17 @@ import "./prototype.css";
 
 import logo from "./img/logo.png";
 
+const ToggleSwitch = ({ checked, onChange, label }: { checked: boolean; onChange: () => void; label: string }) => (
+  <div className="toggle-container" onClick={onChange}>
+    <div className="toggle-switch">
+      <input type="checkbox" checked={checked} readOnly />
+      <span className="toggle-slider"></span>
+    </div>
+    <span className="toggle-label-text">{label}</span>
+  </div>
+);
+
+
 export default function App() {
   const {
     rLL,
@@ -61,6 +72,16 @@ export default function App() {
 
   // Custom share text
   const [customShareText, setCustomShareText] = useState("");
+  
+  // Cumulative view toggle state
+  const [isCumulative, setIsCumulative] = useState(false);
+
+  const getDisplayPoint = (index: number | null) => {
+    if (index === null) return 0;
+    const node = rLL.get(index);
+    if (!node) return 0;
+    return isCumulative ? (node.currentJobPos[node.job] || 0) : node.jobPo;
+  };
 
   const openPanel = (mode: "job-select" | "point-adjust") => {
     setPanelMode(mode);
@@ -259,6 +280,13 @@ export default function App() {
           <span>루트 계산기 v2</span>
         </div>
         <div className="header-actions">
+          <div className="desktop-only">
+            <ToggleSwitch 
+              checked={isCumulative} 
+              onChange={() => setIsCumulative(!isCumulative)} 
+              label="누적 잡포인트 보기" 
+            />
+          </div>
           <button 
             className={`icon-btn ${deleteMode ? 'active' : ''}`} 
             aria-label="Delete Mode" 
@@ -284,6 +312,13 @@ export default function App() {
       <div className="content-wrapper">
         {/* Main Content Area */}
         <main className="main-content">
+          <div className="mobile-toggle-area">
+            <ToggleSwitch 
+              checked={isCumulative} 
+              onChange={() => setIsCumulative(!isCumulative)} 
+              label="누적 잡포인트 보기" 
+            />
+          </div>
           <div className="route-list" id="routeList">
             {/* Table Header */}
             <div className="route-header">
@@ -314,7 +349,9 @@ export default function App() {
                     <span className="stat-value">{node.stats.AGI}</span>
                     <span className="stat-value">{node.stats.VIT}</span>
                   </div>
-                  <div className="job-po-badge">{node.jobPo}</div>
+                  <div className="job-po-badge">
+                    {isCumulative ? (node.currentJobPos[node.job] || 0) : node.jobPo}
+                  </div>
                   {deleteMode && (
                     node.job === '무직' ? (
                       <div style={{ width: '32px', marginLeft: '4px', flexShrink: 0 }}></div>
@@ -345,18 +382,27 @@ export default function App() {
           {/* Point Adjuster Section - Fixed at Top */}
              <div className="sidebar-header">
                <div className="point-adjuster-container" style={{ opacity: selectedIndex !== null ? 1 : 0.5, pointerEvents: selectedIndex !== null ? 'auto' : 'none' }}>
-                 <PointAdjuster 
-                   onPointAdjust={adjustJobPoint} 
-                   onPointSet={(value) => {
-                     if (selectedIndex !== null) {
-                       const currentPoint = rLL.get(selectedIndex)?.jobPo || 0;
-                       const delta = value - currentPoint;
-                       adjustJobPoint(delta);
-                     }
-                   }}
-                   currentPoint={selectedIndex !== null ? rLL.get(selectedIndex)?.jobPo : 0} 
-                   selectedIndex={selectedIndex}
-                 />
+                  <PointAdjuster 
+                    onPointAdjust={adjustJobPoint} 
+                    onPointSet={(value) => {
+                      if (selectedIndex !== null) {
+                        const node = rLL.get(selectedIndex);
+                        if (!node) return;
+                        
+                        let delta;
+                        if (isCumulative) {
+                           const currentCumulative = node.currentJobPos[node.job] || 0;
+                           delta = value - currentCumulative;
+                        } else {
+                           const currentPoint = node.jobPo;
+                           delta = value - currentPoint;
+                        }
+                        adjustJobPoint(delta);
+                      }
+                    }}
+                    currentPoint={getDisplayPoint(selectedIndex)} 
+                    selectedIndex={selectedIndex}
+                  />
                </div>
              </div>
 
@@ -396,12 +442,21 @@ export default function App() {
               onPointAdjust={adjustJobPoint} 
               onPointSet={(value) => {
                 if (selectedIndex !== null) {
-                  const currentPoint = rLL.get(selectedIndex)?.jobPo || 0;
-                  const delta = value - currentPoint;
+                  const node = rLL.get(selectedIndex);
+                  if (!node) return;
+                  
+                  let delta;
+                  if (isCumulative) {
+                     const currentCumulative = node.currentJobPos[node.job] || 0;
+                     delta = value - currentCumulative;
+                  } else {
+                     const currentPoint = node.jobPo;
+                     delta = value - currentPoint;
+                  }
                   adjustJobPoint(delta);
                 }
               }}
-              currentPoint={selectedIndex !== null ? rLL.get(selectedIndex)?.jobPo : 0}
+              currentPoint={getDisplayPoint(selectedIndex)}
               selectedIndex={selectedIndex}
             />
           )}
