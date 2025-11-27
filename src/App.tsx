@@ -243,6 +243,13 @@ export default function App() {
           >
             info
           </UtilBarItem>
+          <UtilBarItem
+            onClick={() => {
+              location.href = '/v2';
+            }}
+          >
+            v2
+          </UtilBarItem>
         </UtilBarLeft>
         <UtilBarRight>
           <UtilBarItem
