@@ -8,9 +8,11 @@
   --text-secondary: #d4d4d8; /* Zinc 300 - Much lighter gray */
   --text-tertiary: #a1a1aa; /* Zinc 400 - Lighter muted text */
 
-  --accent-primary: #818cf8; /* Indigo 400 - Brighter accent */
-  --accent-hover: #6366f1; /* Indigo 500 */
-  --accent-light: rgba(129, 140, 248, 0.2);
+  --accent-primary: #b5c99a; /* Soft Olive - Muted, sage-like */
+  --accent-hover: #97a97b; /* Darker Soft Olive */
+  --accent-light: rgba(181, 201, 154, 0.2);
+  --accent-dark: #718355; /* Dark Moss Green */
+  --accent-skin: #e9d8a6; /* Yellowish Skin */
 
   --border-color: #52525b; /* Zinc 600 - More visible borders */
   --border-hover: #71717a; /* Zinc 500 - Brighter on hover */
@@ -37,7 +39,7 @@
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
     0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-glow: 0 0 15px rgba(99, 102, 241, 0.3);
+  --shadow-glow: 0 0 15px rgba(181, 201, 154, 0.3);
   --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
 
   /* Transitions */
@@ -135,7 +137,7 @@ button {
 .logo-icon {
   width: 20px;
   height: 20px;
-  background: linear-gradient(135deg, var(--accent-primary), #a855f7);
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-dark));
   border-radius: var(--radius-sm);
   display: grid;
   place-items: center;
@@ -147,6 +149,8 @@ button {
   gap: var(--space-xs);
   align-items: center;
 }
+
+
 
 .icon-btn {
   width: 44px;
@@ -274,12 +278,12 @@ button {
 
 .route-row.active {
   border-color: var(--accent-primary);
-  background-color: rgba(129, 140, 248, 0.12);
+  background-color: rgba(181, 201, 154, 0.12);
   box-shadow: inset 2px 0 0 0 var(--accent-primary); /* Left indicator */
 }
 
 .route-row:active {
-  background-color: rgba(129, 140, 248, 0.15);
+  background-color: rgba(181, 201, 154, 0.15);
 }
 
 .job-name {
@@ -318,7 +322,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #5b526b; /* Muted Purple Grey - A touch of favicon color */
+  background-color: var(--accent-dark); /* Dark Olive Green - Matches logo accent */
   width: 33px;
   height: 25px;
   border-radius: var(--radius-sm);
@@ -567,19 +571,20 @@ button {
 }
 
 .adjust-btn.positive {
-  color: var(--success);
-  background-color: rgba(16, 185, 129, 0.1);
+  color: var(--text-primary);
+  background-color: var(--bg-tertiary);
 }
 .adjust-btn.positive:hover {
-  background-color: rgba(16, 185, 129, 0.2);
+  background-color: var(--border-hover);
 }
 
 .adjust-btn.negative {
-  color: var(--error);
-  background-color: rgba(239, 68, 68, 0.1);
+  color: var(--text-secondary);
+  background-color: var(--bg-tertiary);
 }
 .adjust-btn.negative:hover {
-  background-color: rgba(239, 68, 68, 0.2);
+  background-color: var(--border-hover);
+  color: var(--text-primary);
 }
 
 /* Custom Input Section */
@@ -962,7 +967,7 @@ button {
 
 .share-option-btn:hover {
   background-color: var(--bg-tertiary);
-  border-color: var(--primary-color);
+  border-color: var(--accent-primary);
   transform: translateY(-1px);
 }
 
@@ -976,9 +981,9 @@ button {
   justify-content: center;
   width: 40px;
   height: 40px;
-  background-color: rgba(139, 92, 246, 0.1);
+  background-color: var(--accent-dark); /* Dark Green Theme */
   border-radius: 10px;
-  color: var(--primary-color);
+  color: white;
   font-size: 1.25rem;
 }
 
@@ -1006,7 +1011,7 @@ button {
 
 .share-loading-overlay i {
   font-size: 2rem;
-  color: var(--primary-color);
+  color: var(--accent-primary);
 }
 
 /* ElanBox Styles */

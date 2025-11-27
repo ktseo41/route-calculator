@@ -28,7 +28,7 @@ const SharePreview = forwardRef<HTMLDivElement, SharePreviewProps>(({ rLL, custo
       }}
     >
       {/* Table Header */}
-      <div className="route-header" style={{ display: 'flex', borderBottom: '1px solid var(--border)', paddingBottom: '8px', marginBottom: '8px', fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>
+      <div className="route-header" style={{ display: 'flex', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px', marginBottom: '8px', fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>
         <span style={{ flex: 1 }}>직업</span>
         <div style={{ display: 'flex', gap: '8px', width: '140px', justifyContent: 'center' }}>
           <span style={{ width: '28px', textAlign: 'center' }}>STR</span>
@@ -51,7 +51,7 @@ const SharePreview = forwardRef<HTMLDivElement, SharePreviewProps>(({ rLL, custo
                 display: 'flex', 
                 alignItems: 'center', 
                 padding: '8px 0', 
-                borderBottom: '1px solid var(--border-light)',
+                borderBottom: '1px solid var(--border-color)',
                 fontSize: '14px',
                 color: 'var(--text-primary)'
               }}
@@ -65,7 +65,7 @@ const SharePreview = forwardRef<HTMLDivElement, SharePreviewProps>(({ rLL, custo
               </div>
               <div style={{ width: '40px', display: 'flex', justifyContent: 'center' }}>
                 <span style={{ 
-                  backgroundColor: 'var(--bg-tertiary)', 
+                  backgroundColor: 'var(--accent-dark)', 
                   padding: '2px 6px', 
                   borderRadius: '4px', 
                   fontSize: '12px', 
@@ -88,7 +88,7 @@ const SharePreview = forwardRef<HTMLDivElement, SharePreviewProps>(({ rLL, custo
         alignItems: 'center',
         marginTop: '16px',
         paddingTop: '12px',
-        borderTop: '1px solid var(--border)',
+        borderTop: '1px solid var(--border-color)',
       }}>
         {/* URL */}
         <div style={{
