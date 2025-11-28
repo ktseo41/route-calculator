@@ -128,7 +128,6 @@ button {
 .logo {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
   font-weight: 700;
   font-size: 1rem;
   color: var(--text-primary);
@@ -137,11 +136,23 @@ button {
 .logo-icon {
   width: 20px;
   height: 20px;
+  margin-right: 6px;
   background: linear-gradient(135deg, var(--accent-primary), var(--accent-dark));
   border-radius: var(--radius-sm);
   display: grid;
   place-items: center;
   font-size: 12px;
+}
+
+.title {
+  margin-right: 4px;
+}
+
+.version {
+  align-self:flex-end;
+  font-size: 0.75rem;
+  font-weight: normal;
+  color: var(--text-tertiary);
 }
 
 .header-actions {

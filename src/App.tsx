@@ -277,7 +277,8 @@ export default function App() {
           <div className="logo-icon" style={{ background: 'none', padding: 0 }}>
             <img src={logo} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
           </div>
-          <span>루트 계산기 v2</span>
+          <span className="title">루트 계산기</span>
+          <span className="version">v2.0.0</span>
         </div>
         <div className="header-actions">
           <div className="desktop-only">
