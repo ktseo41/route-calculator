@@ -76,6 +76,9 @@ export default function App() {
   // Cumulative view toggle state
   const [isCumulative, setIsCumulative] = useState(false);
 
+  // About modal state
+  const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
+
   const getDisplayPoint = (index: number | null) => {
     if (index === null) return 0;
     const node = rLL.get(index);
@@ -376,6 +379,12 @@ export default function App() {
               <span>직업 추가</span>
             </button>
           </div>
+
+          <footer className="app-footer">
+            <button className="footer-link" onClick={() => setIsAboutModalOpen(true)}>
+              About
+            </button>
+          </footer>
         </main>
 
         {/* Desktop Sidebar */}
@@ -483,6 +492,25 @@ export default function App() {
         customText={customShareText}
         onCustomTextChange={setCustomShareText}
       />
+
+      {isAboutModalOpen && (
+        <div className="modal-overlay" onClick={() => setIsAboutModalOpen(false)}>
+          <div className="modal-content about-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>about</h3>
+              <button className="close-btn" onClick={() => setIsAboutModalOpen(false)}>
+                <i className="ph ph-x"></i>
+              </button>
+            </div>
+            <div className="modal-body">
+              <p>루트 계산기를 이용해 주셔서 감사합니다.</p>
+              <p>이 앱은 여러분의 캐릭터 육성 시뮬레이션을 돕기 위해 제작되었습니다.</p>
+              <br />
+              <p>문의사항이나 건의사항이 있으시면 언제든 연락주세요.</p>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );
