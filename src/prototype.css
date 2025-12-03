@@ -275,6 +275,12 @@ button {
   margin-left: 4px;
 }
 
+.header-drag {
+  width: 32px;
+  flex-shrink: 0;
+  margin-left: 4px;
+}
+
 .route-row {
   background-color: var(--bg-secondary);
   border: 1px solid var(--border-color);
@@ -388,6 +394,30 @@ button {
 .delete-job-btn.no-hover:active {
   background-color: transparent;
   color: var(--text-tertiary);
+}
+
+/* Drag Handle */
+.drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  color: var(--text-tertiary);
+  background-color: transparent;
+  transition: var(--transition-fast);
+  flex-shrink: 0;
+  margin-left: 4px;
+  font-size: 1.25rem;
+  cursor: grab;
+  touch-action: none;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+  color: var(--text-primary);
+  background-color: var(--bg-tertiary);
 }
 
 /* Inline Add Button */
@@ -1302,13 +1332,27 @@ input:checked + .toggle-slider:before {
 }
 
 /* Utility Classes */
+/* Utility Classes */
 .desktop-only {
   display: none;
 }
 
+.mobile-toggle-area {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  align-items: center;
+}
+
 @media (min-width: 768px) {
   .desktop-only {
-    display: block;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+  
+  .mobile-toggle-area {
+    display: none;
   }
 }
 

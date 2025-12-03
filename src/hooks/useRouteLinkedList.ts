@@ -104,6 +104,20 @@ export function useRouteLinkedList(initialRLL?: RouteLinkedList) {
     setVersion(0);
   }, []);
 
+  /**
+   * 직업의 순서를 변경합니다.
+   * 
+   * @param fromIndex - 이동할 노드의 현재 인덱스
+   * @param toIndex - 이동할 위치의 인덱스
+   */
+  const moveJob = useCallback(
+    (fromIndex: number, toIndex: number) => {
+      rLL.move(fromIndex, toIndex);
+      forceUpdate();
+    },
+    [rLL, forceUpdate]
+  );
+
   return {
     rLL,
     version,
@@ -112,6 +126,7 @@ export function useRouteLinkedList(initialRLL?: RouteLinkedList) {
     removeAt,
     reset,
     setRLL,
+    moveJob,
     forceUpdate, // 필요시 직접 호출할 수 있도록 노출
   };
 }

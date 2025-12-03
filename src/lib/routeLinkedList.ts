@@ -6,6 +6,7 @@ import jobPointMap, {
   EachJobPointMap,
   StatMap,
 } from "../database/jobPointMap";
+import { v4 as uuidv4 } from "uuid";
 
 // https://www.zerocho.com/category/Algorithm/post/58008a628475ed00152d6c4d
 // https://dev.to/miku86/javascript-data-structures-singly-linked-list-remove-fai
@@ -198,13 +199,81 @@ export default class RouteLinkedList {
 
     return allNodes;
   }
+
+  public move(fromIndex: number, toIndex: number): void {
+    if (fromIndex === toIndex) return;
+    // 0번 인덱스(무직)는 이동하거나 그 자리에 다른 것을 넣을 수 없음
+    if (fromIndex <= 0 || toIndex <= 0) return;
+    if (fromIndex >= this.length || toIndex >= this.length) return;
+
+    // 1. Remove the node from the current position
+    const nodeToMove = this.removeAt(fromIndex);
+    if (!nodeToMove) return;
+
+    // 2. Insert the node at the new position
+    this.insertNodeAt(nodeToMove, toIndex);
+
+    // 3. Recalculate from the earliest affected point
+    // removeAt already triggers recalculation for the node after the removed one.
+    // But inserting a node requires recalculating the inserted node and subsequent nodes.
+    // To be safe and ensure consistency, we start recalculation from the min index.
+    const startIndex = Math.min(fromIndex, toIndex);
+    const startNode = this.get(startIndex);
+    if (startNode) {
+      startNode.recalculate();
+    }
+  }
+
+  private insertNodeAt(node: RouteNode, index: number): void {
+    if (index < 0 || index > this.length) return;
+
+    if (index === 0) {
+      // This case is technically blocked by move() validation, but for completeness:
+      node.next = this.head;
+      if (this.head) this.head.prev = node;
+      this.head = node;
+      if (!this.tail) this.tail = node;
+    } else if (index === this.length) {
+      // Append to end
+      if (this.tail) {
+        this.tail.next = node;
+        node.prev = this.tail;
+        this.tail = node;
+      } else {
+        this.head = node;
+        this.tail = node;
+      }
+    } else {
+      // Insert in middle
+      const nextNode = this.get(index);
+      const prevNode = nextNode?.prev;
+
+      if (prevNode) {
+        prevNode.next = node;
+        node.prev = prevNode;
+      }
+
+      if (nextNode) {
+        nextNode.prev = node;
+        node.next = nextNode;
+      }
+    }
+
+    this.length += 1;
+    
+    // We need to establish the links for the inserted node's internal state
+    // (e.g., stats based on prev)
+    node.getPrevs();
+  }
 }
 
 export class RouteNode {
   constructor(job: Jobs) {
+    this.id = uuidv4();
     this.job = job;
     this.jobPointMap = jobPointMap[this.job] as EachJobPointMap;
   }
+  id: string;
   job: Jobs;
   jobPo: number = 0;
   stats: Stats = { STR: 5, INT: 5, AGI: 5, VIT: 5 };
