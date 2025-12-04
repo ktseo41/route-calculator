@@ -857,6 +857,14 @@ button {
     display: none;
   }
 
+  .adjust-controls {
+    margin-bottom: var(--space-md);
+  }
+
+  .adjust-btn {
+    height: 38px;
+  }
+
   .point-adjuster-container .point-value {
     font-size: 1.5rem;
     margin-bottom: var(--space-xs);
