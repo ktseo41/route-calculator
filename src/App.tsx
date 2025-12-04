@@ -310,20 +310,38 @@ export default function App() {
     <div className="app-container">
       {/* Header */}
       <header className="app-header">
-        <div className="logo">
-          <div className="logo-icon" style={{ background: 'none', padding: 0 }}>
-            <img src={logo} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+        <div className="header-top">
+          <div className="logo">
+            <div className="logo-icon" style={{ background: 'none', padding: 0 }}>
+              <img src={logo} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+            </div>
+            <span className="title">루트 계산기</span>
+            <span className="version">v2.0.0</span>
           </div>
-          <span className="title">루트 계산기</span>
-          <span className="version">v2.0.0</span>
+          <div className="header-actions">
+            <button 
+              className="icon-btn" 
+              aria-label="Reset" 
+              onClick={handleResetClick}
+              style={rLL.length <= 1 ? { opacity: 0.3, cursor: 'not-allowed' } : {}}
+            >
+              <Broom />
+            </button>
+            <button className="icon-btn" aria-label="Share" onClick={handleShareClick}>
+              {isSharing ? <Spinner className="animate-spin" /> : <ShareNetwork />}
+            </button>
+          </div>
         </div>
-        <div className="header-actions">
-          <div className="desktop-only">
+        
+        <div className="header-bottom">
+          <div className="header-controls-left">
             <ToggleSwitch 
               checked={isCumulative} 
               onChange={() => setIsCumulative(!isCumulative)} 
               label="누적 잡포인트 보기" 
             />
+          </div>
+          <div className="header-controls-right">
             <button 
               className={`icon-btn ${isReorderMode ? 'active' : ''}`} 
               aria-label="Reorder Mode" 
@@ -332,47 +350,21 @@ export default function App() {
             >
               <ArrowsOutLineVertical />
             </button>
+            <button 
+              className={`icon-btn ${deleteMode ? 'active' : ''}`} 
+              aria-label="Delete Mode" 
+              onClick={toggleDeleteMode}
+              style={deleteMode ? { backgroundColor: 'rgba(239, 68, 68, 0.1)', color: 'var(--error)' } : {}}
+            >
+              <MinusCircle />
+            </button>
           </div>
-          <button 
-            className={`icon-btn ${deleteMode ? 'active' : ''}`} 
-            aria-label="Delete Mode" 
-            onClick={toggleDeleteMode}
-            style={deleteMode ? { backgroundColor: 'rgba(239, 68, 68, 0.1)', color: 'var(--error)' } : {}}
-          >
-            <MinusCircle />
-          </button>
-          <button 
-            className="icon-btn" 
-            aria-label="Reset" 
-            onClick={handleResetClick}
-            style={rLL.length <= 1 ? { opacity: 0.3, cursor: 'not-allowed' } : {}}
-          >
-            <Broom />
-          </button>
-          <button className="icon-btn" aria-label="Share" onClick={handleShareClick}>
-            {isSharing ? <Spinner className="animate-spin" /> : <ShareNetwork />}
-          </button>
         </div>
       </header>
 
       <div className="content-wrapper">
         {/* Main Content Area */}
         <main className="main-content">
-          <div className="mobile-toggle-area">
-            <ToggleSwitch 
-              checked={isCumulative} 
-              onChange={() => setIsCumulative(!isCumulative)} 
-              label="누적 잡포인트 보기" 
-            />
-            <button 
-              className={`icon-btn ${isReorderMode ? 'active' : ''}`} 
-              aria-label="Reorder Mode" 
-              onClick={() => setIsReorderMode(!isReorderMode)}
-              style={isReorderMode ? { backgroundColor: 'var(--accent-light)', color: 'var(--accent-primary)' } : {}}
-            >
-              <ArrowsOutLineVertical />
-            </button>
-          </div>
           
           {errorMessage && (
             <div className="mobile-only" style={{
@@ -527,11 +519,6 @@ export default function App() {
             </button>
           </div>
 
-          <footer className="app-footer">
-            <button className="footer-link" onClick={() => setIsAboutModalOpen(true)}>
-              About
-            </button>
-          </footer>
         </main>
 
         {/* Desktop Sidebar */}

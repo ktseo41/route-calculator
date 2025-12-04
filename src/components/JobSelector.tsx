@@ -9,7 +9,7 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onJobSelect }) => {
   return (
     <div>
       {/* 전사 계열 직업 */}
-      <div style={{ marginBottom: 'var(--space-md)', paddingBottom: 'var(--space-sm)', borderBottom: '1px solid var(--border-color)' }}>
+      <div style={{ marginBottom: 'var(--space-md)', paddingBottom: 'var(--space-sm)' }}>
         <h4 style={{ marginBottom: 'var(--space-sm)', color: 'var(--text-tertiary)', fontSize: '0.75rem' }}>전사 계열</h4>
         {/* 1차 직업 */}
         <div className="job-grid" style={{ marginBottom: 'var(--space-sm)' }}>
@@ -41,7 +41,7 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onJobSelect }) => {
       </div>
 
       {/* 모험가 계열 직업 */}
-      <div style={{ marginBottom: 'var(--space-md)', paddingBottom: 'var(--space-sm)', borderBottom: '1px solid var(--border-color)' }}>
+      <div style={{ marginBottom: 'var(--space-md)', paddingBottom: 'var(--space-sm)' }}>
         <h4 style={{ marginBottom: 'var(--space-sm)', color: 'var(--text-tertiary)', fontSize: '0.75rem' }}>모험가 계열</h4>
         <div className="job-grid">
           {/* 1차 직업 */}
