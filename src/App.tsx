@@ -578,7 +578,6 @@ export default function App() {
           isOpen={isPanelOpen}
           onClose={closePanel}
         >
-          {errorMessage && <div style={{ color: 'var(--error)', marginBottom: '1rem' }}>{errorMessage}</div>}
           {panelMode === 'job-select' ? (
             <JobSelector onJobSelect={addNewJob} />
           ) : (
