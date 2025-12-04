@@ -1,4 +1,5 @@
 import React from 'react';
+import { X, DownloadSimple, Image, Check, Copy, Spinner } from "@phosphor-icons/react";
 
 interface ShareModalProps {
   isOpen: boolean;
@@ -29,7 +30,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
         <div className="share-modal-header">
           <h3 className="confirm-modal-title">공유하기</h3>
           <button className="share-modal-close" onClick={onClose}>
-            <i className="ph-bold ph-x"></i>
+            <X weight="bold" />
           </button>
         </div>
         
@@ -53,7 +54,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
             disabled={isSharing}
           >
             <div className="share-icon-wrapper">
-              <i className="ph ph-download-simple"></i>
+              <DownloadSimple />
             </div>
             <span className="share-label">이미지로 저장</span>
           </button>
@@ -64,7 +65,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
             disabled={isSharing}
           >
             <div className="share-icon-wrapper">
-              <i className="ph ph-image"></i>
+              <Image />
             </div>
             <span className="share-label">이미지로 공유</span>
           </button>
@@ -75,7 +76,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
             disabled={isSharing}
           >
             <div className="share-icon-wrapper" style={isUrlCopied ? { color: 'var(--success)', backgroundColor: 'rgba(34, 197, 94, 0.1)' } : {}}>
-              <i className={`ph ${isUrlCopied ? 'ph-check' : 'ph-copy'}`}></i>
+              {isUrlCopied ? <Check /> : <Copy />}
             </div>
             <span className="share-label">{isUrlCopied ? '복사됨' : 'URL 복사'}</span>
           </button>
@@ -83,7 +84,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
         
         {isSharing && (
           <div className="share-loading-overlay">
-            <i className="ph ph-spinner animate-spin"></i>
+            <Spinner className="animate-spin" />
             <span>처리 중...</span>
           </div>
         )}

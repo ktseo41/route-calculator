@@ -1,5 +1,16 @@
 import { useState, useEffect, MouseEvent } from "react";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
+import { 
+  ArrowsOutLineVertical, 
+  MinusCircle, 
+  Broom, 
+  ShareNetwork, 
+  Spinner, 
+  DotsSixVertical, 
+  Trash, 
+  Plus, 
+  X 
+} from "@phosphor-icons/react";
 import { useRouteLinkedList } from "./hooks/useRouteLinkedList";
 import {
   getJobNameFromSelect,
@@ -319,7 +330,7 @@ export default function App() {
               onClick={() => setIsReorderMode(!isReorderMode)}
               style={isReorderMode ? { backgroundColor: 'var(--accent-light)', color: 'var(--accent-primary)' } : {}}
             >
-              <i className="ph ph-arrows-out-line-vertical"></i>
+              <ArrowsOutLineVertical />
             </button>
           </div>
           <button 
@@ -328,7 +339,7 @@ export default function App() {
             onClick={toggleDeleteMode}
             style={deleteMode ? { backgroundColor: 'rgba(239, 68, 68, 0.1)', color: 'var(--error)' } : {}}
           >
-            <i className="ph ph-minus-circle"></i>
+            <MinusCircle />
           </button>
           <button 
             className="icon-btn" 
@@ -336,10 +347,10 @@ export default function App() {
             onClick={handleResetClick}
             style={rLL.length <= 1 ? { opacity: 0.3, cursor: 'not-allowed' } : {}}
           >
-            <i className="ph ph-broom"></i>
+            <Broom />
           </button>
           <button className="icon-btn" aria-label="Share" onClick={handleShareClick}>
-            {isSharing ? <i className="ph ph-spinner animate-spin"></i> : <i className="ph ph-share-network"></i>}
+            {isSharing ? <Spinner className="animate-spin" /> : <ShareNetwork />}
           </button>
         </div>
       </header>
@@ -359,7 +370,7 @@ export default function App() {
               onClick={() => setIsReorderMode(!isReorderMode)}
               style={isReorderMode ? { backgroundColor: 'var(--accent-light)', color: 'var(--accent-primary)' } : {}}
             >
-              <i className="ph ph-arrows-out-line-vertical"></i>
+              <ArrowsOutLineVertical />
             </button>
           </div>
           
@@ -486,7 +497,7 @@ export default function App() {
                                   className="drag-handle"
                                   {...provided.dragHandleProps}
                                 >
-                                  <i className="ph ph-dots-six-vertical"></i>
+                                  <DotsSixVertical />
                                 </div>
                               )}
                               {deleteMode && (
@@ -495,7 +506,7 @@ export default function App() {
                                   onClick={(e) => handleDeleteJob(originalIndex, e)}
                                   aria-label="삭제"
                                 >
-                                  <i className="ph ph-trash"></i>
+                                  <Trash />
                                 </button>
                               )}
                             </div>
@@ -511,7 +522,7 @@ export default function App() {
 
             {/* Inline Add Button - Mobile Only */}
             <button className="add-row-btn mobile-only" onClick={handleAddClick}>
-              <i className="ph-bold ph-plus"></i>
+              <Plus weight="bold" />
               <span>직업 추가</span>
             </button>
           </div>
@@ -635,7 +646,7 @@ export default function App() {
             <div className="modal-header">
               <h3>about</h3>
               <button className="close-btn" onClick={() => setIsAboutModalOpen(false)}>
-                <i className="ph ph-x"></i>
+                <X />
               </button>
             </div>
             <div className="modal-body">
