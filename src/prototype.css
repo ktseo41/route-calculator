@@ -745,13 +745,32 @@ button {
 
   .app-header {
     display: flex;
-    flex-direction: column;
-    padding: 0;
-    height: auto;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 var(--space-lg);
+    height: 60px;
+    border-bottom: 1px solid var(--border-color);
+    justify-content: space-between;
   }
 
-  .header-top, .header-bottom {
-    padding: 0 var(--space-lg);
+  .header-top {
+    display: contents;
+  }
+
+  .header-bottom {
+    width: auto;
+    height: auto;
+    padding: 0;
+    border: none;
+    margin-left: auto;
+    margin-right: var(--space-sm);
+    justify-content: flex-end;
+    gap: var(--space-md);
+    order: 1;
+  }
+
+  .header-actions {
+    order: 2;
   }
 
   .content-wrapper {
