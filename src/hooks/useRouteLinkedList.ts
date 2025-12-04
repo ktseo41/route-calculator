@@ -112,8 +112,9 @@ export function useRouteLinkedList(initialRLL?: RouteLinkedList) {
    */
   const moveJob = useCallback(
     (fromIndex: number, toIndex: number) => {
-      rLL.move(fromIndex, toIndex);
+      const result = rLL.move(fromIndex, toIndex);
       forceUpdate();
+      return result;
     },
     [rLL, forceUpdate]
   );

@@ -100,4 +100,36 @@ describe("RouteLinkedList move functionality", () => {
      expect(rLL.get(0)?.job).toBe(Jobs.무직);
      expect(rLL.get(1)?.job).toBe(Jobs.무도가);
   });
+  test("같은 직업이 연속되게 이동할 수 없다.", () => {
+    const rLL = new RouteLinkedList();
+    rLL.add(Jobs.무도가); // 1
+    rLL.add(Jobs.검사);   // 2
+    rLL.add(Jobs.무도가); // 3
+    
+    const result = rLL.move(3, 2);
+    expect(result).toBe(false);
+    
+    // 움직이지 않아야 함
+    expect(rLL.get(1)?.job).toBe(Jobs.무도가);
+    expect(rLL.get(2)?.job).toBe(Jobs.검사);
+    expect(rLL.get(3)?.job).toBe(Jobs.무도가);
+  });
+
+  test("이동 결과 양옆에 같은 직업이 있으면 이동할 수 없다.", () => {
+     const rLL = new RouteLinkedList();
+     rLL.add(Jobs.무도가); // 1
+     rLL.add(Jobs.검사);   // 2
+     rLL.add(Jobs.전사); // 3
+     rLL.add(Jobs.무도가); // 4
+     
+     // 4번(무도가)을 2번으로 이동 시도.
+     // remove(4) -> 0:무직, 1:무도가, 2:검사, 3:전사
+     // insertAt(2) -> 0:무직, 1:무도가, 2:무도가, 3:검사, 4:전사
+     // 1번이 무도가이고 2번에 삽입하므로 실패해야 함.
+     
+     const result = rLL.move(4, 2);
+     expect(result).toBe(false);
+     
+     expect(rLL.get(4)?.job).toBe(Jobs.무도가);
+  });
 });

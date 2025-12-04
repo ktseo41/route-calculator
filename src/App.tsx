@@ -59,7 +59,10 @@ export default function App() {
     const fromIndex = result.source.index + 1;
     const toIndex = result.destination.index + 1;
 
-    moveJob(fromIndex, toIndex);
+    const success = moveJob(fromIndex, toIndex);
+    if (!success) {
+      setErrorMessage("같은 직업을 연속으로 배치할 수 없습니다.");
+    }
     setSelectedIndex(null); // Clear selection to avoid confusion
   };
 
@@ -316,7 +319,7 @@ export default function App() {
               onClick={() => setIsReorderMode(!isReorderMode)}
               style={isReorderMode ? { backgroundColor: 'var(--accent-light)', color: 'var(--accent-primary)' } : {}}
             >
-              <i className="ph ph-arrows-vertical"></i>
+              <i className="ph ph-arrows-out-line-vertical"></i>
             </button>
           </div>
           <button 
@@ -356,9 +359,35 @@ export default function App() {
               onClick={() => setIsReorderMode(!isReorderMode)}
               style={isReorderMode ? { backgroundColor: 'var(--accent-light)', color: 'var(--accent-primary)' } : {}}
             >
-              <i className="ph ph-arrows-vertical"></i>
+              <i className="ph ph-arrows-out-line-vertical"></i>
             </button>
           </div>
+          
+          {errorMessage && (
+            <div className="mobile-only" style={{
+              position: 'fixed',
+              top: '100px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              zIndex: 100,
+              width: '90%',
+              maxWidth: '400px',
+              color: 'var(--error)',
+              padding: '0.75rem',
+              textAlign: 'center',
+              fontWeight: '600',
+              fontSize: '0.875rem',
+              backgroundColor: 'rgba(39, 39, 42, 0.95)', // Dark background
+              border: '1px solid var(--error)',
+              borderRadius: 'var(--radius-md)',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+              animation: 'fadeIn 0.2s ease-in-out',
+              pointerEvents: 'none', // Allow clicking through if needed, but usually toast blocks interaction? No, let's allow clicks if it's just a message.
+            }}>
+              {errorMessage}
+            </div>
+          )}
+
           <div className="route-list" id="routeList">
             {/* Table Header */}
             <div className="route-header">
@@ -370,8 +399,8 @@ export default function App() {
                 <span className="header-stat">VIT</span>
               </div>
               <span className="header-po">PO</span>
-              {deleteMode && <span className="header-delete"></span>}
               {isReorderMode && <span className="header-drag"></span>}
+              {deleteMode && <span className="header-delete"></span>}
             </div>
 
             {/* Static First Row (Jobless) */}
@@ -397,10 +426,10 @@ export default function App() {
                     <div className="job-po-badge">
                       {isCumulative ? (firstNode.currentJobPos[firstNode.job] || 0) : firstNode.jobPo}
                     </div>
-                    {deleteMode && (
+                    {isReorderMode && (
                       <div style={{ width: '32px', marginLeft: '4px', flexShrink: 0 }}></div>
                     )}
-                    {isReorderMode && (
+                    {deleteMode && (
                       <div style={{ width: '32px', marginLeft: '4px', flexShrink: 0 }}></div>
                     )}
                   </div>
@@ -452,6 +481,14 @@ export default function App() {
                               <div className="job-po-badge">
                                 {isCumulative ? (node.currentJobPos[node.job] || 0) : node.jobPo}
                               </div>
+                              {isReorderMode && (
+                                <div
+                                  className="drag-handle"
+                                  {...provided.dragHandleProps}
+                                >
+                                  <i className="ph ph-dots-six-vertical"></i>
+                                </div>
+                              )}
                               {deleteMode && (
                                 <button 
                                   className={`delete-job-btn ${isDeleting ? 'no-hover' : ''}`}
@@ -460,14 +497,6 @@ export default function App() {
                                 >
                                   <i className="ph ph-trash"></i>
                                 </button>
-                              )}
-                              {isReorderMode && (
-                                <div
-                                  className="drag-handle"
-                                  {...provided.dragHandleProps}
-                                >
-                                  <i className="ph ph-dots-six-vertical"></i>
-                                </div>
                               )}
                             </div>
                           )}
