@@ -124,6 +124,10 @@ export async function generateTableImage(
   const clonedDeleteHeader = clonedTable.querySelector(".header-delete") as HTMLElement;
   if (clonedDeleteHeader) clonedDeleteHeader.remove();
 
+  // 라우트 컨트롤 제거 (PC에서 표시되는 토글/버튼 영역)
+  const clonedRouteControls = clonedTable.querySelector(".route-controls") as HTMLElement;
+  if (clonedRouteControls) clonedRouteControls.remove();
+
   // 하이라이트(active 클래스) 제거
   const activeRows = clonedTable.querySelectorAll(".route-row.active");
   activeRows.forEach((row) => {
