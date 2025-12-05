@@ -50,7 +50,7 @@ const RouteRow = ({
           <span className="stat-value">{node.stats.AGI}</span>
           <span className="stat-value">{node.stats.VIT}</span>
         </div>
-        <div className="job-po-badge">{displayPoint}</div>
+        <div className={`job-po-badge ${isCumulative ? 'cumulative' : ''}`}>{displayPoint}</div>
         {isReorderMode && (
           <div style={{ width: '32px', marginLeft: '4px', flexShrink: 0 }}></div>
         )}
@@ -81,7 +81,7 @@ const RouteRow = ({
         <span className="stat-value">{node.stats.AGI}</span>
         <span className="stat-value">{node.stats.VIT}</span>
       </div>
-      <div className="job-po-badge">{displayPoint}</div>
+      <div className={`job-po-badge ${isCumulative ? 'cumulative' : ''}`}>{displayPoint}</div>
       {isReorderMode && (
         <div
           className="drag-handle"

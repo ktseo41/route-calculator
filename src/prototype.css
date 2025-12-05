@@ -13,6 +13,7 @@
   --accent-light: rgba(181, 201, 154, 0.2);
   --accent-dark: #718355; /* Dark Moss Green */
   --accent-skin: #e9d8a6; /* Yellowish Skin */
+  --accent-cumulative: #4a5c50; /* Darker Yellow-Green */
 
   --border-color: #52525b; /* Zinc 600 - More visible borders */
   --border-hover: #71717a; /* Zinc 500 - Brighter on hover */
@@ -269,6 +270,8 @@ button {
   flex-shrink: 0;
 }
 
+
+
 .header-stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -297,6 +300,8 @@ button {
   text-align: center;
   flex-shrink: 0;
 }
+
+
 
 .header-delete {
   width: 32px;
@@ -352,6 +357,8 @@ button {
   flex-shrink: 0;
 }
 
+
+
 .row-stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr); /* 4 Equal Columns */
@@ -386,6 +393,12 @@ button {
   color: var(--text-primary);
   flex-shrink: 0;
 }
+
+.job-po-badge.cumulative {
+  background-color: var(--accent-cumulative);
+}
+
+
 
 /* Delete Job Button */
 .delete-job-btn {
@@ -923,11 +936,15 @@ button {
   flex-shrink: 0;
 }
 
+
+
 /* Error Section */
 .error-section {
   background-color: var(--bg-secondary);
   flex-shrink: 0;
 }
+
+
 
 /* Dark mode adjustment for divider */
 @media (prefers-color-scheme: dark) {
@@ -1344,6 +1361,8 @@ button {
   height: 24px;
   flex-shrink: 0;
 }
+
+
 
 .toggle-switch input {
   opacity: 0;
