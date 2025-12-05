@@ -69,7 +69,7 @@ const AppHeader = ({
         </div>
       </div>
       
-      <div className="header-bottom">
+      <div className="header-bottom mobile-only">
         <div className="header-controls-left">
           <ToggleSwitch 
             checked={isCumulative} 

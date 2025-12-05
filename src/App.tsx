@@ -1,6 +1,6 @@
 import { useState, useEffect, MouseEvent } from "react";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
-import { Plus } from "@phosphor-icons/react";
+import { Plus, ArrowsOutLineVertical, MinusCircle } from "@phosphor-icons/react";
 import { useRouteLinkedList } from "./hooks/useRouteLinkedList";
 import {
   getJobNameFromSelect,
@@ -24,6 +24,7 @@ import BottomSheet from "./components/BottomSheet";
 import AboutModal from "./components/AboutModal";
 import AppHeader from "./components/AppHeader";
 import RouteRow from "./components/RouteRow";
+import ToggleSwitch from "./components/ToggleSwitch";
 import "./prototype.css";
 
 
@@ -332,6 +333,33 @@ export default function App() {
           )}
 
           <div className="route-list" id="routeList">
+            {/* Desktop Controls - Above Table */}
+            <div className="route-controls desktop-only">
+              <div className="route-controls-content">
+                <ToggleSwitch 
+                  checked={isCumulative} 
+                  onChange={() => setIsCumulative(!isCumulative)} 
+                  label="누적 잡포인트 보기" 
+                />
+                <button 
+                  className={`icon-btn ${isReorderMode ? 'active' : ''}`} 
+                  aria-label="Reorder Mode" 
+                  onClick={() => setIsReorderMode(!isReorderMode)}
+                  style={isReorderMode ? { backgroundColor: 'var(--accent-light)', color: 'var(--accent-primary)' } : {}}
+                >
+                  <ArrowsOutLineVertical />
+                </button>
+                <button 
+                  className={`icon-btn ${deleteMode ? 'active' : ''}`} 
+                  aria-label="Delete Mode" 
+                  onClick={toggleDeleteMode}
+                  style={deleteMode ? { backgroundColor: 'rgba(239, 68, 68, 0.1)', color: 'var(--error)' } : {}}
+                >
+                  <MinusCircle />
+                </button>
+              </div>
+            </div>
+
             {/* Table Header */}
             <div className="route-header">
               <span className="header-job">직업</span>

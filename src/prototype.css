@@ -310,6 +310,12 @@ button {
   margin-left: 4px;
 }
 
+/* Desktop Controls - Hidden on Mobile */
+.route-controls {
+  display: none;
+}
+
+
 .route-row {
   background-color: var(--bg-secondary);
   border: 1px solid var(--border-color);
@@ -783,13 +789,25 @@ button {
   .main-content {
     flex: 0 0 480px; /* Fixed width for table section */
     border-right: 1px solid var(--border-color);
-    padding: var(--space-md);
-    padding-bottom: var(--space-md); /* Reset padding */
+    padding: var(--space-xs) var(--space-md) var(--space-md);
     overflow-y: auto;
   }
 
   .route-row {
     height: 46px;
+  }
+
+  /* Desktop Controls Above Route List */
+  .route-controls {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0;
+  }
+
+  .route-controls-content {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
   }
 
   .desktop-sidebar {
