@@ -9,7 +9,8 @@ import {
   DotsSixVertical, 
   Trash, 
   Plus, 
-  X 
+  X,
+  Info 
 } from "@phosphor-icons/react";
 import { useRouteLinkedList } from "./hooks/useRouteLinkedList";
 import {
@@ -319,6 +320,13 @@ export default function App() {
             <span className="version">v2.0.0</span>
           </div>
           <div className="header-actions">
+            <button 
+              className="icon-btn" 
+              aria-label="Info" 
+              onClick={() => setIsAboutModalOpen(true)}
+            >
+              <Info />
+            </button>
             <button 
               className="icon-btn" 
               aria-label="Reset" 
