@@ -1,16 +1,6 @@
 import { useState, useEffect, MouseEvent } from "react";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
-import { 
-  ArrowsOutLineVertical, 
-  MinusCircle, 
-  Broom, 
-  ShareNetwork, 
-  Spinner, 
-  DotsSixVertical, 
-  Trash, 
-  Plus, 
-  Info 
-} from "@phosphor-icons/react";
+import { Plus } from "@phosphor-icons/react";
 import { useRouteLinkedList } from "./hooks/useRouteLinkedList";
 import {
   getJobNameFromSelect,
@@ -31,11 +21,10 @@ import PointAdjuster from "./components/PointAdjuster";
 import ResetConfirmModal from "./components/ResetConfirmModal";
 import ShareModal from "./components/ShareModal";
 import BottomSheet from "./components/BottomSheet";
-import ToggleSwitch from "./components/ToggleSwitch";
 import AboutModal from "./components/AboutModal";
+import AppHeader from "./components/AppHeader";
+import RouteRow from "./components/RouteRow";
 import "./prototype.css";
-
-import logo from "./img/logo.png";
 
 
 
@@ -299,66 +288,19 @@ export default function App() {
 
   return (
     <div className="app-container">
-      {/* Header */}
-      <header className="app-header">
-        <div className="header-top">
-          <div className="logo">
-            <div className="logo-icon" style={{ background: 'none', padding: 0 }}>
-              <img src={logo} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-            </div>
-            <span className="title">루트 계산기</span>
-            <span className="version">v2.0.0</span>
-          </div>
-          <div className="header-actions">
-            <button 
-              className="icon-btn" 
-              aria-label="Info" 
-              onClick={() => setIsAboutModalOpen(true)}
-            >
-              <Info />
-            </button>
-            <button 
-              className="icon-btn" 
-              aria-label="Reset" 
-              onClick={handleResetClick}
-              style={rLL.length <= 1 ? { opacity: 0.3, cursor: 'not-allowed' } : {}}
-            >
-              <Broom />
-            </button>
-            <button className="icon-btn" aria-label="Share" onClick={handleShareClick}>
-              {isSharing ? <Spinner className="animate-spin" /> : <ShareNetwork />}
-            </button>
-          </div>
-        </div>
-        
-        <div className="header-bottom">
-          <div className="header-controls-left">
-            <ToggleSwitch 
-              checked={isCumulative} 
-              onChange={() => setIsCumulative(!isCumulative)} 
-              label="누적 잡포인트 보기" 
-            />
-          </div>
-          <div className="header-controls-right">
-            <button 
-              className={`icon-btn ${isReorderMode ? 'active' : ''}`} 
-              aria-label="Reorder Mode" 
-              onClick={() => setIsReorderMode(!isReorderMode)}
-              style={isReorderMode ? { backgroundColor: 'var(--accent-light)', color: 'var(--accent-primary)' } : {}}
-            >
-              <ArrowsOutLineVertical />
-            </button>
-            <button 
-              className={`icon-btn ${deleteMode ? 'active' : ''}`} 
-              aria-label="Delete Mode" 
-              onClick={toggleDeleteMode}
-              style={deleteMode ? { backgroundColor: 'rgba(239, 68, 68, 0.1)', color: 'var(--error)' } : {}}
-            >
-              <MinusCircle />
-            </button>
-          </div>
-        </div>
-      </header>
+      <AppHeader
+        rLLLength={rLL.length}
+        isSharing={isSharing}
+        isCumulative={isCumulative}
+        isReorderMode={isReorderMode}
+        deleteMode={deleteMode}
+        onInfoClick={() => setIsAboutModalOpen(true)}
+        onResetClick={handleResetClick}
+        onShareClick={handleShareClick}
+        onCumulativeToggle={() => setIsCumulative(!isCumulative)}
+        onReorderToggle={() => setIsReorderMode(!isReorderMode)}
+        onDeleteToggle={toggleDeleteMode}
+      />
 
       <div className="content-wrapper">
         {/* Main Content Area */}
@@ -411,29 +353,19 @@ export default function App() {
               
               if (firstNode) {
                 return (
-                  <div 
-                    key={firstNode.id} 
-                    className={`route-row ${selectedIndex === 0 ? 'active' : ''}`}
-                    style={{ cursor: 'default' }}
-                    onClick={() => handleRowClick(0)}
-                  >
-                    <span className="job-name">{firstNode.job}</span>
-                    <div className="row-stats">
-                      <span className="stat-value">{firstNode.stats.STR}</span>
-                      <span className="stat-value">{firstNode.stats.INT}</span>
-                      <span className="stat-value">{firstNode.stats.AGI}</span>
-                      <span className="stat-value">{firstNode.stats.VIT}</span>
-                    </div>
-                    <div className="job-po-badge">
-                      {isCumulative ? (firstNode.currentJobPos[firstNode.job] || 0) : firstNode.jobPo}
-                    </div>
-                    {isReorderMode && (
-                      <div style={{ width: '32px', marginLeft: '4px', flexShrink: 0 }}></div>
-                    )}
-                    {deleteMode && (
-                      <div style={{ width: '32px', marginLeft: '4px', flexShrink: 0 }}></div>
-                    )}
-                  </div>
+                  <RouteRow
+                    key={firstNode.id}
+                    node={firstNode}
+                    index={0}
+                    isSelected={selectedIndex === 0}
+                    isCumulative={isCumulative}
+                    isReorderMode={isReorderMode}
+                    deleteMode={deleteMode}
+                    isDeleting={isDeleting}
+                    isStatic={true}
+                    onRowClick={handleRowClick}
+                    onDeleteJob={handleDeleteJob}
+                  />
                 );
               }
               return null;
@@ -450,7 +382,6 @@ export default function App() {
                   >
                     {rLL.getAllNodes().slice(1).map((node, index) => {
                       if (!node) return null;
-                      // Adjust index to match original list (0 is skipped)
                       const originalIndex = index + 1;
                       
                       return (
@@ -461,45 +392,19 @@ export default function App() {
                           isDragDisabled={!isReorderMode}
                         >
                           {(provided, snapshot) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              style={{
-                                ...provided.draggableProps.style,
-                                cursor: 'pointer',
-                                opacity: snapshot.isDragging ? 0.8 : 1,
-                              }}
-                              className={`route-row ${selectedIndex === originalIndex ? 'active' : ''}`}
-                              onClick={() => handleRowClick(originalIndex)}
-                            >
-                              <span className="job-name">{node.job}</span>
-                              <div className="row-stats">
-                                <span className="stat-value">{node.stats.STR}</span>
-                                <span className="stat-value">{node.stats.INT}</span>
-                                <span className="stat-value">{node.stats.AGI}</span>
-                                <span className="stat-value">{node.stats.VIT}</span>
-                              </div>
-                              <div className="job-po-badge">
-                                {isCumulative ? (node.currentJobPos[node.job] || 0) : node.jobPo}
-                              </div>
-                              {isReorderMode && (
-                                <div
-                                  className="drag-handle"
-                                  {...provided.dragHandleProps}
-                                >
-                                  <DotsSixVertical />
-                                </div>
-                              )}
-                              {deleteMode && (
-                                <button 
-                                  className={`delete-job-btn ${isDeleting ? 'no-hover' : ''}`}
-                                  onClick={(e) => handleDeleteJob(originalIndex, e)}
-                                  aria-label="삭제"
-                                >
-                                  <Trash />
-                                </button>
-                              )}
-                            </div>
+                            <RouteRow
+                              node={node}
+                              index={originalIndex}
+                              isSelected={selectedIndex === originalIndex}
+                              isCumulative={isCumulative}
+                              isReorderMode={isReorderMode}
+                              deleteMode={deleteMode}
+                              isDeleting={isDeleting}
+                              provided={provided}
+                              snapshot={snapshot}
+                              onRowClick={handleRowClick}
+                              onDeleteJob={handleDeleteJob}
+                            />
                           )}
                         </Draggable>
                       );
