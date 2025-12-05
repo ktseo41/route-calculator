@@ -9,7 +9,6 @@ import {
   DotsSixVertical, 
   Trash, 
   Plus, 
-  X,
   Info 
 } from "@phosphor-icons/react";
 import { useRouteLinkedList } from "./hooks/useRouteLinkedList";
@@ -32,20 +31,11 @@ import PointAdjuster from "./components/PointAdjuster";
 import ResetConfirmModal from "./components/ResetConfirmModal";
 import ShareModal from "./components/ShareModal";
 import BottomSheet from "./components/BottomSheet";
+import ToggleSwitch from "./components/ToggleSwitch";
+import AboutModal from "./components/AboutModal";
 import "./prototype.css";
 
 import logo from "./img/logo.png";
-
-const ToggleSwitch = ({ checked, onChange, label }: { checked: boolean; onChange: () => void; label: string }) => (
-  <div className="toggle-container" onClick={onChange}>
-    <div className="toggle-switch">
-      <input type="checkbox" checked={checked} readOnly />
-      <span className="toggle-slider"></span>
-    </div>
-    <span className="toggle-label-text">{label}</span>
-  </div>
-);
-
 
 
 
@@ -634,24 +624,10 @@ export default function App() {
         onCustomTextChange={setCustomShareText}
       />
 
-      {isAboutModalOpen && (
-        <div className="modal-overlay" onClick={() => setIsAboutModalOpen(false)}>
-          <div className="modal-content about-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h3>about</h3>
-              <button className="close-btn" onClick={() => setIsAboutModalOpen(false)}>
-                <X />
-              </button>
-            </div>
-            <div className="modal-body">
-              <p>루트 계산기를 이용해 주셔서 감사합니다.</p>
-              <p>이 앱은 여러분의 캐릭터 육성 시뮬레이션을 돕기 위해 제작되었습니다.</p>
-              <br />
-              <p>문의사항이나 건의사항이 있으시면 언제든 연락주세요.</p>
-            </div>
-          </div>
-        </div>
-      )}
+      <AboutModal 
+        isOpen={isAboutModalOpen} 
+        onClose={() => setIsAboutModalOpen(false)} 
+      />
 
     </div>
   );
