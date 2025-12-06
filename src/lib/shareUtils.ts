@@ -237,7 +237,7 @@ export async function shareTableAsImage(
   }`;
   
   try {
-    await shareImage(blob, "route-table.png");
+    await shareImage(blob, "루트 이미지.png");
   } catch (e) {
     // 이미지 공유 실패 시 URL 공유 시도
     await copyUrl(urlToSave);

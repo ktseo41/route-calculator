@@ -195,7 +195,7 @@ export default function App() {
     setIsSharing(true);
     try {
       const blob = await generateTableImage(rLL, ".route-list", customShareText);
-      downloadImage(blob, "route-table.png");
+      downloadImage(blob, "루트 이미지.png");
       setIsShareModalOpen(false);
     } catch (error: any) {
       console.error("이미지 다운로드 실패:", error);
@@ -212,7 +212,7 @@ export default function App() {
       const blob = await generateTableImage(rLL, ".route-list", customShareText);
       await shareImage(
         blob,
-        "route-table.png"
+        "루트 이미지.png"
       );
       setIsShareModalOpen(false);
     } catch (error: any) {
