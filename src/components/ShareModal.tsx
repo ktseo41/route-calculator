@@ -34,8 +34,8 @@ const ShareModal: React.FC<ShareModalProps> = ({
           </button>
         </div>
         
-        <div className="share-input-container" style={{ marginBottom: '16px', padding: '0 4px' }}>
-          <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '6px' }}>
+        <div className="share-input-container">
+          <label className="share-input-label">
             이미지에 포함할 텍스트 (선택)
           </label>
           <input
@@ -75,7 +75,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
             onClick={onShareUrl}
             disabled={isSharing}
           >
-            <div className="share-icon-wrapper" style={isUrlCopied ? { color: 'var(--success)', backgroundColor: 'rgba(34, 197, 94, 0.1)' } : {}}>
+            <div className={`share-icon-wrapper ${isUrlCopied ? 'share-icon-wrapper--copied' : ''}`}>
               {isUrlCopied ? <Check /> : <Copy />}
             </div>
             <span className="share-label">{isUrlCopied ? '복사됨' : 'URL 복사'}</span>

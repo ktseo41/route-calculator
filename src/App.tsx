@@ -25,7 +25,7 @@ import AboutModal from "./components/AboutModal";
 import AppHeader from "./components/AppHeader";
 import RouteRow from "./components/RouteRow";
 import ToggleSwitch from "./components/ToggleSwitch";
-import "./prototype.css";
+import "./index.css";
 
 
 
@@ -308,26 +308,7 @@ export default function App() {
         <main className="main-content">
           
           {errorMessage && (
-            <div className="mobile-only" style={{
-              position: 'fixed',
-              top: '100px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              zIndex: 100,
-              width: '90%',
-              maxWidth: '400px',
-              color: 'var(--error)',
-              padding: '0.75rem',
-              textAlign: 'center',
-              fontWeight: '600',
-              fontSize: '0.875rem',
-              backgroundColor: 'rgba(39, 39, 42, 0.95)', // Dark background
-              border: '1px solid var(--error)',
-              borderRadius: 'var(--radius-md)',
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
-              animation: 'fadeIn 0.2s ease-in-out',
-              pointerEvents: 'none', // Allow clicking through if needed, but usually toast blocks interaction? No, let's allow clicks if it's just a message.
-            }}>
+            <div className="mobile-only error-toast">
               {errorMessage}
             </div>
           )}
@@ -342,18 +323,16 @@ export default function App() {
                   label="누적 잡포인트 보기" 
                 />
                 <button 
-                  className={`icon-btn ${isReorderMode ? 'active' : ''}`} 
+                  className={`icon-btn ${isReorderMode ? 'icon-btn--reorder-active' : ''}`} 
                   aria-label="Reorder Mode" 
                   onClick={() => setIsReorderMode(!isReorderMode)}
-                  style={isReorderMode ? { backgroundColor: 'var(--accent-light)', color: 'var(--accent-primary)' } : {}}
                 >
                   <ArrowsOutLineVertical />
                 </button>
                 <button 
-                  className={`icon-btn ${deleteMode ? 'active' : ''}`} 
+                  className={`icon-btn ${deleteMode ? 'icon-btn--delete-active' : ''}`} 
                   aria-label="Delete Mode" 
                   onClick={toggleDeleteMode}
-                  style={deleteMode ? { backgroundColor: 'rgba(239, 68, 68, 0.1)', color: 'var(--error)' } : {}}
                 >
                   <MinusCircle />
                 </button>
@@ -406,7 +385,7 @@ export default function App() {
                   <div
                     {...provided.droppableProps}
                     ref={provided.innerRef}
-                    style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}
+                    className="droppable-area"
                   >
                     {rLL.getAllNodes().slice(1).map((node, index) => {
                       if (!node) return null;
@@ -456,7 +435,7 @@ export default function App() {
         <aside className="desktop-sidebar"> 
           {/* Point Adjuster Section - Fixed at Top */}
              <div className="sidebar-header">
-               <div className="point-adjuster-container" style={{ opacity: selectedIndex !== null ? 1 : 0.5, pointerEvents: selectedIndex !== null ? 'auto' : 'none' }}>
+               <div className={`point-adjuster-container ${selectedIndex === null ? 'point-adjuster-container--disabled' : ''}`}>
                   <PointAdjuster 
                     onPointAdjust={adjustJobPoint} 
                     onPointSet={(value) => {

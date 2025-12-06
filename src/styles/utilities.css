@@ -1,0 +1,102 @@
+/* ===================================
+   Utility Classes
+   =================================== */
+
+/* Mobile Only - Hidden on Desktop */
+@media (min-width: 768px) {
+  .mobile-only {
+    display: none !important;
+  }
+}
+
+/* Desktop Only - Hidden on Mobile */
+.desktop-only {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .desktop-only {
+    display: block;
+  }
+}
+
+/* ===================================
+   Animations
+   =================================== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Spinner animation for loading states */
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ===================================
+   Error Toast (Mobile)
+   =================================== */
+.error-toast {
+  position: fixed;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  width: 90%;
+  max-width: 400px;
+  color: var(--error);
+  padding: 0.75rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.875rem;
+  background-color: rgba(39, 39, 42, 0.95);
+  border: 1px solid var(--error);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.2s ease-in-out;
+  pointer-events: none;
+}
+
+/* Error Message Container */
+.error-message-container {
+  min-height: 1.5rem; /* Reduced reserved space */
+  font-size: 0.8rem; /* Smaller font */
+  font-weight: 600;
+  color: var(--error);
+  padding: 0 var(--space-sm); /* Reduced padding */
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center text */
+  transition: opacity var(--transition-fast);
+}
+
+.error-message-container.hidden {
+  opacity: 0;
+}
+
+/* Desktop-specific error message enhancements */
+@media (min-width: 768px) {
+  .error-message-container {
+    font-size: 0.9rem; /* Larger text for PC */
+    min-height: 2.25rem; /* Compact height */
+  }
+}
+
+/* ===================================
+   Droppable Area (Drag and Drop)
+   =================================== */
+.droppable-area {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}

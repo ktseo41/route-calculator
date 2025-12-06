@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef, TouchEvent } from 'react';
-import '../prototype.css';
 
 interface BottomSheetProps {
   isOpen: boolean;
@@ -55,11 +54,6 @@ const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen, onClose, children }) 
     }
   };
 
-  if (!isOpen && translateY === 0) {
-    // We can't return null here because we need the overlay to fade out
-    // But for now, let's rely on CSS classes for visibility
-  }
-
   return (
     <>
       <div 
@@ -83,7 +77,6 @@ const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen, onClose, children }) 
           <div className="sheet-handle"></div>
         </div>
         
-
 
         <div className="sheet-content">
           {children}

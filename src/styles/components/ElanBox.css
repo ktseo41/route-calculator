@@ -1,0 +1,67 @@
+/* ===================================
+   ElanBox & ElanButton Component Styles
+   =================================== */
+
+/* ElanBox Outer Frame */
+.elan-box-outer {
+  background-color: black;
+  color: white;
+  padding: 3px;
+  box-sizing: border-box;
+  box-shadow: 0 0 15px rgba(0,0,0,0.7);
+}
+
+/* ElanBox Border */
+.elan-box-border {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #f7f7f7;
+  border-radius: 0.125rem; /* rounded-sm */
+  box-sizing: border-box;
+  box-shadow: inset 0 0 1px 1px #ffffff, inset 0 0 1px 2px rgb(74, 74, 74), 0 0 1px 0px #ffffff, 0 0 1px 2px rgb(74, 74, 74);
+}
+
+/* ElanBox Content Area */
+.elan-box-content {
+  height: 100%;
+  box-sizing: border-box;
+  border-radius: 2px;
+}
+
+/* ElanButton */
+.elan-btn {
+  padding: 0.125rem 0.5rem; /* px-2 py-0.5 */
+  display: flex;
+  align-items: center;
+  z-index: 10;
+  color: white;
+  font-size: 1rem; /* text-md */
+  line-height: 1;
+  font-weight: 400;
+  font-family: "Jaro", sans-serif;
+  font-style: normal;
+  font-optical-sizing: auto;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.8), -1px -1px 1px rgba(0,0,0,0.5);
+  background-color: #4a4a4a;
+  border-width: 1px;
+  border-style: solid;
+  border-top-color: #6a6a6a;
+  border-left-color: #6a6a6a;
+  border-bottom-color: #2a2a2a;
+  border-right-color: #2a2a2a;
+  border-radius: 3px;
+  box-shadow: inset 1px 1px 1px rgba(255,255,255,0.1), inset -1px -1px 1px rgba(0,0,0,0.5);
+  transition: all 200ms;
+}
+
+.elan-btn:hover {
+  background-color: #5a5a5a;
+  border-top-color: #7a7a7a;
+  border-left-color: #7a7a7a;
+}
+
+.elan-btn:active {
+  background-color: #6a6a6a;
+  border-top-color: #8a8a8a;
+  border-left-color: #8a8a8a;
+}

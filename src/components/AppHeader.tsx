@@ -41,8 +41,8 @@ const AppHeader = ({
     <header className="app-header">
       <div className="header-top">
         <div className="logo">
-          <div className="logo-icon" style={{ background: 'none', padding: 0 }}>
-            <img src={logo} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+          <div className="logo-icon logo-icon--image">
+            <img src={logo} alt="Logo" />
           </div>
           <span className="title">루트 계산기</span>
           <span className="version">v2.0.0</span>
@@ -56,10 +56,9 @@ const AppHeader = ({
             <Info />
           </button>
           <button 
-            className="icon-btn" 
+            className={`icon-btn ${rLLLength <= 1 ? 'icon-btn--disabled' : ''}`}
             aria-label="Reset" 
             onClick={onResetClick}
-            style={rLLLength <= 1 ? { opacity: 0.3, cursor: 'not-allowed' } : {}}
           >
             <Broom />
           </button>
@@ -79,18 +78,16 @@ const AppHeader = ({
         </div>
         <div className="header-controls-right">
           <button 
-            className={`icon-btn ${isReorderMode ? 'active' : ''}`} 
+            className={`icon-btn ${isReorderMode ? 'icon-btn--reorder-active' : ''}`}
             aria-label="Reorder Mode" 
             onClick={onReorderToggle}
-            style={isReorderMode ? { backgroundColor: 'var(--accent-light)', color: 'var(--accent-primary)' } : {}}
           >
             <ArrowsOutLineVertical />
           </button>
           <button 
-            className={`icon-btn ${deleteMode ? 'active' : ''}`} 
+            className={`icon-btn ${deleteMode ? 'icon-btn--delete-active' : ''}`}
             aria-label="Delete Mode" 
             onClick={onDeleteToggle}
-            style={deleteMode ? { backgroundColor: 'rgba(239, 68, 68, 0.1)', color: 'var(--error)' } : {}}
           >
             <MinusCircle />
           </button>

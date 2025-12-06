@@ -1,0 +1,166 @@
+/* ===================================
+   Layout Styles
+   =================================== */
+
+/* App Container */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-width: 600px; /* Mobile focused max width */
+  margin: 0 auto;
+  background-color: var(--bg-primary);
+  position: relative;
+  width: 100%;
+  border-left: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+}
+
+/* Content Wrapper */
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden; /* Prevent horizontal scroll from negative margins */
+  padding: var(--space-sm); /* Reduced padding */
+  padding-bottom: 0; /* Remove bottom padding for footer alignment */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Desktop Sidebar - Hidden on Mobile */
+.desktop-sidebar {
+  display: none;
+}
+
+/* Sidebar Divider */
+.sidebar-divider {
+  height: 2px;
+  background-color: var(--text-primary); /* Use text color for high contrast white line */
+  opacity: 0.2;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+/* Error Section */
+.error-section {
+  background-color: var(--bg-secondary);
+  flex-shrink: 0;
+}
+
+/* Footer */
+.app-footer {
+  height: 24px; /* Reduced height */
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* Right aligned */
+  padding: 0 var(--space-md);
+  background-color: transparent;
+  border-top: 1px dotted rgba(255, 255, 255, 0.15);
+  flex-shrink: 0;
+  margin-top: auto; /* Push to bottom */
+  width: calc(100% + 2 * var(--space-sm)); /* Full width including negative margins */
+  margin-left: calc(-1 * var(--space-sm));
+  margin-right: calc(-1 * var(--space-sm));
+  margin-bottom: 0; /* Reset bottom margin */
+}
+
+.footer-link {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.footer-link:hover {
+  color: var(--text-primary);
+  text-decoration: underline;
+}
+
+/* ===================================
+   Desktop Enhancements (min-width: 768px)
+   =================================== */
+@media (min-width: 768px) {
+  body {
+    background-color: #18181b; /* Darker background for the body to make the app pop */
+  }
+
+  #root {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-md);
+  }
+
+  .app-container {
+    max-width: 900px;
+    width: 100%;
+    height: auto;
+    min-height: 600px;
+    max-height: 90vh;
+    margin: 0 auto; /* Ensure horizontal centering */
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-2xl);
+    background-color: var(--bg-primary);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .content-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .main-content {
+    flex: 0 0 480px; /* Fixed width for table section */
+    border-right: 1px solid var(--border-color);
+    padding: var(--space-xs) var(--space-md) var(--space-md);
+    overflow-y: auto;
+  }
+
+  .desktop-sidebar {
+    flex: 1;
+    background-color: var(--bg-secondary);
+    display: flex;
+    flex-direction: column;
+    padding: 0; /* Remove padding to allow header to be full width */
+    overflow: hidden; /* Prevent main scroll */
+  }
+
+  .sidebar-header {
+    background-color: var(--bg-secondary);
+    padding: 0; /* Remove padding to eliminate gap */
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0; /* Prevent shrinking */
+    z-index: 5;
+  }
+
+  .sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-lg);
+  }
+
+  .sidebar-section {
+    margin-bottom: var(--space-xl);
+  }
+
+  .sidebar-section h3 {
+    margin-bottom: var(--space-md);
+    color: var(--text-primary);
+    font-size: 1rem;
+  }
+}

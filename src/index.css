@@ -1,0 +1,25 @@
+/* ===================================
+   Main CSS Entry Point
+   All styles are imported from modular files
+   =================================== */
+
+/* Base styles */
+@import './styles/base.css';
+@import './styles/layout.css';
+@import './styles/utilities.css';
+
+/* Route table styles */
+@import './styles/route-table.css';
+
+/* Component styles */
+@import './styles/components/AppHeader.css';
+@import './styles/components/BottomSheet.css';
+@import './styles/components/JobSelector.css';
+@import './styles/components/Modal.css';
+@import './styles/components/NotiMessage.css';
+@import './styles/components/PointAdjuster.css';
+@import './styles/components/RouteRow.css';
+@import './styles/components/ShareModal.css';
+@import './styles/components/SharePreview.css';
+@import './styles/components/ToggleSwitch.css';
+@import './styles/components/ElanBox.css';

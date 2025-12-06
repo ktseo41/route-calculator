@@ -1,0 +1,289 @@
+/* ===================================
+   RouteRow Component Styles
+   =================================== */
+
+/* Route List Container */
+.route-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px; /* Very tight spacing */
+}
+
+/* Desktop Controls - Hidden on Mobile */
+.route-controls {
+  display: none;
+}
+
+/* Table Header */
+.route-header {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 36px;
+  margin-bottom: 4px;
+}
+
+.header-job {
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  width: 90px;
+  flex-shrink: 0;
+}
+
+.header-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  flex: 1;
+  height: 100%;
+  align-items: center;
+  margin: 0 4px;
+}
+
+.header-stat {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+
+.header-po {
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  width: 32px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.header-delete {
+  width: 32px;
+  flex-shrink: 0;
+  margin-left: 4px;
+}
+
+.header-drag {
+  width: 32px;
+  flex-shrink: 0;
+  margin-left: 4px;
+}
+
+/* Route Row */
+.route-row {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0 8px; /* Compact padding */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+  height: 50px; /* Fixed compact height */
+  cursor: pointer;
+}
+
+.route-row--static {
+  cursor: default;
+}
+
+.route-row.active {
+  border-color: var(--accent-primary);
+  background-color: rgba(181, 201, 154, 0.12);
+  box-shadow: inset 2px 0 0 0 var(--accent-primary); /* Left indicator */
+}
+
+.route-row:active {
+  background-color: rgba(181, 201, 154, 0.15);
+}
+
+.route-row--dragging {
+  opacity: 0.8;
+}
+
+/* Job Name */
+.job-name {
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+  width: 90px; /* Increased width for longer names */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
+}
+
+/* Row Stats */
+.row-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 Equal Columns */
+  flex: 1;
+  height: 100%;
+  align-items: center;
+  margin: 0 4px;
+}
+
+.stat-value {
+  font-size: 0.9375rem; /* 15px */
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.active .stat-value {
+  color: var(--text-primary);
+}
+
+/* Job PO Badge */
+.job-po-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--accent-dark); /* Dark Olive Green - Matches logo accent */
+  width: 33px;
+  height: 25px;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  flex-shrink: 0;
+}
+
+.job-po-badge.cumulative {
+  background-color: var(--accent-cumulative);
+}
+
+/* Row Spacer (for alignment when buttons are hidden) */
+.row-spacer {
+  width: 32px;
+  margin-left: 4px;
+  flex-shrink: 0;
+}
+
+/* Delete Job Button */
+.delete-job-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  color: var(--text-tertiary);
+  background-color: transparent;
+  transition: var(--transition-fast);
+  flex-shrink: 0;
+  margin-left: 4px;
+  font-size: 1.25rem;
+  /* Prevent sticky hover on mobile */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Only apply hover on devices that support hover */
+@media (hover: hover) and (pointer: fine) {
+  .delete-job-btn:hover {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--error);
+  }
+
+  .delete-job-btn.no-hover:hover {
+    background-color: transparent;
+    color: var(--text-tertiary);
+  }
+}
+
+/* Active state for touch devices */
+.delete-job-btn:active {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: var(--error);
+  transform: scale(0.95);
+}
+
+.delete-job-btn.no-hover:active {
+  background-color: transparent;
+  color: var(--text-tertiary);
+}
+
+/* Drag Handle */
+.drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  color: var(--text-tertiary);
+  background-color: transparent;
+  transition: var(--transition-fast);
+  flex-shrink: 0;
+  margin-left: 4px;
+  font-size: 1.25rem;
+  cursor: grab;
+  touch-action: none;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+  color: var(--text-primary);
+  background-color: var(--bg-tertiary);
+}
+
+/* Inline Add Button - Mobile Only */
+.add-row-btn {
+  width: 100%;
+  height: 48px;
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  transition: var(--transition-fast);
+  background-color: transparent;
+  margin-top: 4px;
+}
+
+.add-row-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  background-color: var(--accent-light);
+}
+
+.add-row-btn:active {
+  transform: scale(0.99);
+}
+
+/* Desktop Enhancements */
+@media (min-width: 768px) {
+  .route-row {
+    height: 46px;
+  }
+
+  /* Desktop Controls Above Route List */
+  .route-controls {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0;
+  }
+
+  .route-controls-content {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+}

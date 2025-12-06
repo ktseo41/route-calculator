@@ -1,14 +1,12 @@
 import React from "react";
-import styled from "styled-components";
 
-const NotiMessageBody = styled.div`
-  border: none;
-  padding: 0.75em 1em;
-`;
+const NotiMessageBody = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
+  <div className={`noti-message-body ${className}`}>{children}</div>
+);
 
-const BugReport = styled.div`
-  text-align: center;
-`;
+const BugReport = ({ children }: { children: React.ReactNode }) => (
+  <div className="bug-report">{children}</div>
+);
 
 export const NotiTitle = () => {
   return (
@@ -34,12 +32,12 @@ export const NotiMessage = () => {
       <br /> <br />
       <span className="">현재 버그들 (v0.9.4)</span>
       <br /> <br />
-      <span style={{ textDecoration: "line-through" }}>
+      <span className="noti-strikethrough">
         1. 네크로멘서를 사면했을 때 인트가 5로 돌아가지 않는 문제
       </span>
       - L엠일님 제보
       <br />
-      <span style={{ textDecoration: "line-through" }}>
+      <span className="noti-strikethrough">
         2. 같은 직업 이전 노드의 잡포인트가 제대로 반영되지 않던 문제
       </span>
       - L아리냥님 제보

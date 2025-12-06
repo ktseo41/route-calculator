@@ -1,0 +1,82 @@
+/* ===================================
+   BottomSheet Component Styles
+   =================================== */
+
+.bottom-sheet-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 40;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-fast);
+}
+
+.bottom-sheet-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.bottom-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--bg-secondary);
+  border-top-left-radius: var(--radius-xl);
+  border-top-right-radius: var(--radius-xl);
+  border-top: 1px solid var(--border-color);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+  z-index: 50;
+  transform: translateY(100%);
+  transition: transform var(--transition-fast);
+  max-width: 600px;
+  margin: 0 auto;
+  max-height: 80dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.bottom-sheet.open {
+  transform: translateY(0);
+}
+
+.sheet-handle-area {
+  padding: var(--space-md) 0;
+  display: flex;
+  justify-content: center;
+  cursor: grab;
+  touch-action: none;
+}
+
+.sheet-handle {
+  width: 40px;
+  height: 4px;
+  background-color: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+}
+
+.sheet-close {
+  color: var(--text-secondary);
+  padding: var(--space-xs);
+}
+
+.sheet-content {
+  padding: var(--space-sm) var(--space-lg) var(--space-xl);
+  overflow-y: auto;
+}
+
+/* Hide on desktop */
+@media (min-width: 768px) {
+  .bottom-sheet {
+    display: none !important;
+  }
+
+  .bottom-sheet-overlay {
+    display: none !important;
+  }
+}

@@ -1,0 +1,98 @@
+/* ===================================
+   Base Styles - Variables, Reset, Typography
+   =================================== */
+
+:root {
+  /* Color Palette - Lighter Dark Theme for Better Readability */
+  --bg-primary: #27272a; /* Zinc 800 - Much lighter than before */
+  --bg-secondary: #3f3f46; /* Zinc 700 - Lighter secondary */
+  --bg-tertiary: #52525b; /* Zinc 600 - Lighter tertiary */
+
+  --text-primary: #fafafa; /* Zinc 50 - Brighter white */
+  --text-secondary: #d4d4d8; /* Zinc 300 - Much lighter gray */
+  --text-tertiary: #a1a1aa; /* Zinc 400 - Lighter muted text */
+
+  --accent-primary: #b5c99a; /* Soft Olive - Muted, sage-like */
+  --accent-hover: #97a97b; /* Darker Soft Olive */
+  --accent-light: rgba(181, 201, 154, 0.2);
+  --accent-dark: #718355; /* Dark Moss Green */
+  --accent-skin: #e9d8a6; /* Yellowish Skin */
+  --accent-cumulative: #4a5c50; /* Darker Yellow-Green */
+
+  --border-color: #52525b; /* Zinc 600 - More visible borders */
+  --border-hover: #71717a; /* Zinc 500 - Brighter on hover */
+
+  --success: #34d399; /* Emerald 400 - Brighter green */
+  --error: #f87171; /* Red 400 - Brighter red */
+
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+
+  /* Radius */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-glow: 0 0 15px rgba(181, 201, 154, 0.3);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui,
+    Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR",
+    "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+    sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  height: 100dvh;
+  overflow: hidden; /* App-like feel */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}

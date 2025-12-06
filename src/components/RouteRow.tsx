@@ -39,8 +39,7 @@ const RouteRow = ({
   if (isStatic) {
     return (
       <div 
-        className={`route-row ${isSelected ? 'active' : ''}`}
-        style={{ cursor: 'default' }}
+        className={`route-row route-row--static ${isSelected ? 'active' : ''}`}
         onClick={() => onRowClick(index)}
       >
         <span className="job-name">{node.job}</span>
@@ -52,10 +51,10 @@ const RouteRow = ({
         </div>
         <div className={`job-po-badge ${isCumulative ? 'cumulative' : ''}`}>{displayPoint}</div>
         {isReorderMode && (
-          <div style={{ width: '32px', marginLeft: '4px', flexShrink: 0 }}></div>
+          <div className="row-spacer"></div>
         )}
         {deleteMode && (
-          <div style={{ width: '32px', marginLeft: '4px', flexShrink: 0 }}></div>
+          <div className="row-spacer"></div>
         )}
       </div>
     );
@@ -68,10 +67,8 @@ const RouteRow = ({
       {...provided?.draggableProps}
       style={{
         ...provided?.draggableProps.style,
-        cursor: 'pointer',
-        opacity: snapshot?.isDragging ? 0.8 : 1,
       }}
-      className={`route-row ${isSelected ? 'active' : ''}`}
+      className={`route-row ${isSelected ? 'active' : ''} ${snapshot?.isDragging ? 'route-row--dragging' : ''}`}
       onClick={() => onRowClick(index)}
     >
       <span className="job-name">{node.job}</span>

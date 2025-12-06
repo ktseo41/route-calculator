@@ -1,0 +1,59 @@
+/* ===================================
+   JobSelector Component Styles
+   =================================== */
+
+/* Job Category Container */
+.job-category {
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-sm);
+}
+
+.job-category-title {
+  margin-bottom: var(--space-sm);
+  color: var(--text-tertiary);
+  font-size: 0.75rem;
+}
+
+/* Job Grid */
+.job-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: var(--space-sm);
+}
+
+.job-grid--spaced {
+  margin-bottom: var(--space-sm);
+}
+
+/* Job Button */
+.job-btn {
+  padding: var(--space-sm);
+  background-color: var(--bg-tertiary);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  text-align: center;
+  transition: var(--transition-fast);
+  white-space: nowrap;
+}
+
+.job-btn:hover {
+  background-color: var(--bg-secondary);
+  border-color: var(--text-tertiary);
+  color: var(--text-primary);
+}
+
+.job-btn.active {
+  background-color: var(--accent-light);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+/* Desktop Enhancements */
+@media (min-width: 768px) {
+  .job-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 columns for jobs */
+  }
+}

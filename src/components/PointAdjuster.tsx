@@ -95,8 +95,8 @@ const PointAdjuster: React.FC<PointAdjusterProps> = ({
       </div>
 
       {/* Custom Input Section - Styled to match theme */}
-      <div style={{ marginTop: 'var(--space-sm)' }}>
-        <div className="point-label" style={{ marginBottom: 'var(--space-xs)', textAlign: 'left' }}>직접 입력</div>
+      <div className="custom-input-section">
+        <div className="point-label point-label--left">직접 입력</div>
         <div className="custom-input-container">
           <div className="custom-input-group">
             <button

@@ -1,0 +1,173 @@
+/* ===================================
+   AppHeader Component Styles
+   =================================== */
+
+.app-header {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(39, 39, 42, 0.95);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: none; /* Border is on the bottom row now */
+}
+
+.header-top {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-md);
+  width: 100%;
+}
+
+.header-bottom {
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-md);
+  width: 100%;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.header-bottom .icon-btn {
+  width: 40px;
+  height: 40px;
+  font-size: 1.5rem;
+}
+
+.header-controls-left {
+  display: flex;
+  align-items: center;
+}
+
+.header-controls-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+
+.logo-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 6px;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-dark));
+  border-radius: var(--radius-sm);
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+}
+
+/* Logo icon with custom image */
+.logo-icon--image {
+  background: none;
+  padding: 0;
+}
+
+.logo-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.title {
+  margin-right: 4px;
+}
+
+.version {
+  align-self: flex-end;
+  font-size: 0.75rem;
+  font-weight: normal;
+  color: var(--text-tertiary);
+}
+
+.header-actions {
+  display: flex;
+  gap: var(--space-xs);
+  align-items: center;
+}
+
+/* Icon Button */
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  transition: var(--transition-fast);
+  font-size: 1.5rem;
+  /* Prevent sticky hover on mobile */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Only apply hover on devices that support hover */
+@media (hover: hover) and (pointer: fine) {
+  .icon-btn:hover {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+  }
+}
+
+/* Icon button states */
+.icon-btn--disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.icon-btn--reorder-active {
+  background-color: var(--accent-light);
+  color: var(--accent-primary);
+}
+
+.icon-btn--delete-active {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: var(--error);
+}
+
+/* Desktop Enhancements */
+@media (min-width: 768px) {
+  .app-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 var(--space-lg);
+    height: 60px;
+    border-bottom: 1px solid var(--border-color);
+    justify-content: space-between;
+  }
+
+  .header-top {
+    display: contents;
+  }
+
+  .header-bottom {
+    width: auto;
+    height: auto;
+    padding: 0;
+    border: none;
+    margin-left: auto;
+    margin-right: var(--space-sm);
+    justify-content: flex-end;
+    gap: var(--space-md);
+    order: 1;
+  }
+
+  .header-actions {
+    order: 2;
+  }
+}

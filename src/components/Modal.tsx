@@ -1,11 +1,10 @@
 import React from "react";
-import styled from "styled-components";
 
 type ModalProps = {
   ["isActive"]: boolean;
   ["setIsActive"]: React.Dispatch<React.SetStateAction<boolean>>;
-  ["title"]: JSX.Element;
-  ["content"]: JSX.Element;
+  ["title"]: React.ReactNode;
+  ["content"]: React.ReactNode;
 };
 
 export default ({ isActive, setIsActive, title, content }: ModalProps) => {

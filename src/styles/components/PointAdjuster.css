@@ -1,0 +1,190 @@
+/* ===================================
+   PointAdjuster Component Styles
+   =================================== */
+
+.point-adjuster {
+  display: flex;
+  flex-direction: column;
+}
+
+.point-display {
+  text-align: center;
+  margin-bottom: var(--space-lg);
+}
+
+.point-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.point-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-top: var(--space-xs);
+}
+
+.point-label--left {
+  margin-bottom: var(--space-xs);
+  text-align: left;
+}
+
+/* Adjustment Controls */
+.adjust-controls {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: var(--space-lg);
+}
+
+.adjust-btn {
+  height: 44px; /* Increased from 28px (approx 1.1x) */
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.85rem; /* Slightly larger font */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-fast);
+}
+
+.adjust-btn:hover {
+  background-color: var(--border-hover);
+}
+
+.adjust-btn.positive {
+  color: var(--text-primary);
+  background-color: var(--bg-tertiary);
+}
+
+.adjust-btn.positive:hover {
+  background-color: var(--border-hover);
+}
+
+.adjust-btn.negative {
+  color: var(--text-secondary);
+  background-color: var(--bg-tertiary);
+}
+
+.adjust-btn.negative:hover {
+  background-color: var(--border-hover);
+  color: var(--text-primary);
+}
+
+/* Custom Input Section */
+.custom-input-section {
+  margin-top: var(--space-sm);
+}
+
+.custom-input-container {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.custom-input-group {
+  flex: 1;
+  display: flex;
+  background-color: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  height: 48px; /* Increased height for mobile */
+}
+
+.custom-adjust-btn {
+  width: 40px;
+  height: 100%;
+  color: var(--text-secondary);
+  background-color: transparent;
+  border-radius: 0;
+  font-size: 1.25rem;
+}
+
+.custom-adjust-btn:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.custom-input-field {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  text-align: center;
+  font-weight: 600;
+  outline: none;
+  font-size: 1.1rem; /* Larger font size */
+  width: 100%;
+}
+
+.custom-apply-btn {
+  width: 72px; /* Slightly wider */
+  height: 48px; /* Match container height */
+  background-color: var(--text-primary);
+  color: var(--bg-primary);
+  font-size: 1rem;
+}
+
+.custom-apply-btn:hover {
+  background-color: var(--text-secondary);
+}
+
+/* Point Adjuster Container (Desktop Sidebar) */
+.point-adjuster-container {
+  transition: opacity var(--transition-normal);
+}
+
+.point-adjuster-container--disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Desktop Enhancements */
+@media (min-width: 768px) {
+  .point-adjuster-container {
+    background-color: transparent;
+    padding: var(--space-md); /* Add internal padding */
+    border-radius: 0;
+    border: none;
+  }
+
+  /* Hide label and adjust value on desktop */
+  .point-adjuster-container .point-label {
+    display: none;
+  }
+
+  .adjust-controls {
+    margin-bottom: var(--space-md);
+  }
+
+  .adjust-btn {
+    height: 38px;
+  }
+
+  .point-adjuster-container .point-value {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-xs);
+  }
+
+  /* Reset Custom Input for Desktop */
+  .custom-input-group {
+    height: 32px; /* Compact height */
+  }
+
+  .custom-adjust-btn {
+    width: 32px;
+    font-size: 0.875rem;
+  }
+
+  .custom-input-field {
+    font-size: 1rem;
+  }
+
+  .custom-apply-btn {
+    height: 32px;
+    width: 64px;
+    font-size: 0.875rem;
+  }
+}

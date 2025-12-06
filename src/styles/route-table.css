@@ -1,0 +1,116 @@
+/* ===================================
+   UI Table Styles
+   =================================== */
+
+.ui-table-container {
+  position: relative;
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.12), 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.ui-table-container::-webkit-scrollbar {
+  display: none;
+}
+
+.ui-table {
+  width: 100%;
+  caption-side: bottom;
+  border-collapse: collapse;
+}
+
+.ui-table-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background-image: linear-gradient(to bottom, #2d2d30, #28282b);
+  box-shadow: 0 1px 0 0 rgba(255,255,255,0.15);
+}
+
+.ui-table-header tr {
+  border: 0;
+}
+
+.ui-table-body tr:last-child {
+  border: 0;
+}
+
+.ui-table-footer {
+  background-color: rgba(63, 63, 70, 0.5); /* var(--bg-secondary) approx */
+  border-top: 1px solid var(--border-color);
+  font-weight: 500;
+}
+
+.ui-table-footer tr:last-child {
+  border-bottom: 0;
+}
+
+.ui-table-row {
+  transition: all 200ms ease-out;
+  border-bottom: 1px solid #4a4a4f;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ui-table-row:last-child {
+  border-bottom: 0;
+}
+
+.ui-table-head {
+  height: 3rem; /* h-12 */
+  padding: 0 0.75rem; /* px-3 */
+  text-align: left;
+  vertical-align: middle;
+  white-space: nowrap;
+  border: 0;
+  font-size: 0.875rem; /* text-sm */
+  font-weight: 600;
+  letter-spacing: 0.025em; /* tracking-wide */
+  color: #f0f0f0;
+}
+
+.ui-table-head:first-child {
+  width: 8rem; /* w-32 */
+}
+
+.ui-table-head:has([role=checkbox]) {
+  padding-right: 0;
+}
+
+.ui-table-head > [role=checkbox] {
+  transform: translateY(2px);
+}
+
+.ui-table-cell {
+  height: 3rem; /* h-12 */
+  padding: 0.75rem 0.25rem; /* px-1 py-3 */
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  position: relative;
+  border: 0;
+  background-color: inherit;
+  font-size: 0.875rem; /* text-sm */
+  color: #e0e0e0;
+}
+
+.ui-table-cell:first-child {
+  width: 8rem; /* w-32 */
+  font-weight: 500;
+  color: #f5f5f5;
+}
+
+.ui-table-cell:has([role=checkbox]) {
+  padding-right: 0;
+}
+
+.ui-table-cell > [role=checkbox] {
+  transform: translateY(2px);
+}
+
+.ui-table-caption {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: var(--text-tertiary);
+}

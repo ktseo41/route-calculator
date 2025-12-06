@@ -1,0 +1,131 @@
+/* ===================================
+   SharePreview Component Styles
+   =================================== */
+
+.share-preview-container {
+  background-color: #27272a;
+  border-radius: 12px;
+  padding: 16px;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Header Row */
+.share-preview-header {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.share-preview-header__job {
+  flex: 1;
+}
+
+.share-preview-header__stats {
+  display: flex;
+  gap: 8px;
+  width: 140px;
+  justify-content: center;
+}
+
+.share-preview-header__stat {
+  width: 28px;
+  text-align: center;
+}
+
+.share-preview-header__po {
+  width: 40px;
+  text-align: center;
+}
+
+/* Body Rows */
+.share-preview-row {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.share-preview-row:last-child {
+  border-bottom: none;
+}
+
+.share-preview-row__job {
+  flex: 1;
+  font-weight: 500;
+}
+
+.share-preview-row__stats {
+  display: flex;
+  gap: 8px;
+  width: 140px;
+  justify-content: center;
+}
+
+.share-preview-row__stat {
+  width: 28px;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.share-preview-row__po-wrapper {
+  width: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.share-preview-row__po-badge {
+  background-color: var(--accent-dark);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  min-width: 24px;
+  text-align: center;
+}
+
+/* Footer */
+.share-preview-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-color);
+}
+
+.share-preview-footer__url {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.3);
+  font-family: monospace;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 60%;
+}
+
+.share-preview-footer__signature {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.share-preview-footer__logo {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.share-preview-footer__text {
+  font-size: 12px;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.5);
+}
