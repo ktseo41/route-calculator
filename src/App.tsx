@@ -59,6 +59,11 @@ const UtilBarItem = styled.div`
   cursor: pointer;
 `;
 
+const UtilBarA = styled.a`
+  margin-left: 10px;
+  cursor: pointer;
+`;
+
 const CustomButton = styled.div`
   font-size: 0.8rem;
   padding: calc(0.5em - 1px) 1em;
@@ -237,27 +242,22 @@ export default function App() {
           <UtilBarItem
             onClick={() => {
               setModalTitle(NotiTitle);
-              setModalContent(NotiMessage);
+              setModalContent(NotiMessage(getCustomQueryFromRLL(rLL)));
               setIsModalActive(true);
             }}
           >
             info
           </UtilBarItem>
-          <UtilBarItem
-            onClick={() => {
-              location.href = '/v2';
-            }}
-          >
+          <UtilBarA href={`v2/?${getCustomQueryFromRLL(rLL)}`}>
             v2
-          </UtilBarItem>
+          </UtilBarA>
         </UtilBarLeft>
         <UtilBarRight>
           <UtilBarItem
             onClick={() => {
               const queryToSave = getCustomQueryFromRLL(rLL);
-              const urlToSave = `${location.origin}${location.pathname}${
-                queryToSave.length === 0 ? "" : `?${queryToSave}`
-              }`;
+              const urlToSave = `${location.origin}${location.pathname}${queryToSave.length === 0 ? "" : `?${queryToSave}`
+                }`;
 
               setModalTitle(SaveTitle);
               setModalContent(
