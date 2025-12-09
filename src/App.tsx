@@ -1,6 +1,15 @@
 import { useState, useEffect, MouseEvent } from "react";
-import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
-import { Plus, ArrowsOutLineVertical, MinusCircle } from "@phosphor-icons/react";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from "@hello-pangea/dnd";
+import {
+  Plus,
+  ArrowsOutLineVertical,
+  MinusCircle,
+} from "@phosphor-icons/react";
 import { useRouteLinkedList } from "./hooks/useRouteLinkedList";
 import {
   getJobNameFromSelect,
@@ -8,12 +17,12 @@ import {
   getCustomQueryFromRLL,
   getCurrentJobsFromQuery,
 } from "./lib/routeUtils";
-import { 
-  generateTableImage, 
-  downloadImage, 
-  shareImage, 
-  copyUrl, 
-  handleShareError 
+import {
+  generateTableImage,
+  downloadImage,
+  shareImage,
+  copyUrl,
+  handleShareError,
 } from "./lib/shareUtils";
 import JobSelector from "./components/JobSelector";
 import PointAdjuster from "./components/PointAdjuster";
@@ -26,8 +35,6 @@ import AppHeader from "./components/AppHeader";
 import RouteRow from "./components/RouteRow";
 import ToggleSwitch from "./components/ToggleSwitch";
 import "./index.css";
-
-
 
 export default function App() {
   const {
@@ -84,7 +91,7 @@ export default function App() {
 
   // Custom share text
   const [customShareText, setCustomShareText] = useState("");
-  
+
   // Cumulative view toggle state
   const [isCumulative, setIsCumulative] = useState(false);
 
@@ -98,7 +105,7 @@ export default function App() {
     if (index === null) return 0;
     const node = rLL.get(index);
     if (!node) return 0;
-    return isCumulative ? (node.currentJobPos[node.job] || 0) : node.jobPo;
+    return isCumulative ? node.currentJobPos[node.job] || 0 : node.jobPo;
   };
 
   const openPanel = (mode: "job-select" | "point-adjust") => {
@@ -126,19 +133,19 @@ export default function App() {
     }
 
     addJob(jobName);
-    
-    if (jobName !== '무직') {
+
+    if (jobName !== "무직") {
       setPanelMode("point-adjust");
       // rLL is mutated synchronously, so length is already updated.
       // The new item is at the last index.
-      setSelectedIndex(rLL.length - 1); 
+      setSelectedIndex(rLL.length - 1);
     }
     setErrorMessage("");
   };
 
   const handleRowClick = (index: number) => {
     // Prevent point adjustment for "무직"
-    if (rLL.get(index)?.job === '무직') return;
+    if (rLL.get(index)?.job === "무직") return;
 
     setSelectedIndex(index);
     openPanel("point-adjust");
@@ -147,14 +154,14 @@ export default function App() {
   const handleDeleteJob = (index: number, event: React.MouseEvent) => {
     event.stopPropagation();
     event.preventDefault();
-    
+
     // Remove focus from the button to prevent hover state on mobile
     const target = event.currentTarget as HTMLButtonElement;
     target.blur();
-    
+
     // Temporarily disable hover effects
     setIsDeleting(true);
-    
+
     removeAt(index);
     if (selectedIndex === index) {
       setSelectedIndex(null);
@@ -162,7 +169,7 @@ export default function App() {
     } else if (selectedIndex !== null && selectedIndex > index) {
       setSelectedIndex(selectedIndex - 1);
     }
-    
+
     // Re-enable hover effects after a short delay
     setTimeout(() => {
       setIsDeleting(false);
@@ -194,7 +201,11 @@ export default function App() {
     if (isSharing) return;
     setIsSharing(true);
     try {
-      const blob = await generateTableImage(rLL, ".route-list", customShareText);
+      const blob = await generateTableImage(
+        rLL,
+        ".route-list",
+        customShareText
+      );
       downloadImage(blob, "루트 이미지.png");
       setIsShareModalOpen(false);
     } catch (error: any) {
@@ -209,11 +220,12 @@ export default function App() {
     if (isSharing) return;
     setIsSharing(true);
     try {
-      const blob = await generateTableImage(rLL, ".route-list", customShareText);
-      await shareImage(
-        blob,
-        "루트 이미지.png"
+      const blob = await generateTableImage(
+        rLL,
+        ".route-list",
+        customShareText
       );
+      await shareImage(blob, "루트 이미지.png");
       setIsShareModalOpen(false);
     } catch (error: any) {
       await handleShareError(error, rLL);
@@ -228,7 +240,7 @@ export default function App() {
       const urlToSave = `${location.origin}${location.pathname}${
         queryToSave.length === 0 ? "" : `?${queryToSave}`
       }`;
-      
+
       await copyUrl(urlToSave);
       setIsUrlCopied(true);
       setTimeout(() => setIsUrlCopied(false), 2000);
@@ -306,32 +318,33 @@ export default function App() {
       <div className="content-wrapper">
         {/* Main Content Area */}
         <main className="main-content">
-          
           {errorMessage && (
-            <div className="mobile-only error-toast">
-              {errorMessage}
-            </div>
+            <div className="mobile-only error-toast">{errorMessage}</div>
           )}
 
           <div className="route-list" id="routeList">
             {/* Desktop Controls - Above Table */}
             <div className="route-controls desktop-only">
               <div className="route-controls-content">
-                <ToggleSwitch 
-                  checked={isCumulative} 
-                  onChange={() => setIsCumulative(!isCumulative)} 
-                  label="누적 잡포인트 보기" 
+                <ToggleSwitch
+                  checked={isCumulative}
+                  onChange={() => setIsCumulative(!isCumulative)}
+                  label="누적 포인트 보기"
                 />
-                <button 
-                  className={`icon-btn ${isReorderMode ? 'icon-btn--reorder-active' : ''}`} 
-                  aria-label="Reorder Mode" 
+                <button
+                  className={`icon-btn ${
+                    isReorderMode ? "icon-btn--reorder-active" : ""
+                  }`}
+                  aria-label="Reorder Mode"
                   onClick={() => setIsReorderMode(!isReorderMode)}
                 >
                   <ArrowsOutLineVertical />
                 </button>
-                <button 
-                  className={`icon-btn ${deleteMode ? 'icon-btn--delete-active' : ''}`} 
-                  aria-label="Delete Mode" 
+                <button
+                  className={`icon-btn ${
+                    deleteMode ? "icon-btn--delete-active" : ""
+                  }`}
+                  aria-label="Delete Mode"
                   onClick={toggleDeleteMode}
                 >
                   <MinusCircle />
@@ -357,7 +370,7 @@ export default function App() {
             {(() => {
               const allNodes = rLL.getAllNodes();
               const firstNode = allNodes[0];
-              
+
               if (firstNode) {
                 return (
                   <RouteRow
@@ -387,35 +400,38 @@ export default function App() {
                     ref={provided.innerRef}
                     className="droppable-area"
                   >
-                    {rLL.getAllNodes().slice(1).map((node, index) => {
-                      if (!node) return null;
-                      const originalIndex = index + 1;
-                      
-                      return (
-                        <Draggable 
-                          key={node.id} 
-                          draggableId={node.id} 
-                          index={index}
-                          isDragDisabled={!isReorderMode}
-                        >
-                          {(provided, snapshot) => (
-                            <RouteRow
-                              node={node}
-                              index={originalIndex}
-                              isSelected={selectedIndex === originalIndex}
-                              isCumulative={isCumulative}
-                              isReorderMode={isReorderMode}
-                              deleteMode={deleteMode}
-                              isDeleting={isDeleting}
-                              provided={provided}
-                              snapshot={snapshot}
-                              onRowClick={handleRowClick}
-                              onDeleteJob={handleDeleteJob}
-                            />
-                          )}
-                        </Draggable>
-                      );
-                    })}
+                    {rLL
+                      .getAllNodes()
+                      .slice(1)
+                      .map((node, index) => {
+                        if (!node) return null;
+                        const originalIndex = index + 1;
+
+                        return (
+                          <Draggable
+                            key={node.id}
+                            draggableId={node.id}
+                            index={index}
+                            isDragDisabled={!isReorderMode}
+                          >
+                            {(provided, snapshot) => (
+                              <RouteRow
+                                node={node}
+                                index={originalIndex}
+                                isSelected={selectedIndex === originalIndex}
+                                isCumulative={isCumulative}
+                                isReorderMode={isReorderMode}
+                                deleteMode={deleteMode}
+                                isDeleting={isDeleting}
+                                provided={provided}
+                                snapshot={snapshot}
+                                onRowClick={handleRowClick}
+                                onDeleteJob={handleDeleteJob}
+                              />
+                            )}
+                          </Draggable>
+                        );
+                      })}
                     {provided.placeholder}
                   </div>
                 )}
@@ -423,88 +439,97 @@ export default function App() {
             </DragDropContext>
 
             {/* Inline Add Button - Mobile Only */}
-            <button className="add-row-btn mobile-only" onClick={handleAddClick}>
+            <button
+              className="add-row-btn mobile-only"
+              onClick={handleAddClick}
+            >
               <Plus weight="bold" />
               <span>직업 추가</span>
             </button>
           </div>
-
         </main>
 
         {/* Desktop Sidebar */}
-        <aside className="desktop-sidebar"> 
+        <aside className="desktop-sidebar">
           {/* Point Adjuster Section - Fixed at Top */}
-             <div className="sidebar-header">
-               <div className={`point-adjuster-container ${selectedIndex === null ? 'point-adjuster-container--disabled' : ''}`}>
-                  <PointAdjuster 
-                    onPointAdjust={adjustJobPoint} 
-                    onPointSet={(value) => {
-                      if (selectedIndex !== null) {
-                        const node = rLL.get(selectedIndex);
-                        if (!node) return;
-                        
-                        let delta;
-                        if (isCumulative) {
-                           const currentCumulative = node.currentJobPos[node.job] || 0;
-                           delta = value - currentCumulative;
-                        } else {
-                           const currentPoint = node.jobPo;
-                           delta = value - currentPoint;
-                        }
-                        adjustJobPoint(delta);
-                      }
-                    }}
-                    currentPoint={getDisplayPoint(selectedIndex)} 
-                    selectedIndex={selectedIndex}
-                  />
-               </div>
-             </div>
+          <div className="sidebar-header">
+            <div
+              className={`point-adjuster-container ${
+                selectedIndex === null
+                  ? "point-adjuster-container--disabled"
+                  : ""
+              }`}
+            >
+              <PointAdjuster
+                onPointAdjust={adjustJobPoint}
+                onPointSet={(value) => {
+                  if (selectedIndex !== null) {
+                    const node = rLL.get(selectedIndex);
+                    if (!node) return;
 
-             {/* Divider */}
-             <div className="sidebar-divider"></div>
+                    let delta;
+                    if (isCumulative) {
+                      const currentCumulative =
+                        node.currentJobPos[node.job] || 0;
+                      delta = value - currentCumulative;
+                    } else {
+                      const currentPoint = node.jobPo;
+                      delta = value - currentPoint;
+                    }
+                    adjustJobPoint(delta);
+                  }
+                }}
+                currentPoint={getDisplayPoint(selectedIndex)}
+                selectedIndex={selectedIndex}
+              />
+            </div>
+          </div>
 
-             {/* Error Message Section - Fixed between Header and Content */}
-             <div className="error-section">
-                <div className={`error-message-container ${!errorMessage ? 'hidden' : ''}`}>
-                  {errorMessage || " "}
-                </div>
-             </div>
+          {/* Divider */}
+          <div className="sidebar-divider"></div>
 
-             {/* Divider */}
-             <div className="sidebar-divider"></div>
+          {/* Error Message Section - Fixed between Header and Content */}
+          <div className="error-section">
+            <div
+              className={`error-message-container ${
+                !errorMessage ? "hidden" : ""
+              }`}
+            >
+              {errorMessage || " "}
+            </div>
+          </div>
 
-             {/* Job Selector Section - Scrollable */}
-             <div className="sidebar-content">
-               <div className="sidebar-section">
+          {/* Divider */}
+          <div className="sidebar-divider"></div>
 
-                 <JobSelector onJobSelect={addNewJob} />
-               </div>
-             </div>
+          {/* Job Selector Section - Scrollable */}
+          <div className="sidebar-content">
+            <div className="sidebar-section">
+              <JobSelector onJobSelect={addNewJob} />
+            </div>
+          </div>
         </aside>
       </div>
 
       <div className="mobile-only">
-        <BottomSheet
-          isOpen={isPanelOpen}
-          onClose={closePanel}
-        >
-          {panelMode === 'job-select' ? (
+        <BottomSheet isOpen={isPanelOpen} onClose={closePanel}>
+          {panelMode === "job-select" ? (
             <JobSelector onJobSelect={addNewJob} />
           ) : (
-            <PointAdjuster 
-              onPointAdjust={adjustJobPoint} 
+            <PointAdjuster
+              onPointAdjust={adjustJobPoint}
               onPointSet={(value) => {
                 if (selectedIndex !== null) {
                   const node = rLL.get(selectedIndex);
                   if (!node) return;
-                  
+
                   let delta;
                   if (isCumulative) {
-                     const currentCumulative = node.currentJobPos[node.job] || 0;
-                     delta = value - currentCumulative;
+                    const currentCumulative = node.currentJobPos[node.job] || 0;
+                    delta = value - currentCumulative;
                   } else {
-                     const currentPoint = node.jobPo;
-                     delta = value - currentPoint;
+                    const currentPoint = node.jobPo;
+                    delta = value - currentPoint;
                   }
                   adjustJobPoint(delta);
                 }
@@ -516,17 +541,15 @@ export default function App() {
         </BottomSheet>
       </div>
 
-
-
-      <ResetConfirmModal 
-        isOpen={isResetConfirmOpen} 
-        onClose={() => setIsResetConfirmOpen(false)} 
-        onConfirm={performReset} 
+      <ResetConfirmModal
+        isOpen={isResetConfirmOpen}
+        onClose={() => setIsResetConfirmOpen(false)}
+        onConfirm={performReset}
       />
 
-      <ShareModal 
-        isOpen={isShareModalOpen} 
-        onClose={() => setIsShareModalOpen(false)} 
+      <ShareModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
         onDownloadImage={handleDownloadImage}
         onShareImage={handleShareImage}
         onShareUrl={handleShareUrl}
@@ -536,11 +559,10 @@ export default function App() {
         onCustomTextChange={setCustomShareText}
       />
 
-      <AboutModal 
-        isOpen={isAboutModalOpen} 
-        onClose={() => setIsAboutModalOpen(false)} 
+      <AboutModal
+        isOpen={isAboutModalOpen}
+        onClose={() => setIsAboutModalOpen(false)}
       />
-
     </div>
   );
 }

@@ -1,10 +1,10 @@
-import { 
-  ArrowsOutLineVertical, 
-  MinusCircle, 
-  Broom, 
-  ShareNetwork, 
-  Spinner, 
-  Info 
+import {
+  ArrowsOutLineVertical,
+  MinusCircle,
+  Broom,
+  ShareNetwork,
+  Spinner,
+  Info,
 } from "@phosphor-icons/react";
 import ToggleSwitch from "./ToggleSwitch";
 
@@ -48,45 +48,53 @@ const AppHeader = ({
           <span className="version">v2.0.0</span>
         </div>
         <div className="header-actions">
-          <button 
-            className="icon-btn" 
-            aria-label="Info" 
-            onClick={onInfoClick}
-          >
+          <button className="icon-btn" aria-label="Info" onClick={onInfoClick}>
             <Info />
           </button>
-          <button 
-            className={`icon-btn ${rLLLength <= 1 ? 'icon-btn--disabled' : ''}`}
-            aria-label="Reset" 
+          <button
+            className={`icon-btn ${rLLLength <= 1 ? "icon-btn--disabled" : ""}`}
+            aria-label="Reset"
             onClick={onResetClick}
           >
             <Broom />
           </button>
-          <button className="icon-btn" aria-label="Share" onClick={onShareClick}>
-            {isSharing ? <Spinner className="animate-spin" /> : <ShareNetwork />}
+          <button
+            className="icon-btn"
+            aria-label="Share"
+            onClick={onShareClick}
+          >
+            {isSharing ? (
+              <Spinner className="animate-spin" />
+            ) : (
+              <ShareNetwork />
+            )}
           </button>
         </div>
       </div>
-      
+
       <div className="header-bottom mobile-only">
         <div className="header-controls-left">
-          <ToggleSwitch 
-            checked={isCumulative} 
-            onChange={onCumulativeToggle} 
-            label="누적 잡포인트 보기" 
+          <ToggleSwitch
+            checked={isCumulative}
+            onChange={onCumulativeToggle}
+            label="누적 포인트 보기"
           />
         </div>
         <div className="header-controls-right">
-          <button 
-            className={`icon-btn ${isReorderMode ? 'icon-btn--reorder-active' : ''}`}
-            aria-label="Reorder Mode" 
+          <button
+            className={`icon-btn ${
+              isReorderMode ? "icon-btn--reorder-active" : ""
+            }`}
+            aria-label="Reorder Mode"
             onClick={onReorderToggle}
           >
             <ArrowsOutLineVertical />
           </button>
-          <button 
-            className={`icon-btn ${deleteMode ? 'icon-btn--delete-active' : ''}`}
-            aria-label="Delete Mode" 
+          <button
+            className={`icon-btn ${
+              deleteMode ? "icon-btn--delete-active" : ""
+            }`}
+            aria-label="Delete Mode"
             onClick={onDeleteToggle}
           >
             <MinusCircle />
