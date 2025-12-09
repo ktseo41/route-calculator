@@ -28,7 +28,7 @@ export const NotiMessage = (queryToSave: string) => {
       <br />
       2. 구 루트 계산기 (v1)도 계속 유지할 예정입니다.
       <br />
-      3. 버그, 문의, 개선 요청사항 창구도 새롭게 만들었습니다. (링크: <a href="https://tally.so/r/KYpZWX">https://tally.so/r/KYpZWX</a>)
+      3. 버그, 문의, 개선 요청사항 창구도 새롭게 만들었습니다. (링크: <a href="https://tally.so/r/0QdJB9">https://tally.so/r/0QdJB9</a>)
       <br /> <br />
       <span className="has-text-weight-semibold">추가 예정 기능</span>
       <br /> <br />
