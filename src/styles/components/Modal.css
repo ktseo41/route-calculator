@@ -259,23 +259,115 @@
   text-align: center;
 }
 
+.donation-buttons {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 .donation-placeholder {
   font-weight: 600;
   color: var(--text-primary);
   margin-bottom: var(--space-sm);
 }
 
-.work-history {
+.donation-link {
+  display: inline-block;
+  padding: var(--space-sm) var(--space-lg);
+  background-color: #ff7b79;
+  color: white;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.donation-link:hover {
+  background-color: #ff6563;
+  transform: translateY(-1px);
+}
+
+.donation-link--secondary {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.donation-link--secondary:hover {
+  background-color: var(--bg-primary);
+  border-color: var(--accent-primary);
+}
+
+/* Dev Stats */
+.dev-stats {
   display: flex;
   flex-direction: column;
+  gap: 6px;
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px dashed var(--border-color);
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.stat-label {
+  color: var(--text-tertiary);
+}
+
+.stat-value {
+  color: var(--text-primary);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-value.code-change {
+  display: flex;
+  gap: 8px;
+}
+
+.stat-value .addition {
+  color: #22c55e; /* Green */
+}
+
+.stat-value .deletion {
+  color: #ef4444; /* Red */
+}
+
+/* AI Tools */
+.ai-tools {
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px dashed var(--border-color);
+}
+
+.ai-label {
+  display: flex;
+  align-items: center;
   gap: 4px;
   font-size: 0.8rem;
   color: var(--text-tertiary);
-  border-top: 1px dashed var(--border-color);
-  padding-top: var(--space-sm);
+  margin-bottom: 6px;
 }
 
-.history-item {
+.ai-tool-list {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ai-tool {
+  display: inline-block;
+  padding: 2px 8px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
 }

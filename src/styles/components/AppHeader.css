@@ -63,7 +63,11 @@
   width: 20px;
   height: 20px;
   margin-right: 6px;
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-dark));
+  background: linear-gradient(
+    135deg,
+    var(--accent-primary),
+    var(--accent-dark)
+  );
   border-radius: var(--radius-sm);
   display: grid;
   place-items: center;

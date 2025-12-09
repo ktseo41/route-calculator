@@ -173,8 +173,9 @@
     height: 32px; /* Compact height */
   }
 
-  .custom-adjust-btn {
+  .custom-input-group .custom-adjust-btn {
     width: 32px;
+    height: 32px;
     font-size: 0.875rem;
   }
 
