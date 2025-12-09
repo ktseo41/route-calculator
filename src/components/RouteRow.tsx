@@ -31,15 +31,15 @@ const RouteRow = ({
   onRowClick,
   onDeleteJob,
 }: RouteRowProps) => {
-  const displayPoint = isCumulative 
-    ? (node.currentJobPos[node.job] || 0) 
+  const displayPoint = isCumulative
+    ? node.currentJobPos[node.job] || 0
     : node.jobPo;
 
   // Static row (첫 번째 무직 row)
   if (isStatic) {
     return (
-      <div 
-        className={`route-row route-row--static ${isSelected ? 'active' : ''}`}
+      <div
+        className={`route-row route-row--static ${isSelected ? "active" : ""}`}
         onClick={() => onRowClick(index)}
       >
         <span className="job-name">{node.job}</span>
@@ -49,13 +49,9 @@ const RouteRow = ({
           <span className="stat-value">{node.stats.AGI}</span>
           <span className="stat-value">{node.stats.VIT}</span>
         </div>
-        <div className={`job-po-badge ${isCumulative ? 'cumulative' : ''}`}>{displayPoint}</div>
-        {isReorderMode && (
-          <div className="row-spacer"></div>
-        )}
-        {deleteMode && (
-          <div className="row-spacer"></div>
-        )}
+        <div className={`job-po-badge ${isCumulative ? "cumulative" : ""}`}>
+          {displayPoint}
+        </div>
       </div>
     );
   }
@@ -68,7 +64,9 @@ const RouteRow = ({
       style={{
         ...provided?.draggableProps.style,
       }}
-      className={`route-row ${isSelected ? 'active' : ''} ${snapshot?.isDragging ? 'route-row--dragging' : ''}`}
+      className={`route-row ${isSelected ? "active" : ""} ${
+        snapshot?.isDragging ? "route-row--dragging" : ""
+      }`}
       onClick={() => onRowClick(index)}
     >
       <span className="job-name">{node.job}</span>
@@ -78,18 +76,17 @@ const RouteRow = ({
         <span className="stat-value">{node.stats.AGI}</span>
         <span className="stat-value">{node.stats.VIT}</span>
       </div>
-      <div className={`job-po-badge ${isCumulative ? 'cumulative' : ''}`}>{displayPoint}</div>
+      <div className={`job-po-badge ${isCumulative ? "cumulative" : ""}`}>
+        {displayPoint}
+      </div>
       {isReorderMode && (
-        <div
-          className="drag-handle"
-          {...provided?.dragHandleProps}
-        >
+        <div className="drag-handle" {...provided?.dragHandleProps}>
           <DotsSixVertical />
         </div>
       )}
       {deleteMode && (
-        <button 
-          className={`delete-job-btn ${isDeleting ? 'no-hover' : ''}`}
+        <button
+          className={`delete-job-btn ${isDeleting ? "no-hover" : ""}`}
           onClick={(e) => onDeleteJob(index, e)}
           aria-label="삭제"
         >

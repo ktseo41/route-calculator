@@ -362,8 +362,6 @@ export default function App() {
                 <span className="header-stat">VIT</span>
               </div>
               <span className="header-po">PO</span>
-              {isReorderMode && <span className="header-drag"></span>}
-              {deleteMode && <span className="header-delete"></span>}
             </div>
 
             {/* Static First Row (Jobless) */}
