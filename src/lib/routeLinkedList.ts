@@ -390,9 +390,18 @@ export class RouteNode {
     let actualChange;
     if (isRecalculating) {
       this.jobPo = 0;
+      this.stats = this.getPrevStats();
+      this.currentJobPos[this.job] = this.prev?.currentJobPos[this.job] || 0;
       actualChange = jobPoDelta;
     } else {
       actualChange = this.getActualChange(jobPoDelta);
+      // 감소 시: 전체 재계산 방식 사용 (limit 처리로 인한 비대칭성 해결)
+      if (actualChange < 0) {
+        const newJobPo = this.jobPo + actualChange;
+        this.resetAndRecalculateStats(newJobPo);
+        if (this.next) this.next.recalculate();
+        return;
+      }
     }
 
     this.shouldChangeStats(actualChange, isRecalculating) &&
@@ -401,6 +410,25 @@ export class RouteNode {
     (this.currentJobPos[this.job] as number) += actualChange;
 
     if (this.next) this.next.recalculate();
+  }
+
+  /**
+   * 잡포인트 감소 시 스탯을 리셋하고 처음부터 다시 계산
+   * limit 처리로 인한 증가/감소 비대칭성 문제 해결
+   */
+  private resetAndRecalculateStats(targetJobPo: number): void {
+    // 1. 스탯과 currentJobPos 리셋
+    this.stats = this.getPrevStats();
+    const prevJobPo = this.prev?.currentJobPos[this.job] || 0;
+    this.currentJobPos[this.job] = prevJobPo;
+    this.jobPo = 0;
+
+    // 2. 0에서 targetJobPo까지 증가 로직 적용 (isRecalculating=true로 호출)
+    if (targetJobPo > 0) {
+      this.changeStats(targetJobPo, true);
+    }
+    this.jobPo = targetJobPo;
+    (this.currentJobPos[this.job] as number) = prevJobPo + targetJobPo;
   }
 
   private getActualChange(jobPoDelta: number): number {

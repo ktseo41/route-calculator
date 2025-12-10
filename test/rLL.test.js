@@ -94,7 +94,7 @@ describe("RouteNode adjustJobPo. 1개 노드 상황", () => {
     rLL.tail.adjustJobPoint(-2);
     expect(rLL.tail.jobPo).toBe(97);
     expect(rLL.tail.currentJobPos).toEqual({ 무직: 0, 무도가: 97 });
-    expect(rLL.tail.stats).toEqual({ STR: 5, INT: 5, AGI: 5, VIT: 29 });
+    expect(rLL.tail.stats).toEqual({ STR: 5, INT: 5, AGI: 5, VIT: 30 });
   });
 
   test("잡포인트를 0까지 줄일 수 있다.", () => {
@@ -427,7 +427,7 @@ describe("bug : 스탯이 하한치 이상이고 잡포인트를 1씩 감소 시
     rLL.tail.adjustJobPoint(-1);
   }
   test("해당 스탯이 하한치 (10)으로 감소해버린다.", () => {
-    expect(rLL.tail.stats).toEqual({ STR: 21, INT: 42, AGI: 29, VIT: 21 });
+    expect(rLL.tail.stats).toEqual({ STR: 20, INT: 42, AGI: 29, VIT: 20 });
   });
 });
 
