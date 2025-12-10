@@ -253,18 +253,13 @@
 }
 
 .donation-content {
-  background-color: var(--bg-tertiary);
-  padding: var(--space-md);
   border-radius: var(--radius-md);
   text-align: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xs);
 }
 
-.donation-buttons {
-  display: flex;
-  gap: var(--space-sm);
-  justify-content: center;
-  flex-wrap: wrap;
-}
 
 .donation-placeholder {
   font-weight: 600;
@@ -274,7 +269,7 @@
 
 .donation-link {
   display: inline-block;
-  padding: var(--space-sm) var(--space-lg);
+  padding: var(--space-sm) var(--space-xs);
   background-color: #ff7b79;
   color: white;
   font-weight: 600;
@@ -290,7 +285,7 @@
 }
 
 .donation-link--secondary {
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-tertiary);
   color: var(--text-primary);
   border: 1px solid var(--border-color);
 }

@@ -104,24 +104,22 @@ const AboutModal = ({ isOpen, onClose }: AboutModalProps) => {
               <Heart size={18} weight="fill" className="heart-icon" /> 후원하기
             </h4>
             <div className="donation-content">
-              <div className="donation-buttons">
-                <a
-                  href="https://ko-fi.com/elanroutecalc"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="donation-link"
-                >
-                  Ko-fi에서 후원하기
-                </a>
-                <a
-                  href="https://ko-fi.com/post/%EC%95%88%EB%85%95%ED%95%98%EC%84%B8%EC%9A%94-%ED%9B%84%EC%9B%90-%ED%8E%98%EC%9D%B4%EC%A7%80%EB%A5%BC-%EC%97%B4%EC%97%88%EC%8A%B5%EB%8B%88%EB%8B%A4-N4N01PZ6G0"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="donation-link donation-link--secondary"
-                >
-                  후원 소개글
-                </a>
-              </div>
+              <a
+                href="https://ko-fi.com/elanroutecalc"
+                target="_blank"
+                rel="noreferrer"
+                className="donation-link"
+              >
+                Ko-fi에서 후원하기
+              </a>
+              <a
+                href="https://ko-fi.com/post/%EC%95%88%EB%85%95%ED%95%98%EC%84%B8%EC%9A%94-%ED%9B%84%EC%9B%90-%ED%8E%98%EC%9D%B4%EC%A7%80%EB%A5%BC-%EC%97%B4%EC%97%88%EC%8A%B5%EB%8B%88%EB%8B%A4-N4N01PZ6G0"
+                target="_blank"
+                rel="noreferrer"
+                className="donation-link donation-link--secondary"
+              >
+                후원 소개글
+              </a>
             </div>
           </section>
         </div>
