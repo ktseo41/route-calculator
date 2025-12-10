@@ -31,6 +31,7 @@ import ResetConfirmModal from "./components/ResetConfirmModal";
 import ShareModal from "./components/ShareModal";
 import BottomSheet from "./components/BottomSheet";
 import AboutModal from "./components/AboutModal";
+import DeleteConfirmModal from "./components/DeleteConfirmModal";
 import AppHeader from "./components/AppHeader";
 import RouteRow from "./components/RouteRow";
 import ToggleSwitch from "./components/ToggleSwitch";
@@ -84,6 +85,12 @@ export default function App() {
   const [isDeleting, setIsDeleting] = useState(false);
   // Reset confirmation modal state
   const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
+  // Delete confirmation modal state
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  // Target index for deletion
+  const [deleteTargetIndex, setDeleteTargetIndex] = useState<number | null>(
+    null
+  );
   // Share modal state
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   // URL copied state
@@ -159,14 +166,22 @@ export default function App() {
     const target = event.currentTarget as HTMLButtonElement;
     target.blur();
 
+    // Open delete confirmation modal
+    setDeleteTargetIndex(index);
+    setIsDeleteConfirmOpen(true);
+  };
+
+  const performDelete = () => {
+    if (deleteTargetIndex === null) return;
+
     // Temporarily disable hover effects
     setIsDeleting(true);
 
-    removeAt(index);
-    if (selectedIndex === index) {
+    removeAt(deleteTargetIndex);
+    if (selectedIndex === deleteTargetIndex) {
       setSelectedIndex(null);
       setIsPanelOpen(false);
-    } else if (selectedIndex !== null && selectedIndex > index) {
+    } else if (selectedIndex !== null && selectedIndex > deleteTargetIndex) {
       setSelectedIndex(selectedIndex - 1);
     }
 
@@ -174,6 +189,10 @@ export default function App() {
     setTimeout(() => {
       setIsDeleting(false);
     }, 200);
+
+    // Close modal and reset target
+    setIsDeleteConfirmOpen(false);
+    setDeleteTargetIndex(null);
   };
 
   const handleAddClick = () => {
@@ -579,6 +598,20 @@ export default function App() {
       <AboutModal
         isOpen={isAboutModalOpen}
         onClose={() => setIsAboutModalOpen(false)}
+      />
+
+      <DeleteConfirmModal
+        isOpen={isDeleteConfirmOpen}
+        jobName={
+          deleteTargetIndex !== null
+            ? rLL.get(deleteTargetIndex)?.job || ""
+            : ""
+        }
+        onClose={() => {
+          setIsDeleteConfirmOpen(false);
+          setDeleteTargetIndex(null);
+        }}
+        onConfirm={performDelete}
       />
     </div>
   );

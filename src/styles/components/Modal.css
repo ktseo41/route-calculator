@@ -46,7 +46,7 @@
   font-size: 1.125rem;
   font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: var(--space-sm);
+  margin-bottom: var(--space-lg);
   text-align: center;
 }
 
@@ -259,7 +259,6 @@
   grid-template-columns: 1fr 1fr;
   gap: var(--space-xs);
 }
-
 
 .donation-placeholder {
   font-weight: 600;
