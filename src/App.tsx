@@ -257,19 +257,33 @@ export default function App() {
   };
 
   useEffect(() => {
-    if (location.search.length > 0) {
-      const newRLL = getCurrentJobsFromQuery(location);
-      setRLL(newRLL);
-      // Clean the URL after reflecting the data
-      window.history.replaceState({}, document.title, window.location.pathname);
-      return;
-    }
-
+    // 먼저 sessionStorage에서 기존 데이터 복원
     const savedData = sessionStorage.getItem("elan-route-save");
     if (savedData) {
       const fakeLocation = { search: `?${savedData}` };
-      const newRLL = getCurrentJobsFromQuery(fakeLocation as Location);
+      const savedRLL = getCurrentJobsFromQuery(fakeLocation as Location);
+      if (savedRLL !== null) {
+        setRLL(savedRLL);
+      }
+    }
+
+    // 그 다음 URL 쿼리 파라미터 처리
+    if (location.search.length > 0) {
+      const newRLL = getCurrentJobsFromQuery(location);
+      if (newRLL === null) {
+        // 유효하지 않은 쿼리 문자열 - 기존 상태 유지하고 에러 메시지만 표시
+        setErrorMessage("유효하지 않은 URL입니다.");
+        // Clean the URL
+        window.history.replaceState(
+          {},
+          document.title,
+          window.location.pathname
+        );
+        return;
+      }
       setRLL(newRLL);
+      // Clean the URL after reflecting the data
+      window.history.replaceState({}, document.title, window.location.pathname);
     }
   }, []);
 

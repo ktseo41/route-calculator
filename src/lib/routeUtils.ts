@@ -68,9 +68,58 @@ export function getCustomQueryFromRLL(rLL: RouteLinkedList): string {
  * @param location - Location 객체 (search 속성 포함)
  * @returns 복원된 RouteLinkedList
  */
+/**
+ * URL 쿼리 문자열이 유효한지 검증합니다.
+ *
+ * @param search - 검증할 쿼리 문자열
+ * @returns 유효하면 true, 유효하지 않으면 false
+ */
+export function validateQueryString(search: string): boolean {
+  if (search.length <= 1) return true; // 빈 쿼리는 유효
+
+  let isJob = true;
+  for (let index = 1; index < search.length; index++) {
+    const charCustom = search[index] as keyof typeof CustomSystem;
+    const decimalNumber = CustomSystem[charCustom];
+
+    // 유효하지 않은 문자 체크
+    if (decimalNumber === undefined) {
+      return false;
+    }
+
+    if (isJob) {
+      const job = NumberedJobs[decimalNumber];
+      // 유효하지 않은 직업 코드 체크
+      if (job === undefined) {
+        return false;
+      }
+      isJob = !isJob;
+    } else {
+      if (decimalNumber === 57) {
+        if (isOverFiftySeven(search.slice(index + 1))) {
+          const nextCharCustom = search[index + 1] as keyof typeof CustomSystem;
+          const nextDecimal = CustomSystem[nextCharCustom];
+          if (nextDecimal === undefined) {
+            return false;
+          }
+          index += 1;
+        }
+      }
+      isJob = !isJob;
+    }
+  }
+
+  return true;
+}
+
 export function getCurrentJobsFromQuery({
   search,
-}: Location | { search: string }): RouteLinkedList {
+}: Location | { search: string }): RouteLinkedList | null {
+  // 먼저 쿼리 문자열 유효성 검사
+  if (!validateQueryString(search)) {
+    return null;
+  }
+
   /*
   _가 발견되면 다음 _가 있는지 탐색한다.
    */
@@ -78,23 +127,23 @@ export function getCurrentJobsFromQuery({
   const newRLL = new RouteLinkedList();
   for (let index = 1; index < search.length; index++) {
     const charCustom = search[index] as keyof typeof CustomSystem;
-    let decimalNumber = CustomSystem[charCustom];
+    const decimalNumber = CustomSystem[charCustom];
 
     if (isJob) {
       const job = NumberedJobs[decimalNumber];
       newRLL.add(job as Jobs);
       isJob = !isJob;
     } else {
+      let finalDecimal = decimalNumber;
       if (decimalNumber === 57) {
         if (isOverFiftySeven(search.slice(index + 1))) {
           const nextCharCustom = search[index + 1] as keyof typeof CustomSystem;
           const nextDecimal = CustomSystem[nextCharCustom];
-
-          decimalNumber += nextDecimal;
+          finalDecimal += nextDecimal;
           index += 1;
         }
       }
-      newRLL.tail?.adjustJobPoint(decimalNumber);
+      newRLL.tail?.adjustJobPoint(finalDecimal);
       isJob = !isJob;
     }
   }
