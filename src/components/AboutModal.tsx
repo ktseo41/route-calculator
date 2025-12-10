@@ -89,12 +89,13 @@ const AboutModal = ({ isOpen, onClose }: AboutModalProps) => {
                 <span>구 버전 계산기</span>
               </a>
               <a
-                href="#"
-                onClick={(e) => e.preventDefault()}
-                className="link-item disabled"
+                href="https://youtube.com/shorts/YOI8FLsIW8s?feature=share"
+                target="_blank"
+                rel="noreferrer"
+                className="link-item"
               >
                 <YoutubeLogo size={18} />
-                <span>사용법 영상 (준비중)</span>
+                <span>소개 영상</span>
               </a>
             </div>
           </section>
