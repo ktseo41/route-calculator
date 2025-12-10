@@ -1,22 +1,29 @@
 import React, { useState, useRef, useEffect } from "react";
+import ToggleSwitch from "./ToggleSwitch";
 
 interface PointAdjusterProps {
   onPointAdjust: (adjustment: number) => void;
   onPointSet?: (value: number) => void;
   currentPoint?: number;
   selectedIndex?: number | null;
+  jobName?: string;
+  isCumulative?: boolean;
+  onCumulativeToggle?: () => void;
 }
 
-const PointAdjuster: React.FC<PointAdjusterProps> = ({ 
-  onPointAdjust, 
-  onPointSet, 
-  currentPoint = 0, 
-  selectedIndex 
+const PointAdjuster: React.FC<PointAdjusterProps> = ({
+  onPointAdjust,
+  onPointSet,
+  currentPoint = 0,
+  selectedIndex,
+  jobName,
+  isCumulative = false,
+  onCumulativeToggle,
 }) => {
   const positiveButtons = [1, 5, 10, 100];
   const negativeButtons = [-1, -5, -10, -100];
   const [customValue, setCustomValue] = useState<string>("");
-  
+
   // Track the last valid selected index to detect job changes
   const lastSelectedIndex = useRef<number | null>(null);
 
@@ -25,7 +32,10 @@ const PointAdjuster: React.FC<PointAdjusterProps> = ({
     if (selectedIndex === null || selectedIndex === undefined) return;
 
     // If we have a previous index and it's different from current one
-    if (lastSelectedIndex.current !== null && lastSelectedIndex.current !== selectedIndex) {
+    if (
+      lastSelectedIndex.current !== null &&
+      lastSelectedIndex.current !== selectedIndex
+    ) {
       setCustomValue(""); // Reset input
     }
 
@@ -69,8 +79,135 @@ const PointAdjuster: React.FC<PointAdjusterProps> = ({
   return (
     <div className="point-adjuster">
       <div className="point-display mobile-only">
-        <div className="point-value">{currentPoint}</div>
-        <div className="point-label">현재 잡포인트</div>
+        {/* Header: Job Name & Toggle */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          {jobName && (
+            <div
+              style={{
+                fontSize: "1.1rem",
+                fontWeight: 700,
+                color: "var(--text-primary)",
+              }}
+            >
+              {jobName}
+            </div>
+          )}
+          {onCumulativeToggle && (
+            <ToggleSwitch
+              checked={isCumulative}
+              onChange={onCumulativeToggle}
+              label="누적"
+            />
+          )}
+        </div>
+
+        {/* Stepper: [-] [Value] [+] */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "12px",
+            marginTop: "12px",
+          }}
+        >
+          <button
+            onClick={() => onPointAdjust(-1)}
+            style={{
+              width: "44px",
+              height: "44px",
+              borderRadius: "8px",
+              background: "var(--bg-tertiary)",
+              border: "none",
+              color: "var(--text-primary)",
+              fontSize: "1.25rem",
+              fontWeight: 700,
+              cursor: "pointer",
+            }}
+          >
+            −
+          </button>
+          <div
+            style={{
+              fontSize: "2rem",
+              fontWeight: 700,
+              color: "var(--text-primary)",
+              minWidth: "80px",
+              textAlign: "center",
+            }}
+          >
+            {currentPoint}
+          </div>
+          <button
+            onClick={() => onPointAdjust(1)}
+            style={{
+              width: "44px",
+              height: "44px",
+              borderRadius: "8px",
+              background: "var(--bg-tertiary)",
+              border: "none",
+              color: "var(--text-primary)",
+              fontSize: "1.25rem",
+              fontWeight: 700,
+              cursor: "pointer",
+            }}
+          >
+            +
+          </button>
+        </div>
+
+        {/* Quick Adjustment Buttons Grid - 3 columns */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: "6px",
+            marginTop: "12px",
+          }}
+        >
+          {[5, 10, 100].map((val) => (
+            <button
+              key={`+${val}`}
+              onClick={() => onPointAdjust(val)}
+              style={{
+                height: "32px",
+                borderRadius: "8px",
+                background: "var(--bg-tertiary)",
+                border: "none",
+                color: "var(--text-primary)",
+                fontSize: "0.75rem",
+                fontWeight: 600,
+                cursor: "pointer",
+              }}
+            >
+              +{val}
+            </button>
+          ))}
+          {[-5, -10, -100].map((val) => (
+            <button
+              key={val}
+              onClick={() => onPointAdjust(val)}
+              style={{
+                height: "32px",
+                borderRadius: "8px",
+                background: "var(--bg-tertiary)",
+                border: "none",
+                color: "var(--text-secondary)",
+                fontSize: "0.75rem",
+                fontWeight: 600,
+                cursor: "pointer",
+              }}
+            >
+              {val}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="adjust-controls">

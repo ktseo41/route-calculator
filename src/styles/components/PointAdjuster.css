@@ -12,6 +12,31 @@
   margin-bottom: var(--space-lg);
 }
 
+.point-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-md);
+  padding: 0 var(--space-xs);
+}
+
+.point-job-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: left;
+}
+
+.point-toggle-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+/* Adjust toggle label size for this context if needed */
+.point-toggle-wrapper .toggle-label-text {
+  font-size: 0.75rem;
+}
+
 .point-value {
   font-size: 2rem;
   font-weight: 700;
@@ -32,10 +57,7 @@
 
 /* Adjustment Controls */
 .adjust-controls {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  margin-bottom: var(--space-lg);
+  display: none;
 }
 
 .adjust-btn {
@@ -156,7 +178,10 @@
   }
 
   .adjust-controls {
-    margin-bottom: var(--space-md);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: var(--space-lg);
   }
 
   .adjust-btn {

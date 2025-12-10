@@ -548,6 +548,11 @@ export default function App() {
               }}
               currentPoint={getDisplayPoint(selectedIndex)}
               selectedIndex={selectedIndex}
+              jobName={
+                selectedIndex !== null ? rLL.get(selectedIndex)?.job : undefined
+              }
+              isCumulative={isCumulative}
+              onCumulativeToggle={() => setIsCumulative(!isCumulative)}
             />
           )}
         </BottomSheet>
