@@ -6,8 +6,7 @@ name: Deploy v2 to GitHub Pages
 on:
   push:
     branches:
-      - renewal
-      - renewal-v2
+      - main
 
 # 작업(job) 설정
 jobs:
