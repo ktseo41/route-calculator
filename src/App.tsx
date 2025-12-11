@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import styled from "styled-components";
 import { CustomSystem } from "./database/customsystem";
 import { Jobs, classifiedJobs, NumberedJobs } from "./database/job";
-import RouteLinkedList from "./lib/RouteLinkedList";
+import RouteLinkedList from "./lib/routeLinkedList";
 import { NotiTitle, NotiMessage } from "./components/NotiMessage";
 import { SaveTitle, SaveContent } from "./components/Save";
 import { LoadTitle, LoadContent } from "./components/Load";
@@ -55,6 +55,11 @@ const UtilBarRight = styled.div`
 `;
 
 const UtilBarItem = styled.div`
+  margin-left: 10px;
+  cursor: pointer;
+`;
+
+const UtilBarA = styled.a`
   margin-left: 10px;
   cursor: pointer;
 `;
@@ -237,20 +242,22 @@ export default function App() {
           <UtilBarItem
             onClick={() => {
               setModalTitle(NotiTitle);
-              setModalContent(NotiMessage);
+              setModalContent(NotiMessage(getCustomQueryFromRLL(rLL)));
               setIsModalActive(true);
             }}
           >
             info
           </UtilBarItem>
+          <UtilBarA href={`v2/?${getCustomQueryFromRLL(rLL)}`}>
+            v2
+          </UtilBarA>
         </UtilBarLeft>
         <UtilBarRight>
           <UtilBarItem
             onClick={() => {
               const queryToSave = getCustomQueryFromRLL(rLL);
-              const urlToSave = `${location.origin}${location.pathname}${
-                queryToSave.length === 0 ? "" : `?${queryToSave}`
-              }`;
+              const urlToSave = `${location.origin}${location.pathname}${queryToSave.length === 0 ? "" : `?${queryToSave}`
+                }`;
 
               setModalTitle(SaveTitle);
               setModalContent(
