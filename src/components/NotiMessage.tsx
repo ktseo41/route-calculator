@@ -24,7 +24,7 @@ export const NotiMessage = (queryToSave: string) => {
     <NotiMessageBody className="message-body has-text-left has-text-weight-normal">
       <span className="has-text-weight-semibold">루트 계산기를 새롭게 업데이트했습니다.</span>
       <br /> <br />
-      <span>1. <a href={`v2/?${queryToSave}`}>v2</a> 링크를 눌러 이동가능합니다.</span>
+      <span>1. <a href={`v2/?${queryToSave}`}>v2</a> 링크를 눌러 이동 가능합니다.</span>
       <br />
       2. 구 루트 계산기 (v1)도 계속 유지할 예정입니다.
       <br />
