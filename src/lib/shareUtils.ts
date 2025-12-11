@@ -1,7 +1,7 @@
 import { toPng } from "html-to-image";
 import RouteLinkedList from "@/lib/routeLinkedList";
 import { getCustomQueryFromRLL } from "@/lib/routeUtils";
-import logo from "@/img/logo.png";
+import smallLogo from "@/img/small-logo.png";
 
 /**
  * 테이블을 이미지 Blob으로 변환하는 함수
@@ -33,23 +33,29 @@ export async function generateTableImage(
   }
 
   // 삭제 버튼들과 삭제 헤더 컬럼 숨기기
-  const deleteButtons = tableContainer.querySelectorAll(".delete-job-btn") as NodeListOf<HTMLElement>;
-  const deleteHeader = tableContainer.querySelector(".header-delete") as HTMLElement;
+  const deleteButtons = tableContainer.querySelectorAll(
+    ".delete-job-btn"
+  ) as NodeListOf<HTMLElement>;
+  const deleteHeader = tableContainer.querySelector(
+    ".header-delete"
+  ) as HTMLElement;
   const originalDeleteButtonDisplays: string[] = [];
-  const originalDeleteHeaderDisplay = deleteHeader ? deleteHeader.style.display : "";
-  
+  const originalDeleteHeaderDisplay = deleteHeader
+    ? deleteHeader.style.display
+    : "";
+
   deleteButtons.forEach((btn) => {
     originalDeleteButtonDisplays.push(btn.style.display);
     btn.style.display = "none";
   });
-  
+
   if (deleteHeader) {
     deleteHeader.style.display = "none";
   }
 
   // 쿼리 문자열 생성
   const queryToSave = getCustomQueryFromRLL(rLL);
-  
+
   // 푸터 요소 생성 (하단에 URL + 로고)
   const footer = document.createElement("div");
   footer.style.display = "flex";
@@ -63,7 +69,7 @@ export async function generateTableImage(
   footer.style.backgroundColor = "#27272a"; // Match table background
   footer.style.borderBottomLeftRadius = "8px";
   footer.style.borderBottomRightRadius = "8px";
-  
+
   // 왼쪽: URL 문자열
   const urlEl = document.createElement("div");
   urlEl.innerText = queryToSave;
@@ -74,31 +80,33 @@ export async function generateTableImage(
   urlEl.style.whiteSpace = "nowrap";
   urlEl.style.textOverflow = "ellipsis";
   urlEl.style.maxWidth = "60%";
-  
+
   // 오른쪽: 로고 + 텍스트
   const signatureContainer = document.createElement("div");
   signatureContainer.style.display = "flex";
   signatureContainer.style.alignItems = "center";
   signatureContainer.style.gap = "6px";
-  
+
   const faviconImg = document.createElement("img");
-  faviconImg.src = logo;
+  faviconImg.src = smallLogo;
   faviconImg.style.width = "16px";
   faviconImg.style.height = "16px";
   faviconImg.style.objectFit = "contain";
-  
+
   const signatureText = document.createElement("span");
-  signatureText.innerText = customText ? `${customText} · 루트 계산기` : "루트 계산기";
+  signatureText.innerText = customText
+    ? `${customText} · 루트 계산기`
+    : "루트 계산기";
   signatureText.style.fontSize = "12px";
   signatureText.style.fontWeight = "bold";
   signatureText.style.color = "rgba(255, 255, 255, 0.5)";
-  
+
   signatureContainer.appendChild(faviconImg);
   signatureContainer.appendChild(signatureText);
-  
+
   footer.appendChild(urlEl);
   footer.appendChild(signatureContainer);
-  
+
   // 백드롭 컨테이너 생성
   const backdrop = document.createElement("div");
   backdrop.style.backgroundColor = "transparent"; // Zinc 700 - Backdrop color
@@ -106,26 +114,32 @@ export async function generateTableImage(
   backdrop.style.alignItems = "center";
   backdrop.style.justifyContent = "center";
   backdrop.style.width = "fit-content";
-  
+
   // 테이블 복제 및 스타일링
   const clonedTable = tableContainer.cloneNode(true) as HTMLElement;
   clonedTable.style.backgroundColor = "#27272a"; // Zinc 800 - Table background
   clonedTable.style.borderRadius = "12px";
   clonedTable.style.padding = "16px";
   clonedTable.style.width = "400px"; // Fixed width for consistency
-  
+
   // 복제된 테이블 내부의 불필요한 요소 제거 (이미 원본에서 숨겼지만, 복제본에서도 확실히 처리)
-  const clonedAddButton = clonedTable.querySelector(".add-row-btn") as HTMLElement;
+  const clonedAddButton = clonedTable.querySelector(
+    ".add-row-btn"
+  ) as HTMLElement;
   if (clonedAddButton) clonedAddButton.remove();
-  
+
   const clonedDeleteButtons = clonedTable.querySelectorAll(".delete-job-btn");
-  clonedDeleteButtons.forEach(btn => (btn as HTMLElement).remove());
-  
-  const clonedDeleteHeader = clonedTable.querySelector(".header-delete") as HTMLElement;
+  clonedDeleteButtons.forEach((btn) => (btn as HTMLElement).remove());
+
+  const clonedDeleteHeader = clonedTable.querySelector(
+    ".header-delete"
+  ) as HTMLElement;
   if (clonedDeleteHeader) clonedDeleteHeader.remove();
 
   // 라우트 컨트롤 제거 (PC에서 표시되는 토글/버튼 영역)
-  const clonedRouteControls = clonedTable.querySelector(".route-controls") as HTMLElement;
+  const clonedRouteControls = clonedTable.querySelector(
+    ".route-controls"
+  ) as HTMLElement;
   if (clonedRouteControls) clonedRouteControls.remove();
 
   // 하이라이트(active 클래스) 제거
@@ -136,10 +150,10 @@ export async function generateTableImage(
 
   // 푸터 추가
   clonedTable.appendChild(footer);
-  
+
   // 백드롭에 테이블 추가
   backdrop.appendChild(clonedTable);
-  
+
   // 화면 밖으로 임시 추가
   document.body.appendChild(backdrop);
 
@@ -159,11 +173,11 @@ export async function generateTableImage(
     if (addButton) {
       addButton.style.display = originalDisplay;
     }
-    
+
     deleteButtons.forEach((btn, index) => {
       btn.style.display = originalDeleteButtonDisplays[index];
     });
-    
+
     if (deleteHeader) {
       deleteHeader.style.display = originalDeleteHeaderDisplay;
     }
@@ -172,7 +186,7 @@ export async function generateTableImage(
   // Data URL을 Blob으로 변환
   const response = await fetch(dataUrl);
   const blob = await response.blob();
-  
+
   return blob;
 }
 
@@ -193,12 +207,9 @@ export function downloadImage(blob: Blob, filename: string): void {
 /**
  * 이미지를 공유하는 함수 (Web Share API)
  */
-export async function shareImage(
-  blob: Blob, 
-  filename: string
-): Promise<void> {
+export async function shareImage(blob: Blob, filename: string): Promise<void> {
   const file = new File([blob], filename, { type: "image/png" });
-  
+
   if (navigator.share && navigator.canShare) {
     const shareData = {
       files: [file],
@@ -217,9 +228,7 @@ export async function shareImage(
 /**
  * URL을 클립보드에 복사하는 함수
  */
-export async function copyUrl(
-  url: string
-): Promise<void> {
+export async function copyUrl(url: string): Promise<void> {
   await navigator.clipboard.writeText(url);
 }
 
@@ -235,7 +244,7 @@ export async function shareTableAsImage(
   const urlToSave = `${location.origin}${location.pathname}${
     queryToSave.length === 0 ? "" : `?${queryToSave}`
   }`;
-  
+
   try {
     await shareImage(blob, "루트 이미지.png");
   } catch (e) {
