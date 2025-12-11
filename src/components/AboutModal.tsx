@@ -6,7 +6,7 @@ import {
   YoutubeLogo,
   Heart,
   Sparkle,
-  ArrowsDownUp,
+  ArrowsOutLineVertical,
   ChartLineUp,
   Files,
 } from "@phosphor-icons/react";
@@ -46,7 +46,7 @@ const AboutModal = ({ isOpen, onClose }: AboutModalProps) => {
             <ul className="feature-list">
               <li>
                 <div className="icon-box">
-                  <ArrowsDownUp size={20} />
+                  <ArrowsOutLineVertical size={20} />
                 </div>
                 <span>드래그로 순서 변경</span>
               </li>
@@ -89,7 +89,7 @@ const AboutModal = ({ isOpen, onClose }: AboutModalProps) => {
                 <span>구 버전 계산기</span>
               </a>
               <a
-                href="https://youtube.com/shorts/YOI8FLsIW8s?feature=share"
+                href="https://youtube.com/shorts/7roI_TdYsEM?feature=share"
                 target="_blank"
                 rel="noreferrer"
                 className="link-item"
