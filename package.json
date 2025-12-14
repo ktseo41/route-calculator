@@ -1,17 +1,14 @@
 {
   "name": "route-calculator",
-  "homepage": "https://ktseo41.github.io/route-calculator/index.html",
-  "version": "0.9.4",
+  "homepage": "https://ktseo41.github.io/route-calculator/v2",
+  "version": "2.1.0",
   "type": "module",
   "description": "일랜시아 웹 루트계산기",
   "main": "index.html",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "test": "vitest",
-    "predeploy": "vite build --outDir gh-pages",
-    "deploy": "gh-pages -d gh-pages",
-    "postdeploy": "rimraf gh-pages"
+    "test": "vitest"
   },
   "author": "ktseo41",
   "license": "ISC",
