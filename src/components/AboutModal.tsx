@@ -9,6 +9,7 @@ import {
   ArrowsOutLineVertical,
   ChartLineUp,
   Files,
+  GithubLogo,
 } from "@phosphor-icons/react";
 
 interface AboutModalProps {
@@ -96,6 +97,15 @@ const AboutModal = ({ isOpen, onClose }: AboutModalProps) => {
               >
                 <YoutubeLogo size={18} />
                 <span>소개 영상</span>
+              </a>
+              <a
+                href="https://github.com/ktseo41/route-calculator"
+                target="_blank"
+                rel="noreferrer"
+                className="link-item"
+              >
+                <GithubLogo size={18} />
+                <span>GitHub</span>
               </a>
             </div>
           </section>
