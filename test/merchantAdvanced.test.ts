@@ -29,24 +29,22 @@ describe("상인 선행 후 2차 생산직 전환 스탯 테스트", () => {
 
     // 1. 상인 추가
     rll.add(Jobs.상인);
-    let currentStats = rll.tail!.stats;
 
     // 2. 상인 잡포 2 후 스탯 검증 (배달 + 흥정 5레벨 추가)
-    currentStats = rll.tail!.stats;
     rll.tail!.adjustJobPoint(2);
 
-    expect(currentStats.STR).toBe(5);
-    expect(currentStats.INT).toBe(5);
-    expect(currentStats.AGI).toBe(5);
-    expect(currentStats.VIT).toBe(5);
+    expect(rll.tail!.stats.STR).toBe(5);
+    expect(rll.tail!.stats.INT).toBe(5);
+    expect(rll.tail!.stats.AGI).toBe(5);
+    expect(rll.tail!.stats.VIT).toBe(5);
 
     // 3. 미용사로 전직
     rll.add(Jobs.미용사);
 
-    expect(currentStats.STR).toBe(5);
-    expect(currentStats.INT).toBe(5);
-    expect(currentStats.AGI).toBe(5);
-    expect(currentStats.VIT).toBe(5);
+    expect(rll.tail!.stats.STR).toBe(5);
+    expect(rll.tail!.stats.INT).toBe(5);
+    expect(rll.tail!.stats.AGI).toBe(5);
+    expect(rll.tail!.stats.VIT).toBe(5);
   });
 
   it("요리 25레벨로 상인이 된 후, 재단 15레벨 추가해서 재단사가 되는 상황", () => {
@@ -54,7 +52,6 @@ describe("상인 선행 후 2차 생산직 전환 스탯 테스트", () => {
 
     // 1. 상인 추가
     rll.add(Jobs.상인);
-    let currentStats = rll.tail!.stats;
 
     /**
      * 2. 상인 잡포 7 추가 후 스탯 검증 (재단 15레벨 추가)
@@ -64,21 +61,20 @@ describe("상인 선행 후 2차 생산직 전환 스탯 테스트", () => {
      * - AGI: +1 -> 6
      * - VIT, INT: 0
      */
-    currentStats = rll.tail!.stats;
     rll.tail!.adjustJobPoint(7);
 
-    expect(currentStats.STR).toBe(5);
-    expect(currentStats.INT).toBe(5);
-    expect(currentStats.AGI).toBe(6);
-    expect(currentStats.VIT).toBe(5);
+    expect(rll.tail!.stats.STR).toBe(5);
+    expect(rll.tail!.stats.INT).toBe(5);
+    expect(rll.tail!.stats.AGI).toBe(6);
+    expect(rll.tail!.stats.VIT).toBe(5);
 
     // 3. 재단사로 전직
     rll.add(Jobs.재단사);
 
-    expect(currentStats.STR).toBe(5);
-    expect(currentStats.INT).toBe(5);
-    expect(currentStats.AGI).toBe(6);
-    expect(currentStats.VIT).toBe(5);
+    expect(rll.tail!.stats.STR).toBe(5);
+    expect(rll.tail!.stats.INT).toBe(5);
+    expect(rll.tail!.stats.AGI).toBe(6);
+    expect(rll.tail!.stats.VIT).toBe(5);
   });
 
   it.each([Jobs.세공사, Jobs.대장장이, Jobs.연금술사])(
@@ -88,7 +84,6 @@ describe("상인 선행 후 2차 생산직 전환 스탯 테스트", () => {
 
       // 1. 상인 추가
       rll.add(Jobs.상인);
-      let currentStats = rll.tail!.stats;
 
       /**
        * 2. 상인 잡포 7 추가 후 스탯 검증 (배달+흥정 15레벨 / 2 = 7 잡포)
@@ -99,21 +94,20 @@ describe("상인 선행 후 2차 생산직 전환 스탯 테스트", () => {
        * - 4당: AGI +1 [limit 30] → 7/4 = 1 → AGI +1 → 6
        * - 10당: VIT +1, INT +1 [limit 10] → 7/10 = 0 → VIT +0, INT +0
        */
-      currentStats = rll.tail!.stats;
       rll.tail!.adjustJobPoint(7);
 
-      expect(currentStats.STR).toBe(5);
-      expect(currentStats.INT).toBe(5);
-      expect(currentStats.AGI).toBe(6);
-      expect(currentStats.VIT).toBe(5);
+      expect(rll.tail!.stats.STR).toBe(5);
+      expect(rll.tail!.stats.INT).toBe(5);
+      expect(rll.tail!.stats.AGI).toBe(6);
+      expect(rll.tail!.stats.VIT).toBe(5);
 
       // 3. 2차 직업으로 전직
       rll.add(job);
 
-      expect(currentStats.STR).toBe(5);
-      expect(currentStats.INT).toBe(5);
-      expect(currentStats.AGI).toBe(6);
-      expect(currentStats.VIT).toBe(5);
+      expect(rll.tail!.stats.STR).toBe(5);
+      expect(rll.tail!.stats.INT).toBe(5);
+      expect(rll.tail!.stats.AGI).toBe(6);
+      expect(rll.tail!.stats.VIT).toBe(5);
     }
   );
 
@@ -122,7 +116,6 @@ describe("상인 선행 후 2차 생산직 전환 스탯 테스트", () => {
 
     // 1. 상인 추가
     rll.add(Jobs.상인);
-    let currentStats = rll.tail!.stats;
 
     /**
      * 2. 상인 잡포 5 추가 후 스탯 검증 (요리25 + 배달+흥정5 = 30)
@@ -132,21 +125,20 @@ describe("상인 선행 후 2차 생산직 전환 스탯 테스트", () => {
      * - 4당: AGI +1 [limit 30] → 5/4 = 1 → AGI +1 → 6
      * - 10당: VIT +1, INT +1 [limit 10] → 5/10 = 0 → VIT +0, INT +0
      */
-    currentStats = rll.tail!.stats;
     rll.tail!.adjustJobPoint(5);
 
-    expect(currentStats.STR).toBe(5);
-    expect(currentStats.INT).toBe(5);
-    expect(currentStats.AGI).toBe(6);
-    expect(currentStats.VIT).toBe(5);
+    expect(rll.tail!.stats.STR).toBe(5);
+    expect(rll.tail!.stats.INT).toBe(5);
+    expect(rll.tail!.stats.AGI).toBe(6);
+    expect(rll.tail!.stats.VIT).toBe(5);
 
     // 3. 목공사로 전직
     rll.add(Jobs.목공사);
 
-    expect(currentStats.STR).toBe(5);
-    expect(currentStats.INT).toBe(5);
-    expect(currentStats.AGI).toBe(6);
-    expect(currentStats.VIT).toBe(5);
+    expect(rll.tail!.stats.STR).toBe(5);
+    expect(rll.tail!.stats.INT).toBe(5);
+    expect(rll.tail!.stats.AGI).toBe(6);
+    expect(rll.tail!.stats.VIT).toBe(5);
   });
 });
 
@@ -156,14 +148,13 @@ describe("2차 직업 전환 후 스탯 적용 테스트", () => {
 
     // 1. 상인 추가
     rll.add(Jobs.상인);
-    let currentStats = rll.tail!.stats;
 
     // 2. 배달 + 흥정 5레벨로 미용사
     rll.tail!.adjustJobPoint(2);
-    expect(currentStats.STR).toBe(5);
-    expect(currentStats.INT).toBe(5);
-    expect(currentStats.AGI).toBe(5);
-    expect(currentStats.VIT).toBe(5);
+    expect(rll.tail!.stats.STR).toBe(5);
+    expect(rll.tail!.stats.INT).toBe(5);
+    expect(rll.tail!.stats.AGI).toBe(5);
+    expect(rll.tail!.stats.VIT).toBe(5);
 
     rll.add(Jobs.미용사);
 
@@ -176,12 +167,11 @@ describe("2차 직업 전환 후 스탯 적용 테스트", () => {
      * - VIT: +12
      */
     rll.tail!.adjustJobPoint(100);
-    currentStats = rll.tail!.stats;
 
-    expect(currentStats.STR).toBe(5);
-    expect(currentStats.INT).toBe(5);
-    expect(currentStats.AGI).toBe(38);
-    expect(currentStats.VIT).toBe(17);
+    expect(rll.tail!.stats.STR).toBe(5);
+    expect(rll.tail!.stats.INT).toBe(5);
+    expect(rll.tail!.stats.AGI).toBe(38);
+    expect(rll.tail!.stats.VIT).toBe(17);
   });
 
   it("요리 25레벨로 상인, 재단 15레벨로 재단사, 이후 재단사 잡포 100", () => {
@@ -189,14 +179,13 @@ describe("2차 직업 전환 후 스탯 적용 테스트", () => {
 
     // 1. 상인 추가
     rll.add(Jobs.상인);
-    let currentStats = rll.tail!.stats;
 
     // 2. 재단 15레벨로 상인 잡포 7
     rll.tail!.adjustJobPoint(7);
-    expect(currentStats.STR).toBe(5);
-    expect(currentStats.INT).toBe(5);
-    expect(currentStats.AGI).toBe(6);
-    expect(currentStats.VIT).toBe(5);
+    expect(rll.tail!.stats.STR).toBe(5);
+    expect(rll.tail!.stats.INT).toBe(5);
+    expect(rll.tail!.stats.AGI).toBe(6);
+    expect(rll.tail!.stats.VIT).toBe(5);
 
     rll.add(Jobs.재단사);
 
@@ -209,12 +198,11 @@ describe("2차 직업 전환 후 스탯 적용 테스트", () => {
      * - 8당 INT -1 (limit 20): 100/8 = 12 → 이미 5라서 유지
      */
     rll.tail!.adjustJobPoint(100);
-    currentStats = rll.tail!.stats;
 
-    expect(currentStats.STR).toBe(5);
-    expect(currentStats.INT).toBe(5);
-    expect(currentStats.AGI).toBe(39); // 6 + 33 = 39
-    expect(currentStats.VIT).toBe(25); // 5 + 20 = 25
+    expect(rll.tail!.stats.STR).toBe(5);
+    expect(rll.tail!.stats.INT).toBe(5);
+    expect(rll.tail!.stats.AGI).toBe(39); // 6 + 33 = 39
+    expect(rll.tail!.stats.VIT).toBe(25); // 5 + 20 = 25
   });
 
   it("요리 25레벨로 상인, 배달+흥정 15레벨로 세공사, 이후 세공사 잡포 100", () => {
@@ -222,14 +210,13 @@ describe("2차 직업 전환 후 스탯 적용 테스트", () => {
 
     // 1. 상인 추가
     rll.add(Jobs.상인);
-    let currentStats = rll.tail!.stats;
 
     // 2. 배달+흥정 15레벨로 상인 잡포 7 (요리는 전직 조건이라 미포함)
     rll.tail!.adjustJobPoint(7);
-    expect(currentStats.STR).toBe(5);
-    expect(currentStats.INT).toBe(5);
-    expect(currentStats.AGI).toBe(6);
-    expect(currentStats.VIT).toBe(5);
+    expect(rll.tail!.stats.STR).toBe(5);
+    expect(rll.tail!.stats.INT).toBe(5);
+    expect(rll.tail!.stats.AGI).toBe(6);
+    expect(rll.tail!.stats.VIT).toBe(5);
 
     rll.add(Jobs.세공사);
 
@@ -241,12 +228,11 @@ describe("2차 직업 전환 후 스탯 적용 테스트", () => {
      * - 9당 VIT +1 (limit 40): 100/9 = 11 → VIT +11
      */
     rll.tail!.adjustJobPoint(100);
-    currentStats = rll.tail!.stats;
 
-    expect(currentStats.STR).toBe(5);
-    expect(currentStats.INT).toBe(5); // Changed from 6
-    expect(currentStats.AGI).toBe(31); // 6 + 25 = 31 (was 8 + 25 = 33)
-    expect(currentStats.VIT).toBe(16); // 5 + 11 = 16 (was 6 + 11 = 17)
+    expect(rll.tail!.stats.STR).toBe(5);
+    expect(rll.tail!.stats.INT).toBe(5); // Changed from 6
+    expect(rll.tail!.stats.AGI).toBe(31); // 6 + 25 = 31 (was 8 + 25 = 33)
+    expect(rll.tail!.stats.VIT).toBe(16); // 5 + 11 = 16 (was 6 + 11 = 17)
   });
 
   it("요리 25레벨로 상인, 배달+흥정 15레벨로 대장장이, 이후 대장장이 잡포 100", () => {
@@ -254,14 +240,13 @@ describe("2차 직업 전환 후 스탯 적용 테스트", () => {
 
     // 1. 상인 추가
     rll.add(Jobs.상인);
-    let currentStats = rll.tail!.stats;
 
     // 2. 배달+흥정 15레벨로 상인 잡포 7 (요리는 전직 조건이라 미포함)
     rll.tail!.adjustJobPoint(7);
-    expect(currentStats.STR).toBe(5);
-    expect(currentStats.INT).toBe(5);
-    expect(currentStats.AGI).toBe(6);
-    expect(currentStats.VIT).toBe(5);
+    expect(rll.tail!.stats.STR).toBe(5);
+    expect(rll.tail!.stats.INT).toBe(5);
+    expect(rll.tail!.stats.AGI).toBe(6);
+    expect(rll.tail!.stats.VIT).toBe(5);
 
     rll.add(Jobs.대장장이);
 
@@ -274,12 +259,11 @@ describe("2차 직업 전환 후 스탯 적용 테스트", () => {
      * - 10당 STR +1 (limit 20): 100/10 = 10 → STR +10
      */
     rll.tail!.adjustJobPoint(100);
-    currentStats = rll.tail!.stats;
 
-    expect(currentStats.STR).toBe(15); // 5 + 10 = 15
-    expect(currentStats.INT).toBe(5); // Changed from 6
-    expect(currentStats.AGI).toBe(31); // 6 + 25 = 31 (was 8 + 25 = 33)
-    expect(currentStats.VIT).toBe(19); // 5 + 14 = 19 (was 6 + 14 = 20)
+    expect(rll.tail!.stats.STR).toBe(15); // 5 + 10 = 15
+    expect(rll.tail!.stats.INT).toBe(5); // Changed from 6
+    expect(rll.tail!.stats.AGI).toBe(31); // 6 + 25 = 31 (was 8 + 25 = 33)
+    expect(rll.tail!.stats.VIT).toBe(19); // 5 + 14 = 19 (was 6 + 14 = 20)
   });
 
   it("요리 25레벨로 상인, 배달+흥정 5레벨로 목공사, 이후 목공사 잡포 100", () => {
@@ -287,14 +271,13 @@ describe("2차 직업 전환 후 스탯 적용 테스트", () => {
 
     // 1. 상인 추가
     rll.add(Jobs.상인);
-    let currentStats = rll.tail!.stats;
 
     // 2. 배달+흥정 5레벨로 상인 잡포 5 (요리25 + 배달+흥정5 = 30)
     rll.tail!.adjustJobPoint(5);
-    expect(currentStats.STR).toBe(5);
-    expect(currentStats.INT).toBe(5);
-    expect(currentStats.AGI).toBe(6);
-    expect(currentStats.VIT).toBe(5);
+    expect(rll.tail!.stats.STR).toBe(5);
+    expect(rll.tail!.stats.INT).toBe(5);
+    expect(rll.tail!.stats.AGI).toBe(6);
+    expect(rll.tail!.stats.VIT).toBe(5);
 
     rll.add(Jobs.목공사);
 
@@ -307,12 +290,11 @@ describe("2차 직업 전환 후 스탯 적용 테스트", () => {
      * - 10당 STR +1 (limit 20): 100/10 = 10 → STR +10
      */
     rll.tail!.adjustJobPoint(100);
-    currentStats = rll.tail!.stats;
 
-    expect(currentStats.STR).toBe(15); // 5 + 10 = 15
-    expect(currentStats.INT).toBe(5);
-    expect(currentStats.AGI).toBe(31); // 6 + 25 = 31
-    expect(currentStats.VIT).toBe(16); // 5 + 11 = 16
+    expect(rll.tail!.stats.STR).toBe(15); // 5 + 10 = 15
+    expect(rll.tail!.stats.INT).toBe(5);
+    expect(rll.tail!.stats.AGI).toBe(31); // 6 + 25 = 31
+    expect(rll.tail!.stats.VIT).toBe(16); // 5 + 11 = 16
   });
 
   it("요리 25레벨로 상인, 배달+흥정 15레벨로 연금술사, 이후 연금술사 잡포 100", () => {
@@ -320,14 +302,13 @@ describe("2차 직업 전환 후 스탯 적용 테스트", () => {
 
     // 1. 상인 추가
     rll.add(Jobs.상인);
-    let currentStats = rll.tail!.stats;
 
     // 2. 배달+흥정 15레벨로 상인 잡포 7 (요리는 전직 조건이라 미포함)
     rll.tail!.adjustJobPoint(7);
-    expect(currentStats.STR).toBe(5);
-    expect(currentStats.INT).toBe(5);
-    expect(currentStats.AGI).toBe(6);
-    expect(currentStats.VIT).toBe(5);
+    expect(rll.tail!.stats.STR).toBe(5);
+    expect(rll.tail!.stats.INT).toBe(5);
+    expect(rll.tail!.stats.AGI).toBe(6);
+    expect(rll.tail!.stats.VIT).toBe(5);
 
     rll.add(Jobs.연금술사);
 
@@ -339,11 +320,10 @@ describe("2차 직업 전환 후 스탯 적용 테스트", () => {
      * - 10당 INT +1 (limit 20): 100/10 = 10 → INT +10
      */
     rll.tail!.adjustJobPoint(100);
-    currentStats = rll.tail!.stats;
 
-    expect(currentStats.STR).toBe(5);
-    expect(currentStats.INT).toBe(15); // 5 + 10 = 15
-    expect(currentStats.AGI).toBe(26); // 6 + 20 = 26
-    expect(currentStats.VIT).toBe(17); // 5 + 12 = 17
+    expect(rll.tail!.stats.STR).toBe(5);
+    expect(rll.tail!.stats.INT).toBe(15); // 5 + 10 = 15
+    expect(rll.tail!.stats.AGI).toBe(26); // 6 + 20 = 26
+    expect(rll.tail!.stats.VIT).toBe(17); // 5 + 12 = 17
   });
 });
