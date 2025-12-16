@@ -209,3 +209,38 @@ describe("상인 선행 후 2차 생산직 전환 스탯 테스트", () => {
     expect(currentStats.VIT).toBe(5);
   });
 });
+
+describe("2차 직업 전환 후 스탯 적용 테스트", () => {
+  it("요리 25레벨로 상인, 배달 + 흥정 5레벨로 미용사, 이후 미용 잡포 100", () => {
+    const rll = new RouteLinkedList();
+
+    // 1. 상인 추가
+    rll.add(Jobs.상인);
+    let currentStats = rll.tail!.stats;
+
+    // 2. 배달 + 흥정 5레벨로 미용사
+    rll.tail!.adjustJobPoint(2);
+    expect(currentStats.STR).toBe(5);
+    expect(currentStats.INT).toBe(5);
+    expect(currentStats.AGI).toBe(5);
+    expect(currentStats.VIT).toBe(5);
+
+    rll.add(Jobs.미용사);
+
+    /**
+     * 3. 미용 잡포 100
+     *
+     * - STR: -0
+     * - INT: -0
+     * - AGI: +33
+     * - VIT: +12
+     */
+    rll.tail!.adjustJobPoint(100);
+    currentStats = rll.tail!.stats;
+
+    expect(currentStats.STR).toBe(5);
+    expect(currentStats.INT).toBe(5);
+    expect(currentStats.AGI).toBe(38);
+    expect(currentStats.VIT).toBe(17);
+  });
+});
