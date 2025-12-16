@@ -45,11 +45,7 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onJobSelect }) => {
         <h4 className="job-category-title">모험가 계열</h4>
         <div className="job-grid">
           {/* 1차 직업 */}
-          <button
-            className="job-btn"
-            onClick={onJobSelect}
-            value="모험가"
-          >
+          <button className="job-btn" onClick={onJobSelect} value="모험가">
             모험가
           </button>
 
@@ -66,13 +62,26 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onJobSelect }) => {
           ))}
 
           {/* 3차 직업 */}
-          <button
-            className="job-btn"
-            onClick={onJobSelect}
-            value="정령술사"
-          >
+          <button className="job-btn" onClick={onJobSelect} value="정령술사">
             정령술사
           </button>
+        </div>
+      </div>
+
+      {/* 상인 계열 직업 */}
+      <div className="job-category">
+        <h4 className="job-category-title">상인 계열</h4>
+        <div className="job-grid">
+          {classifiedJobs[3].map((jobName) => (
+            <button
+              key={jobName}
+              className="job-btn"
+              onClick={onJobSelect}
+              value={jobName}
+            >
+              {jobName}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -80,18 +89,7 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onJobSelect }) => {
       <div>
         <h4 className="job-category-title">기타</h4>
         <div className="job-grid">
-          <button
-            className="job-btn"
-            onClick={onJobSelect}
-            value="상인"
-          >
-            상인
-          </button>
-          <button
-            className="job-btn"
-            onClick={onJobSelect}
-            value="네크로멘서"
-          >
+          <button className="job-btn" onClick={onJobSelect} value="네크로멘서">
             네크로멘서
           </button>
         </div>
