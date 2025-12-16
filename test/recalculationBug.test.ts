@@ -176,28 +176,6 @@ const rawRouteData: RawRouteData[] = [
 ];
 
 /**
- * 누적 잡포를 개별 잡포로 변환
- * 같은 직업이 다시 나올 때 이전 투자량과의 차이를 계산
- */
-function convertToIndividualPoints(rawData: RawRouteData[]): RouteStep[] {
-  const jobPointTracker: Map<string, number> = new Map();
-
-  return rawData.map((data) => {
-    const previousPoint = jobPointTracker.get(data.jobName) || 0;
-    const individualPoint = data.cumulativePoint - previousPoint;
-
-    // 현재 누적 포인트를 기록
-    jobPointTracker.set(data.jobName, data.cumulativePoint);
-
-    return {
-      jobName: data.jobName,
-      individualPoint,
-      expectedStats: data.expectedStats,
-    };
-  });
-}
-
-/**
  * 순수기사를 100으로 먼저 투자했다가 50으로 줄이는 시나리오 테스트
  * 빛의기사 다음에 순수기사를 추가하고, 100 → 50으로 조정 후 나머지 루트 진행
  */
@@ -230,9 +208,6 @@ describe("순수기사 100 → 50 조정 시나리오", () => {
     // 2. 순수기사 추가하고 100으로 먼저 투자
     rll.add("순수기사" as Jobs);
     rll.tail!.adjustJobPoint(100);
-
-    // 순수기사 100 투자 시 예상 스탯 (처음부터 순수기사 100 가정)
-    const statsAfter100 = { ...rll.tail!.stats };
 
     // 3. 순수기사를 -10씩 5번 줄여서 50으로 만듦
     for (let i = 0; i < 5; i++) {
