@@ -31,7 +31,7 @@ describe("상인 선행 후 2차 생산직 전환 스탯 테스트", () => {
     rll.add(Jobs.상인);
     let currentStats = rll.tail!.stats;
 
-    // 상인 잡포 2 후 스탯 검증
+    // 2. 상인 잡포 2 후 스탯 검증 (배달 + 흥정 5레벨 추가)
     currentStats = rll.tail!.stats;
     rll.tail!.adjustJobPoint(2);
 
@@ -40,12 +40,44 @@ describe("상인 선행 후 2차 생산직 전환 스탯 테스트", () => {
     expect(currentStats.AGI).toBe(5);
     expect(currentStats.VIT).toBe(5);
 
-    // 2. 미용사로 전직 (배달+흥정 5레벨 추가로 → 미용사 잡포 2)
+    // 3. 미용사로 전직
     rll.add(Jobs.미용사);
 
     expect(currentStats.STR).toBe(5);
     expect(currentStats.INT).toBe(5);
     expect(currentStats.AGI).toBe(5);
+    expect(currentStats.VIT).toBe(5);
+  });
+
+  it("요리 25레벨로 상인이 된 후, 재단 15레벨 추가해서 재단사가 되는 상황", () => {
+    const rll = new RouteLinkedList();
+
+    // 1. 상인 추가
+    rll.add(Jobs.상인);
+    let currentStats = rll.tail!.stats;
+
+    /**
+     * 2. 상인 잡포 7 추가 후 스탯 검증 (재단 15레벨 추가)
+     *
+     * 상인 잡포 7:
+     * - STR: -3 -> 10이하라 유지 -> 5
+     * - AGI: +1 -> 6
+     * - VIT, INT: 0
+     */
+    currentStats = rll.tail!.stats;
+    rll.tail!.adjustJobPoint(7);
+
+    expect(currentStats.STR).toBe(5);
+    expect(currentStats.INT).toBe(5);
+    expect(currentStats.AGI).toBe(6);
+    expect(currentStats.VIT).toBe(5);
+
+    // 3. 재단사로 전직
+    rll.add(Jobs.재단사);
+
+    expect(currentStats.STR).toBe(5);
+    expect(currentStats.INT).toBe(5);
+    expect(currentStats.AGI).toBe(6);
     expect(currentStats.VIT).toBe(5);
   });
 });
