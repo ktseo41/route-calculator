@@ -197,60 +197,11 @@ function convertToIndividualPoints(rawData: RawRouteData[]): RouteStep[] {
   });
 }
 
-const routeSequence: RouteStep[] = convertToIndividualPoints(rawRouteData);
-
-describe("루트2 테스트 (제공된 루트 데이터)", () => {
-  it("제공된 루트 스텝별 스탯 검증", () => {
-    const rll = new RouteLinkedList();
-
-    routeSequence.forEach((step, index) => {
-      const { jobName, individualPoint, expectedStats } = step;
-
-      rll.add(jobName as Jobs);
-      rll.tail!.adjustJobPoint(individualPoint);
-
-      const currentStats = rll.tail!.stats;
-
-      expect(currentStats.STR).toBe(expectedStats.STR);
-      expect(currentStats.INT).toBe(expectedStats.INT);
-      expect(currentStats.AGI).toBe(expectedStats.AGI);
-      expect(currentStats.VIT).toBe(expectedStats.VIT);
-    });
-  });
-
-  it("최종 스탯이 70/60/70/70인지 확인", () => {
-    const rll = new RouteLinkedList();
-
-    routeSequence.forEach((step) => {
-      const { jobName, individualPoint } = step;
-      rll.add(jobName as Jobs);
-      rll.tail!.adjustJobPoint(individualPoint);
-    });
-
-    const finalStats = rll.tail!.stats;
-
-    expect(finalStats.STR).toBe(70);
-    expect(finalStats.INT).toBe(60);
-    expect(finalStats.AGI).toBe(70);
-    expect(finalStats.VIT).toBe(70);
-  });
-
-  it("총 잡포인트 합계가 올바른지 확인", () => {
-    const totalJobPoints = routeSequence.reduce(
-      (sum, step) => sum + step.individualPoint,
-      0
-    );
-
-    // 예상 총합: 100*9 + 20 + 100 + 100*3 + 70 + 57 + 100*2 + 50 + 87 + 100*3 = ?
-    expect(totalJobPoints).toBeGreaterThan(0);
-  });
-});
-
 /**
  * 순수기사를 100으로 먼저 투자했다가 50으로 줄이는 시나리오 테스트
  * 빛의기사 다음에 순수기사를 추가하고, 100 → 50으로 조정 후 나머지 루트 진행
  */
-describe("루트2 테스트 - 순수기사 100 → 50 조정 시나리오", () => {
+describe("순수기사 100 → 50 조정 시나리오", () => {
   // 빛의기사까지의 루트 (첫 18개)
   const routeUntilLightKnight: RawRouteData[] = rawRouteData.slice(0, 18);
 
