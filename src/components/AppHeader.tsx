@@ -8,7 +8,7 @@ import {
 } from "@phosphor-icons/react";
 import SnowBackground from "./SnowBackground";
 import ToggleSwitch from "./ToggleSwitch";
-import logo from "../img/logo.png";
+import logo from "../img/logo_christmas.png";
 
 interface AppHeaderProps {
   rLLLength: number;
@@ -46,7 +46,7 @@ const AppHeader = ({
             <img src={logo} alt="Logo" />
           </div>
           <span className="title">루트 계산기</span>
-          <span className="version">v2.1.1</span>
+          <span className="version">v2.1.2</span>
         </div>
         <div className="header-actions">
           <button className="icon-btn" aria-label="Info" onClick={onInfoClick}>

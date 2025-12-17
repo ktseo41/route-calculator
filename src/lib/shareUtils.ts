@@ -1,7 +1,7 @@
 import { toPng } from "html-to-image";
 import RouteLinkedList from "@/lib/routeLinkedList";
 import { getCustomQueryFromRLL } from "@/lib/routeUtils";
-import smallLogo from "@/img/small-logo.png";
+import smallLogo from "@/img/logo_christmas_small.png";
 
 /**
  * 테이블을 이미지 Blob으로 변환하는 함수
