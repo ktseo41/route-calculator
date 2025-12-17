@@ -44,9 +44,7 @@
 /* Sidebar Divider */
 .sidebar-divider {
   height: 2px;
-  background-color: var(
-    --text-primary
-  ); /* Use text color for high contrast white line */
+  background-color: var(--text-primary); /* Use text color for high contrast white line */
   opacity: 0.2;
   margin: 0;
   flex-shrink: 0;
