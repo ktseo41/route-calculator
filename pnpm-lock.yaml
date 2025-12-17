@@ -20,9 +20,6 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
-      es-hangul:
-        specifier: ^2.3.8
-        version: 2.3.8
       html-to-image:
         specifier: ^1.11.13
         version: 1.11.13
