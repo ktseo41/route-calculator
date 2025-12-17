@@ -36,6 +36,7 @@ import AppHeader from "./components/AppHeader";
 import RouteRow from "./components/RouteRow";
 import ToggleSwitch from "./components/ToggleSwitch";
 import "./index.css";
+import SnowBackground from "./components/SnowBackground";
 
 export default function App() {
   const {
@@ -334,6 +335,7 @@ export default function App() {
 
   return (
     <div className="app-container">
+      <SnowBackground />
       <AppHeader
         rLLLength={rLL.length}
         isSharing={isSharing}
