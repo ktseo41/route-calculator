@@ -23,7 +23,7 @@ const AboutModal = ({ isOpen, onClose }: AboutModalProps) => {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="modal-header">
-          <h3 className="modal-title">루트 계산기 v2.1.0</h3>
+          <h3 className="modal-title">루트 계산기 v2.1.1</h3>
           <button className="close-btn" onClick={onClose}>
             <X size={24} />
           </button>
@@ -35,6 +35,9 @@ const AboutModal = ({ isOpen, onClose }: AboutModalProps) => {
               <Sparkle size={20} weight="fill" /> 버전 히스토리
             </h4>
             <ul className="version-history">
+              <li>
+                <strong>v2.1.1</strong> — 테이블 헤더 스크롤 고정 및 UI 개선
+              </li>
               <li>
                 <strong>v2.1.0</strong> — 상인 2차 직업 (미용사, 재단사 등) 추가
               </li>

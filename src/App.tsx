@@ -356,45 +356,48 @@ export default function App() {
           )}
 
           <div className="route-list" id="routeList">
-            {/* Desktop Controls - Above Table */}
-            <div className="route-controls desktop-only">
-              <div className="route-controls-content">
-                <ToggleSwitch
-                  checked={isCumulative}
-                  onChange={() => setIsCumulative(!isCumulative)}
-                  label="누적 포인트 보기"
-                />
-                <button
-                  className={`icon-btn ${
-                    isReorderMode ? "icon-btn--reorder-active" : ""
-                  }`}
-                  aria-label="Reorder Mode"
-                  onClick={() => setIsReorderMode(!isReorderMode)}
-                >
-                  <ArrowsOutLineVertical />
-                </button>
-                <button
-                  className={`icon-btn ${
-                    deleteMode ? "icon-btn--delete-active" : ""
-                  }`}
-                  aria-label="Delete Mode"
-                  onClick={toggleDeleteMode}
-                >
-                  <MinusCircle />
-                </button>
+            {/* Sticky Header Group */}
+            <div className="sticky-header-wrapper">
+              {/* Desktop Controls - Above Table */}
+              <div className="route-controls desktop-only">
+                <div className="route-controls-content">
+                  <ToggleSwitch
+                    checked={isCumulative}
+                    onChange={() => setIsCumulative(!isCumulative)}
+                    label="누적 포인트 보기"
+                  />
+                  <button
+                    className={`icon-btn ${
+                      isReorderMode ? "icon-btn--reorder-active" : ""
+                    }`}
+                    aria-label="Reorder Mode"
+                    onClick={() => setIsReorderMode(!isReorderMode)}
+                  >
+                    <ArrowsOutLineVertical />
+                  </button>
+                  <button
+                    className={`icon-btn ${
+                      deleteMode ? "icon-btn--delete-active" : ""
+                    }`}
+                    aria-label="Delete Mode"
+                    onClick={toggleDeleteMode}
+                  >
+                    <MinusCircle />
+                  </button>
+                </div>
               </div>
-            </div>
 
-            {/* Table Header */}
-            <div className="route-header">
-              <span className="header-job">직업</span>
-              <div className="header-stats">
-                <span className="header-stat">STR</span>
-                <span className="header-stat">INT</span>
-                <span className="header-stat">AGI</span>
-                <span className="header-stat">VIT</span>
+              {/* Table Header */}
+              <div className="route-header">
+                <span className="header-job">직업</span>
+                <div className="header-stats">
+                  <span className="header-stat">STR</span>
+                  <span className="header-stat">INT</span>
+                  <span className="header-stat">AGI</span>
+                  <span className="header-stat">VIT</span>
+                </div>
+                <span className="header-po">PO</span>
               </div>
-              <span className="header-po">PO</span>
             </div>
 
             {/* Static First Row (Jobless) */}

@@ -30,7 +30,7 @@
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden; /* Prevent horizontal scroll from negative margins */
-  padding: var(--space-sm); /* Reduced padding */
+  padding: 0 var(--space-sm); /* Reduced padding, removed top padding */
   padding-bottom: 0; /* Remove bottom padding for footer alignment */
   display: flex;
   flex-direction: column;
@@ -127,7 +127,7 @@
   .main-content {
     flex: 0 0 480px; /* Fixed width for table section */
     border-right: 1px solid var(--border-color);
-    padding: var(--space-xs) var(--space-md) var(--space-md);
+    padding: 0 var(--space-md) var(--space-md);
     overflow-y: auto;
   }
 
