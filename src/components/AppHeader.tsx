@@ -39,7 +39,7 @@ const AppHeader = ({
 }: AppHeaderProps) => {
   return (
     <header className="app-header">
-      <SnowBackground className="header-snow" />
+      <SnowBackground className="header-snow" count={30} />
       <div className="header-top">
         <div className="logo">
           <div className="logo-icon logo-icon--image">

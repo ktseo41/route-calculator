@@ -4,15 +4,17 @@ const SNOWFLAKE_COUNT = 50;
 
 export default function SnowBackground({
   className = "",
+  count = SNOWFLAKE_COUNT,
 }: {
   className?: string;
+  count?: number;
 }) {
   const [flakes, setFlakes] = useState<
     Array<{ id: number; style: React.CSSProperties }>
   >([]);
 
   useEffect(() => {
-    const newFlakes = Array.from({ length: SNOWFLAKE_COUNT }).map((_, i) => {
+    const newFlakes = Array.from({ length: count }).map((_, i) => {
       const size = Math.random() * 4 + 2; // 2px to 6px
       const duration = Math.random() * 10 + 10; // 10s to 20s
       const delay = Math.random() * 10; // 0s to 10s
@@ -31,7 +33,7 @@ export default function SnowBackground({
       };
     });
     setFlakes(newFlakes);
-  }, []);
+  }, [count]);
 
   return (
     <div className={`snow-container ${className}`} aria-hidden="true">
