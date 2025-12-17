@@ -1,13 +1,10 @@
 import {
   X,
-  Image,
   Bug,
   Link as LinkIcon,
   YoutubeLogo,
   Heart,
   Sparkle,
-  ArrowsOutLineVertical,
-  ChartLineUp,
   Files,
   GithubLogo,
 } from "@phosphor-icons/react";
@@ -26,7 +23,7 @@ const AboutModal = ({ isOpen, onClose }: AboutModalProps) => {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="modal-header">
-          <h3 className="modal-title">루트 계산기 v2.0.0</h3>
+          <h3 className="modal-title">루트 계산기 v2.1.0</h3>
           <button className="close-btn" onClick={onClose}>
             <X size={24} />
           </button>
@@ -34,34 +31,16 @@ const AboutModal = ({ isOpen, onClose }: AboutModalProps) => {
 
         <div className="modal-body about-content">
           <section className="about-section">
-            <p>
-              UI를 개선하고, 기능을 추가했습니다.
-              <br />
-            </p>
-          </section>
-
-          <section className="about-section">
             <h4>
-              <Sparkle size={20} weight="fill" /> 2.0에서 추가된 기능
+              <Sparkle size={20} weight="fill" /> 버전 히스토리
             </h4>
-            <ul className="feature-list">
+            <ul className="version-history">
               <li>
-                <div className="icon-box">
-                  <ArrowsOutLineVertical size={20} />
-                </div>
-                <span>드래그로 순서 변경</span>
+                <strong>v2.1.0</strong> — 상인 2차 직업 (미용사, 재단사 등) 추가
               </li>
               <li>
-                <div className="icon-box">
-                  <ChartLineUp size={20} />
-                </div>
-                <span>누적 보기 모드</span>
-              </li>
-              <li>
-                <div className="icon-box">
-                  <Image size={20} />
-                </div>
-                <span>이미지로 저장</span>
+                <strong>v2.0.0</strong> — UI 개선, 드래그 순서 변경, 누적 보기,
+                이미지 저장
               </li>
             </ul>
           </section>

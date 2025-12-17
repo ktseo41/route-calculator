@@ -45,7 +45,7 @@ const AppHeader = ({
             <img src={logo} alt="Logo" />
           </div>
           <span className="title">루트 계산기</span>
-          <span className="version">v2.0.0</span>
+          <span className="version">v2.1.0</span>
         </div>
         <div className="header-actions">
           <button className="icon-btn" aria-label="Info" onClick={onInfoClick}>

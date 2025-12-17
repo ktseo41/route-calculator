@@ -1,4 +1,4 @@
-## 일랜시아 루트 계산기 v2.0.0
+## 일랜시아 루트 계산기 v2.1.0
 
 <p align="center">
   <img src="https://i.imgur.com/6RMIBsI.gif" alt="description">
