@@ -14,6 +14,20 @@
   display: none;
 }
 
+/* Sticky Header Wrapper */
+.sticky-header-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: var(
+    --bg-primary
+  ); /* Use main background to hide scrolling content */
+  padding-bottom: 4px; /* Move spacing here */
+  padding-top: var(
+    --space-sm
+  ); /* Added top padding since it was removed from main content */
+}
+
 /* Table Header */
 .route-header {
   background-color: var(--bg-secondary);
@@ -24,7 +38,7 @@
   align-items: center;
   justify-content: space-between;
   height: 36px;
-  margin-bottom: 4px;
+  /* margin-bottom: 4px; Removed: spacing handled by wrapper padding */
 }
 
 .header-job {
@@ -151,7 +165,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--accent-dark); /* Dark Olive Green - Matches logo accent */
+  background-color: var(
+    --accent-dark
+  ); /* Dark Olive Green - Matches logo accent */
   width: 33px;
   height: 25px;
   border-radius: var(--radius-sm);
@@ -278,7 +294,7 @@
   .route-controls {
     display: flex;
     justify-content: flex-end;
-    padding: 0;
+    padding: 0 0 4px 0; /* Add bottom padding */
   }
 
   .route-controls-content {

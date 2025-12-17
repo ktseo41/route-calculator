@@ -30,7 +30,7 @@
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden; /* Prevent horizontal scroll from negative margins */
-  padding: var(--space-sm); /* Reduced padding */
+  padding: 0 var(--space-sm); /* Reduced padding, removed top padding */
   padding-bottom: 0; /* Remove bottom padding for footer alignment */
   display: flex;
   flex-direction: column;
@@ -44,7 +44,9 @@
 /* Sidebar Divider */
 .sidebar-divider {
   height: 2px;
-  background-color: var(--text-primary); /* Use text color for high contrast white line */
+  background-color: var(
+    --text-primary
+  ); /* Use text color for high contrast white line */
   opacity: 0.2;
   margin: 0;
   flex-shrink: 0;
@@ -67,7 +69,9 @@
   border-top: 1px dotted rgba(255, 255, 255, 0.15);
   flex-shrink: 0;
   margin-top: auto; /* Push to bottom */
-  width: calc(100% + 2 * var(--space-sm)); /* Full width including negative margins */
+  width: calc(
+    100% + 2 * var(--space-sm)
+  ); /* Full width including negative margins */
   margin-left: calc(-1 * var(--space-sm));
   margin-right: calc(-1 * var(--space-sm));
   margin-bottom: 0; /* Reset bottom margin */
@@ -127,7 +131,7 @@
   .main-content {
     flex: 0 0 480px; /* Fixed width for table section */
     border-right: 1px solid var(--border-color);
-    padding: var(--space-xs) var(--space-md) var(--space-md);
+    padding: 0 var(--space-md) var(--space-md);
     overflow-y: auto;
   }
 
