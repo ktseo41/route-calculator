@@ -8,7 +8,7 @@ import {
 } from "@phosphor-icons/react";
 import SnowBackground from "./SnowBackground";
 import ToggleSwitch from "./ToggleSwitch";
-import logo from "../img/logo.png";
+import logo from "../img/logo_christmas.png";
 
 interface AppHeaderProps {
   rLLLength: number;
