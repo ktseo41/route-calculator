@@ -9,6 +9,12 @@
   gap: 4px; /* Very tight spacing */
 }
 
+@media (max-width: 767px) {
+  .route-list {
+    padding-bottom: var(--space-sm);
+  }
+}
+
 /* Desktop Controls - Hidden on Mobile */
 .route-controls {
   display: none;
