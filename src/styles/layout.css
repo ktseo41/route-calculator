@@ -67,9 +67,7 @@
   border-top: 1px dotted rgba(255, 255, 255, 0.15);
   flex-shrink: 0;
   margin-top: auto; /* Push to bottom */
-  width: calc(
-    100% + 2 * var(--space-sm)
-  ); /* Full width including negative margins */
+  width: calc(100% + 2 * var(--space-sm)); /* Full width including negative margins */
   margin-left: calc(-1 * var(--space-sm));
   margin-right: calc(-1 * var(--space-sm));
   margin-bottom: 0; /* Reset bottom margin */
