@@ -215,6 +215,7 @@
   flex-direction: column;
   gap: var(--space-xs);
   padding-left: var(--space-xs);
+  list-style: none;
 }
 
 .version-history li {
