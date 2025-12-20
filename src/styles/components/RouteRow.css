@@ -108,7 +108,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  transition: var(--transition-fast);
+  /* Only transition specific properties, NOT transform (which conflicts with DnD) */
+  transition: background-color var(--transition-fast),
+    border-color var(--transition-fast), box-shadow var(--transition-fast);
   position: relative;
   overflow: hidden;
   height: 50px; /* Fixed compact height */
@@ -129,8 +131,12 @@
   background-color: rgba(181, 201, 154, 0.15);
 }
 
+/* Dragging state - lifted appearance */
 .route-row--dragging {
-  opacity: 0.8;
+  opacity: 1;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+  border-color: var(--accent-primary);
 }
 
 /* Job Name */
