@@ -213,6 +213,5 @@ export class RouteNode {
     this.getPrevs();
     const newJobPo = this.recalculateJobPo();
     this.adjustJobPoint(newJobPo, isRecalculating);
-    if (this.next) this.next.recalculate();
   }
 }
