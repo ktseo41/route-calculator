@@ -36,8 +36,8 @@ const AboutModal = ({ isOpen, onClose }: AboutModalProps) => {
             </h4>
             <ul className="version-history">
               <li>
-                <strong>v2.1.3</strong> — 루트 중간 노드 수정 시 발생하는 무한
-                대기 오류 수정
+                <strong>v2.1.3</strong> — 노드 순서 변경 시 연산 과부하 버그
+                해결
               </li>
               <li>
                 <strong>v2.1.2</strong> — 크리스마스 테마 및 눈 내리는 효과 추가
