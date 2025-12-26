@@ -6,9 +6,8 @@ import {
   Spinner,
   Info,
 } from "@phosphor-icons/react";
-import SnowBackground from "./SnowBackground";
 import ToggleSwitch from "./ToggleSwitch";
-import logo from "../img/logo_christmas.png";
+import logo from "../img/logo.png";
 
 interface AppHeaderProps {
   rLLLength: number;
@@ -39,7 +38,6 @@ const AppHeader = ({
 }: AppHeaderProps) => {
   return (
     <header className="app-header">
-      <SnowBackground className="header-snow" count={30} />
       <div className="header-top">
         <div className="logo">
           <div className="logo-icon logo-icon--image">
