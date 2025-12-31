@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 import RouteLinkedList from "../lib/routeLinkedList";
 import { getCustomQueryFromRLL } from "../lib/routeUtils";
-import logo from "../img/logo_christmas.png";
+import logo from "../img/logo.png";
 
 interface SharePreviewProps {
   rLL: RouteLinkedList;
